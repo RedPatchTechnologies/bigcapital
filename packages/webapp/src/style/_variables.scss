@@ -3,12 +3,34 @@
 
 $ns: bp4;
 
+:root {
+  --color-dark-gray5: #404854;
+  --color-dark-gray4: #383E47;
+  --color-dark-gray3: #2f343c;
+  --color-dark-gray2: #252A31;
+  --color-dark-gray1: #1c2127;
+
+  --color-ui-background-primary: var(--color-base-sand-0);
+  --color-ui-background-secondary: var(--color-base-sand-10);
+  --color-ui-background-tertiary: var(--color-base-sand-20);
+
+  --color-dashboard-insider-background: var(--color-dark-gray1);
+  --color-dashboard-topbar-background: var(--color-dark-gray1);
+  --color-dashboard-topbar-border-color: #c7d5db;
+  --color-dashboard-datatable-background: var(--color-dark-gray1);
+
+  --color-dashboard-navbar-background: var(--color-dark-gray1);
+  --color-datatable-head-background: var(--color-dark-gray3);
+  --color-sidebar-overlay-background: var(--color-dark-gray5);
+}
+
 $pt-popover-box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.02),
   0 2px 4px rgba(16, 22, 26, 0.1), 0 8px 24px rgba(16, 22, 26, 0.1);
 
 $blue1: #0069ff;
 $blue2: #0052ff;
 $blue3: rgb(0, 82, 204);
+
 $pt-link-color: $blue3;
 $pt-intent-primary: $blue1;
 $menu-item-color-hover: $light-gray4;
@@ -30,7 +52,9 @@ $button-background-color-disabled: #e9ecef !default;
 $button-background-color: #e6effb !default;
 $button-background-color-hover: #cfdcee !default;
 
-$sidebar-background: #01115e;
+$app-bg: var(--color-dark-gray1);
+
+$sidebar-background: var(--color-dark-gray3);
 $sidebar-text-color: #fff;
 $sidebar-width: 100%;
 $sidebar-menu-item-color: rgb(255, 255, 255);

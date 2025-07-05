@@ -38,8 +38,11 @@
 @import 'pages/fonts';
 @import "section";
 
+
+
 .App {
   min-width: 1100px;
+  background-color: $app-bg;
 }
 
 // =======
