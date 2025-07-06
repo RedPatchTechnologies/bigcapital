@@ -10,18 +10,68 @@ $ns: bp4;
   --color-dark-gray2: #252A31;
   --color-dark-gray1: #1c2127;
 
+  --color-white: #fff;
+  --color-black: #000;
+
+  // Background
   --color-ui-background-primary: var(--color-base-sand-0);
   --color-ui-background-secondary: var(--color-base-sand-10);
   --color-ui-background-tertiary: var(--color-base-sand-20);
 
+  // Main Dashboard.
   --color-dashboard-insider-background: var(--color-dark-gray1);
   --color-dashboard-topbar-background: var(--color-dark-gray1);
   --color-dashboard-topbar-border-color: #c7d5db;
   --color-dashboard-datatable-background: var(--color-dark-gray1);
-
   --color-dashboard-navbar-background: var(--color-dark-gray1);
+
+  // Datatable
   --color-datatable-head-background: var(--color-dark-gray3);
+  --color-datatable-cell-hover-background: var(--color-dark-gray3);
+
+  // Sidebar overlay
   --color-sidebar-overlay-background: var(--color-dark-gray5);
+  --color-sidebar-overlay-hover-background: var(--color-dark-gray3);
+  --color-sidebar-overlay-item-text: var(--color-white);
+  --color-sidebar-overlay-item-text-hover: var(--color-white);
+  --color-sidebar-overlay-divider-background: #e2e5ec;
+  --color-sidebar-overlay-label-text: #707a85;
+  --color-sidebar-overlay-label-border: #e2e5ec;
+
+  --color-financial-report-background: var(--color-dark-gray2);
+  --color-datatable-text: var(--color-white);
+
+  --color-card-background: var(--color-dark-gray5);
+  --color-card-border: #d2dce2;
+
+  // Bank accounts.
+  --color-bank-account-card-background: var(--color-card-background);
+  --color-bank-account-card-border: #c8cad0;
+  --color-bank-account-card-hover-border: #0153cc;
+  --color-bank-transactions-details-bar-background: var(--color-dark-gray1);
+
+  // Bank account transactions.
+  --color-bank-transactions-datatable-card-background: var(--color-dark-gray1);
+  --color-bank-transactions-datatable-card-border: #f0f0f0;
+
+  --color-sidebar-preferences-background: var(--color-dark-gray1);
+  --color-sidebar-preferences-border: #c6d0d9;
+
+  // Sidebar preferences.
+  --color-sidebar-preferences-item-background: transparent;
+  --color-sidebar-preferences-item-text: #fff;
+
+  --color-sidebar-preferences-item-hover-background: rgba(255, 255, 255, 0.6);
+  --color-sidebar-preferences-item-hover-text: #fff; 
+
+  --color-preferences-topbar-background: var(--color-dark-gray1);
+  --color-preferences-topbar-border: var(--color-dark-gray3);
+  --color-preferences-topbar-title: #fff;
+
+  --color-preferences-content-background: var(--color-dark-gray2);
+
+  // Financial sheet.
+  --color-financial-sheet-card-border: var(--color-dark-gray5);
 }
 
 $pt-popover-box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.02),

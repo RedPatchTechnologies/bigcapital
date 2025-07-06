@@ -3,8 +3,8 @@
 // Preferences sidebar.
 // -----------------------------
 .preferences-sidebar {
-  background: #eaeef6;
-  border-right: 1px solid #c6d0d9;
+  background: var(--color-sidebar-preferences-background);
+  border-right: 1px solid var(--color-sidebar-preferences-border);
   min-width: 220px;
   max-width: 220px;
   height: 100%;
@@ -64,12 +64,12 @@
       padding: 8px 18px;
       font-size: 15px;
       font-weight: 400;
-      color: #333;
+      color: var(--color-sidebar-preferences-item-text);
 
       &:hover,
       &.#{$ns}-active {
-        background-color: rgba(255, 255, 255, 0.6);
-        color: #333;
+        background-color: var(--color-sidebar-preferences-item-hover-background);
+        color: var(--color-sidebar-preferences-item-hover-text);
       }
     }
   }

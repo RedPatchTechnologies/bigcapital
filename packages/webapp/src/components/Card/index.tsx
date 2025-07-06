@@ -13,8 +13,8 @@ export function Card({ className, style, children }) {
 const CardRoot = styled.div`
   padding: 15px;
   margin: 15px;
-  background: #fff;
-  border: 1px solid #d2dce2;
+  background: var(--color-card-background);
+  border: 1px solid var(--color-card-border);
 `;
 
 export const CardFooterActions = styled.div`

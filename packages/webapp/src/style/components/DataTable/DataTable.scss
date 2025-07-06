@@ -212,7 +212,7 @@
       }
 
       .tr:hover .td {
-        background: #f3f7fc;
+        background: var(--color-datatable-cell-hover-background);
       }
 
       .tr.is-context-menu-active .td {
@@ -378,7 +378,7 @@
 .table-constrant,
 .table--constrant {
   .table {
-    color: #000;
+    color: var(--color-datatable-text);
 
     .thead {
       .tr:first-of-type .th {
@@ -387,14 +387,14 @@
     }
 
     .thead .th {
-      background: #fff;
-      color: #000;
+      background: transparent;
+      color: var(--color-datatable-text);
       border-bottom: 1px solid #000000;
       padding: 0.5rem;
     }
 
     .tbody .tr .td {
-      background: #fff;
+      background: transparent;
       padding: 0.5rem 0.5rem;
       border-bottom: 0;
     }

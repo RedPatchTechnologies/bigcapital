@@ -104,13 +104,13 @@ const BankAccountWrap = styled.div`
   display: flex;
   flex-direction: column;
   border-radius: 3px;
-  background: #fff;
+  background: var(--color-bank-account-card-background);
   margin: 8px;
-  border: 1px solid #c8cad0;
+  border: 1px solid var(--color-bank-account-card-border);
   transition: all 0.1s ease-in-out;
 
   &:hover {
-    border-color: #0153cc;
+    border-color: var(--color-bank-account-card-hover-border);
   }
 `;
 

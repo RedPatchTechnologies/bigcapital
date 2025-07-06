@@ -12,7 +12,7 @@ interface ContentTabItemRootProps {
 }
 const ContentTabItemRoot = styled.button<ContentTabItemRootProps>`
   flex: 1 0;
-  background: #fff;
+  background: var(--color-card-background);
   border: 1px solid #e1e2e8;
   border-radius: 5px;
   padding: 11px;

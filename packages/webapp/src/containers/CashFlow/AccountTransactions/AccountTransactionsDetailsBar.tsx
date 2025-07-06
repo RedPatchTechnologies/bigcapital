@@ -178,7 +178,7 @@ const AccountBalanceItemWrap = styled.div`
 
 const AccountTransactionDetailsWrap = styled.div`
   display: flex;
-  background: #fff;
+  background: var(--color-bank-transactions-details-bar-background);
   border-bottom: 1px solid #d2dce2;
   padding: 0 22px;
   height: 42px;
