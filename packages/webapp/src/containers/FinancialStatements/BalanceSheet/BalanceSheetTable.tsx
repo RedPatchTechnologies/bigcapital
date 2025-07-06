@@ -82,7 +82,8 @@ const BalanceSheetDataTable = styled(ReportDataTable)`
       &.row_type--TOTAL.row-id--ASSETS,
       &.row_type--TOTAL.row-id--LIABILITY_EQUITY {
         .td {
-          border-bottom: 3px double #000;
+          border-bottom-width: 3px;
+          border-bottom-style: double;
         }
       }
     }

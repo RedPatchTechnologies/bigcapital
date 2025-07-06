@@ -69,7 +69,8 @@ const ARAgingSummaryDataTable = styled(ReportDataTable)`
 
           .td {
             border-top: 1px solid #bbb;
-            border-bottom: 3px double #333;
+            border-bottom-width: 3px;
+            border-bottom-style: double;
           }
         }
       }

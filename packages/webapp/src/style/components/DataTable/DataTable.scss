@@ -8,7 +8,7 @@
     border-spacing: 0;
     min-width: 100%;
     display: block;
-    color: #101219;
+    // color: #101219;
 
     .thead .thead-inner,
     .tbody .tbody-inner {
@@ -22,9 +22,9 @@
         padding: 0.68rem 0.5rem;
         background: var(--color-datatable-head-background);
         font-size: 14px;
-        color: #424853;
+        color: var(--color-datatable-head-text);
         font-weight: 400;
-        border-bottom: 1px solid #d2dde2;
+        border-bottom: 1px solid var(--color-datatable-head-border);
 
         > div {
           overflow: hidden;
@@ -378,18 +378,17 @@
 .table-constrant,
 .table--constrant {
   .table {
-    color: var(--color-datatable-text);
+    color: var(--color-datatable-constrant-text);
 
     .thead {
       .tr:first-of-type .th {
-        border-top: 1px solid #000000;
+        border-top: 1px solid var(--color-datatable-constrant-head-border);
       }
     }
-
     .thead .th {
       background: transparent;
       color: var(--color-datatable-text);
-      border-bottom: 1px solid #000000;
+      border-bottom: 1px solid var(--color-datatable-constrant-head-border);
       padding: 0.5rem;
     }
 

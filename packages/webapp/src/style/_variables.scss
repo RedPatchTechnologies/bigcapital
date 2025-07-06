@@ -1,13 +1,13 @@
-@import "@blueprintjs/colors/lib/scss/colors";
+@import '@blueprintjs/colors/lib/scss/colors';
 @import '@blueprintjs/core/src/common/variables';
 
 $ns: bp4;
 
 :root {
   --color-dark-gray5: #404854;
-  --color-dark-gray4: #383E47;
+  --color-dark-gray4: #383e47;
   --color-dark-gray3: #2f343c;
-  --color-dark-gray2: #252A31;
+  --color-dark-gray2: #252a31;
   --color-dark-gray1: #1c2127;
 
   --color-white: #fff;
@@ -25,8 +25,12 @@ $ns: bp4;
   --color-dashboard-datatable-background: var(--color-dark-gray1);
   --color-dashboard-navbar-background: var(--color-dark-gray1);
 
+  --color-dashboard-topbar-title-text: var(--color-white);
+
   // Datatable
   --color-datatable-head-background: var(--color-dark-gray3);
+  --color-datatable-head-text: var(--color-white);
+  --color-datatable-head-border: var(--color-white);
   --color-datatable-cell-hover-background: var(--color-dark-gray3);
 
   // Sidebar overlay
@@ -39,7 +43,11 @@ $ns: bp4;
   --color-sidebar-overlay-label-border: #e2e5ec;
 
   --color-financial-report-background: var(--color-dark-gray2);
+
+  --color-datatable-constrant-text: var(--color-white);
   --color-datatable-text: var(--color-white);
+
+  --color-datatable-constrant-head-border: var(--color-white);
 
   --color-card-background: var(--color-dark-gray5);
   --color-card-border: #d2dce2;
@@ -62,7 +70,7 @@ $ns: bp4;
   --color-sidebar-preferences-item-text: #fff;
 
   --color-sidebar-preferences-item-hover-background: rgba(255, 255, 255, 0.6);
-  --color-sidebar-preferences-item-hover-text: #fff; 
+  --color-sidebar-preferences-item-hover-text: #fff;
 
   --color-preferences-topbar-background: var(--color-dark-gray1);
   --color-preferences-topbar-border: var(--color-dark-gray3);
@@ -72,10 +80,29 @@ $ns: bp4;
 
   // Financial sheet.
   --color-financial-sheet-card-border: var(--color-dark-gray5);
+  --color-financial-sheet-title-text: var(--color-white);
+  --color-financial-sheet-type-text: var(--color-white);
+  --color-financial-sheet-date-text: var(--color-white);
+  --color-financial-sheet-footer-text: var(--color-white);
+  --color-financial-sheet-minimal-title-text: var(--color-white);
+
+  // Transaction locking.
+  --color-transaction-locking-item-background: var(--color-dark-gray2);
+  --color-transaction-locking-item-border: var(--color-dark-gray3);
+  --color-transaction-locking-item-icon-border: var(--color-dark-gray5);
+  --color-transaction-locking-item-enabled-border: var(--color-dark-gray5);
+
+  // Reports items.
+  --color-report-item-background: var(--color-dark-gray3);
+  --color-report-item-border: var(--color-dark-gray5);
+  --color-report-item-top-border: var(--color-dark-gray5);
+  --color-report-item-text: var(--color-white);
 }
 
-$pt-popover-box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.02),
-  0 2px 4px rgba(16, 22, 26, 0.1), 0 8px 24px rgba(16, 22, 26, 0.1);
+$pt-popover-box-shadow:
+  0 0 0 1px rgba(16, 22, 26, 0.02),
+  0 2px 4px rgba(16, 22, 26, 0.1),
+  0 8px 24px rgba(16, 22, 26, 0.1);
 
 $blue1: #0069ff;
 $blue2: #0052ff;
@@ -89,9 +116,19 @@ $menu-item-color-active: $light-gray3;
 $breadcrumbs-collapsed-icon: url("data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='#6B8193' enable-background='new 0 0 16 16' xml:space='preserve'><g><circle cx='2' cy='8.03' r='2'/><circle cx='14' cy='8.03' r='2'/><circle cx='8' cy='8.03' r='2'/></g></svg>");
 
 $sidebar-zindex: 16;
-$pt-font-family: 'Noto Sans', -apple-system, BlinkMacSystemFont,
-  Segoe UI, Roboto, Oxygen, Ubuntu, Cantarell, Open Sans, Helvetica Neue,
-  Icons16, sans-serif;
+$pt-font-family:
+  'Noto Sans',
+  -apple-system,
+  BlinkMacSystemFont,
+  Segoe UI,
+  Roboto,
+  Oxygen,
+  Ubuntu,
+  Cantarell,
+  Open Sans,
+  Helvetica Neue,
+  Icons16,
+  sans-serif;
 
 $button-box-shadow: 0 0 0 !default;
 $button-box-shadow-active: 0 0 0 !default;
