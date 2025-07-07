@@ -116,7 +116,7 @@
         .inner-resizer {
           height: 100%;
           width: 1px;
-          border-left: 1px solid #e6e6e6;
+          border-left: 1px solid var(--color-datatable-head-border);
           margin: 0 auto;
         }
 
@@ -181,7 +181,7 @@
       }
 
       .tr .td {
-        border-bottom: 1px solid #ececec;
+        border-bottom: 1px solid var(--color-datatable-cell-border);
         align-items: center;
         
 
@@ -276,7 +276,7 @@
           height: 0;
           border-top: 5px solid transparent;
           border-bottom: 5px solid transparent;
-          border-left: 8px solid #acacac;
+          border-left: 8px solid var(--color-datatable-caret);
           display: block;
           transition: all 0.1s cubic-bezier(.4, 1, .75, .9);
 
@@ -287,7 +287,7 @@
 
         &:hover {
           .expand-arrow {
-            border-left-color: #7d8593;
+            border-left-color: var(--color-datatable-caret-hover);
           }
         }
       }

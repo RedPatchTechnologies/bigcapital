@@ -59,8 +59,8 @@ const TrialBalanceDataTable = styled(ReportDataTable)`
         border-top-color: #000;
       }
       .tr.row_type--TOTAL .td {
-        border-top: 1px solid #bbb;
         font-weight: 500;
+        border-top-width: 1px;
         border-bottom-width: 3px;
         border-bottom-style: double;
       }

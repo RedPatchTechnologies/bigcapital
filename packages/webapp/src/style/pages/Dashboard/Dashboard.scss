@@ -163,10 +163,10 @@ $dashboard-views-bar-height: 44px;
   }
 
   &__actions-bar {
-    border-bottom: 2px solid #e1e2e8;
+    border-bottom: 2px solid var(--color-dashboard-actionsbar-border);
 
     .bp4-navbar-divider {
-      border-left-color: rgb(199, 214, 219);
+      border-left-color: var(--color-dashboard-actionsbar-divider);
     }
 
     .#{$ns}-navbar {
@@ -445,7 +445,7 @@ $dashboard-views-bar-height: 44px;
     flex-direction: column;
     background: var(--color-dashboard-datatable-background);
     margin: 22px 32px;
-    border: 1px solid #d2dce2;
+    border: 1px solid var(--color-dashboard-datatable-border);
 
     .bigcapital-datatable {
       display: flex;

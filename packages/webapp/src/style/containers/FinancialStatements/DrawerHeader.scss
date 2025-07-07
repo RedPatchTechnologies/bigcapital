@@ -23,7 +23,6 @@
     .bp4-dark & {
       background-color: var(--color-dark-gray4);
     }
-
     > form {
       display: flex;
       flex-direction: column;
@@ -74,14 +73,14 @@
         width: 100%;
 
         .bp4-tab-indicator {
-          border-left: 3px solid #0350f8;
+          border-left: 3px solid var(--color-primary);
           background-color: #edf5ff;
           border-radius: 0;
         }
       }
 
       .bp4-tab {
-        color: #333;
+        color: var(--color-financial-report-drawer-tab-text);
         line-height: 45px;
         border-radius: 0;
         padding-left: 14px;

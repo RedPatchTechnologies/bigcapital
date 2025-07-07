@@ -1,6 +1,6 @@
 // @ts-nocheck
 import React from 'react';
-import { Menu } from '@blueprintjs/core';
+import { Intent, Menu } from '@blueprintjs/core';
 
 import { MenuItem, MenuItemLabel } from '@/components';
 import { ISidebarMenuItemType } from '@/containers/Dashboard/Sidebar/interfaces';
@@ -22,6 +22,7 @@ function SidebarMenuItem({ item, index }) {
       dropdownType={item.dropdownType || 'collapse'}
       onClick={item.onClick}
       active={isActive}
+      intent={Intent.NONE}
     />
   );
 }

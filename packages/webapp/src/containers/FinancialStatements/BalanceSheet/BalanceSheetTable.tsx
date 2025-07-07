@@ -61,7 +61,7 @@ const BalanceSheetDataTable = styled(ReportDataTable)`
         border-bottom: 0;
         padding-top: 0.32rem;
         padding-bottom: 0.32rem;
-        // color: #252A31;
+        border-color: var(--color-datatable-constrant-cell-border);
       }
       &.is-expanded {
         .td:not(.name) .cell-inner {
@@ -71,13 +71,13 @@ const BalanceSheetDataTable = styled(ReportDataTable)`
       &.row_type--TOTAL {
         .td {
           font-weight: 500;
-          border-top: 1px solid #bbb;
-          // color: #000;
+          border-top-width: 1px;
+          border-top-style: solid;
         }
       }
-
       &:last-of-type .td {
-        border-bottom: 1px solid #bbb;
+        border-bottom-width: 1px;
+        border-bottom-style: solid;
       }
       &.row_type--TOTAL.row-id--ASSETS,
       &.row_type--TOTAL.row-id--LIABILITY_EQUITY {
