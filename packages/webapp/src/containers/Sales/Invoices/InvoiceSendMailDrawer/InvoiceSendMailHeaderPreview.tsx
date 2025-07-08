@@ -13,7 +13,7 @@ export function InvoiceSendMailHeaderPreview() {
   return (
     <Stack
       bg={'white'}
-      borderBottom={'1px solid #dcdcdd'}
+      borderBottom={'1px solid var(--color-element-customize-divider)'}
       padding={'22px 30px'}
       spacing={8}
       position={'sticky'}

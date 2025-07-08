@@ -55,13 +55,16 @@ export default function BalanceSheetTable({
 }
 
 const BalanceSheetDataTable = styled(ReportDataTable)`
+  --color-table-text-color: var(--color-light-gray1);
+  --color-table-total-text-color: var(--color-light-gray4);
+
   .table {
     .tbody .tr {
       .td {
-        border-bottom: 0;
+        border-bottom-width: 0;
         padding-top: 0.32rem;
         padding-bottom: 0.32rem;
-        border-color: var(--color-datatable-constrant-cell-border);
+        color: var(--color-table-text-color);
       }
       &.is-expanded {
         .td:not(.name) .cell-inner {
@@ -70,6 +73,7 @@ const BalanceSheetDataTable = styled(ReportDataTable)`
       }
       &.row_type--TOTAL {
         .td {
+          color: var(--color-table-total-text-color);
           font-weight: 500;
           border-top-width: 1px;
           border-top-style: solid;
@@ -82,6 +86,7 @@ const BalanceSheetDataTable = styled(ReportDataTable)`
       &.row_type--TOTAL.row-id--ASSETS,
       &.row_type--TOTAL.row-id--LIABILITY_EQUITY {
         .td {
+          color: var(--color-table-total-text-color);
           border-bottom-width: 3px;
           border-bottom-style: double;
         }

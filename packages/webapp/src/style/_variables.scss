@@ -28,14 +28,14 @@ $ns: bp4;
   --color-alert-default-title-text: var(--color-light-gray2);
 
   --color-alert-danger-background: transparent;
-  --color-alert-danger-border: red;
-  --color-alert-danger-description-text: red;
-  --color-alert-danger-title-text: red;
+  --color-alert-danger-border: #2d72d2;
+  --color-alert-danger-description-text: var(--color-light-gray1);
+  --color-alert-danger-title-text: #8abbff;
 
   --color-alert-primary-background: transparent;
-  --color-alert-primary-border: red;
-  --color-alert-primary-title-text: red;
-  --color-alert-primary-description-text: red;
+  --color-alert-primary-border: #2d72d2;
+  --color-alert-primary-title-text: #8abbff;
+  --color-alert-primary-description-text: var(--color-light-gray1);
 
   // Background
   --color-ui-background-primary: var(--color-base-sand-0);
@@ -78,8 +78,7 @@ $ns: bp4;
   --color-sidebar-menu-item-active-background: var(--color-dark-gray5);
   --color-sidebar-menu-item-active-text: #fff;
 
-  --color-sidebar-menu-item-focus-background: var(--color-dark-gray5);
-
+  --color-sidebar-menu-item-focus-background: #01143e;
   --color-sidebar-menu-label-color: rgba(255, 255, 255, 0.4);
 
   // Sidebar overlay
@@ -97,8 +96,10 @@ $ns: bp4;
 
   --color-datatable-text: var(--color-white);
 
-  --color-datatable-constrant-text: var(--color-light-gray5);
+  --color-datatable-constrant-text: var(--color-light-gray2);
   --color-datatable-constrant-cell-border: var(--color-dark-gray5);
+
+  --color-datatable-constrant-head-text: var(--color-light-gray2);
   --color-datatable-constrant-head-border: var(--color-dark-gray5);
 
   --color-card-background: var(--color-dark-gray5);
@@ -135,7 +136,7 @@ $ns: bp4;
   --color-financial-sheet-title-text: var(--color-light-gray1);
   --color-financial-sheet-type-text: var(--color-light-gray1);
   --color-financial-sheet-date-text: var(--color-light-gray1);
-  --color-financial-sheet-footer-text: var(--color-white);
+  --color-financial-sheet-footer-text: var(--color-light-gray1);
   --color-financial-sheet-minimal-title-text: var(--color-white);
 
   // Transaction locking.
@@ -152,6 +153,98 @@ $ns: bp4;
   --color-report-item-text: var(--color-light-gray2);
 
   --color-financial-report-drawer-tab-text: var(--color-light-gray3);
+
+  --color-element-customize-header-background: var(--color-dark-gray3);
+  --color-element-customize-header-title-text: var(--color-light-gray4);
+
+  --color-element-customize-background: var(--color-dark-gray3);
+  --color-element-customize-preview-background: var(--color-dark-gray5);
+
+  --color-element-customize-header-tabs-background: var(--color-dark-gray3);
+  --color-element-customize-divider: var(--color-dark-gray5);
+
+  // Universal search
+  --color-universal-search-background: var(--color-dark-gray3);
+  --color-universal-search-footer-divider: var(--color-dark-gray4);
+}
+
+.bp4-dark {
+  // Alerts
+  --color-alert-default-background: transparent;
+  --color-alert-default-description-text: var(--color-light-gray4);
+  --color-alert-default-title-text: var(--color-light-gray2);
+
+  --color-alert-danger-background: transparent;
+  --color-alert-danger-border: #2d72d2;
+  --color-alert-danger-description-text: var(--color-light-gray1);
+  --color-alert-danger-title-text: #8abbff;
+
+  --color-alert-primary-background: transparent;
+  --color-alert-primary-border: #2d72d2;
+  --color-alert-primary-title-text: #8abbff;
+  --color-alert-primary-description-text: var(--color-light-gray1);
+
+  // Background
+  --color-ui-background-primary: var(--color-base-sand-0);
+  --color-ui-background-secondary: var(--color-base-sand-10);
+  --color-ui-background-tertiary: var(--color-base-sand-20);
+
+  // Main Dashboard.
+  --color-dashboard-insider-background: var(--color-dark-gray1);
+  --color-dashboard-topbar-background: var(--color-dark-gray1);
+  --color-dashboard-topbar-border-color: transparent;
+  --color-dashboard-datatable-background: var(--color-dark-gray1);
+  --color-dashboard-datatable-border: var(--color-dark-gray3);
+  --color-dashboard-navbar-background: var(--color-dark-gray1);
+
+  --color-dashboard-topbar-title-text: var(--color-light-gray2);
+
+  --color-dashboard-actionsbar-border: var(--color-dark-gray4);
+  --color-dashboard-actionsbar-divider: rgba(255, 255, 255, 0.2);
+
+  // Datatable
+  --color-datatable-head-background: var(--color-dark-gray3);
+  --color-datatable-head-text: var(--color-white);
+  --color-datatable-head-border: var(--color-dark-gray4);
+  --color-datatable-cell-hover-background: var(--color-dark-gray3);
+  --color-datatable-cell-border: var(--color-dark-gray4);
+
+  --color-datatable-caret: var(--color-dark-gray5);
+  --color-datatable-caret-hover: var(--color-dark-gray5);
+
+  // Sidebar
+  --color-sidebar-background: var(--color-dark-gray3);
+  --color-sidebar-text: var(--color-white);
+  --color-sidebar-scrollbars-background: rgba(255, 255, 255, 0.25);
+
+  --color-sidebar-menu-item-text: #ffff;
+
+  --color-sidebar-menu-item-hover-background: var(--color-dark-gray5);
+  --color-sidebar-menu-item-text-hover: #fff;
+
+  --color-sidebar-menu-item-active-background: var(--color-dark-gray5);
+  --color-sidebar-menu-item-active-text: #fff;
+
+  --color-sidebar-menu-item-focus-background: var(--color-dark-gray5);
+  --color-sidebar-menu-label-color: rgba(255, 255, 255, 0.4);
+
+  // Sidebar overlay
+  --color-sidebar-overlay-background: var(--color-dark-gray5);
+  --color-sidebar-overlay-hover-background: var(--color-dark-gray3);
+  --color-sidebar-overlay-item-text: var(--color-white);
+  --color-sidebar-overlay-item-hover-text: var(--color-white);
+  --color-sidebar-overlay-divider-background: rgba(255, 255, 255, 0.15);
+  --color-sidebar-overlay-label-text: rgba(255, 255, 255, 0.5);
+  --color-sidebar-overlay-label-border: var(
+    --color-sidebar-overlay-divider-background
+  );
+
+  
+  --color-datatable-empty-status-title: #2c3a5d;
+  --color-datatable-empty-status-description: #1f3255;
+
+  --color-datatable-empty-status-title: var(--color-light-gray4);
+  --color-datatable-empty-status-description: var(--color-light-gray5);
 }
 
 $pt-popover-box-shadow:

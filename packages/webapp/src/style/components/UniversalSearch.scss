@@ -2,7 +2,7 @@
   position: fixed;
   filter: blur(0);
   opacity: 1;
-  background-color: #fff;
+  background-color: var(--color-universal-search-background);
   border-radius: 3px;
   box-shadow: 0 0 0 1px rgba(16, 22, 26, 0.1), 0 4px 8px rgba(16, 22, 26, 0.2),
     0 18px 46px 6px rgba(16, 22, 26, 0.2);
@@ -128,7 +128,7 @@
 
   &__footer {
     padding: 12px 12px;
-    border-top: 1px solid #d3dce2;
+    border-top: 1px solid var(--color-universal-search-footer-divider);
   }
 
   &__actions {

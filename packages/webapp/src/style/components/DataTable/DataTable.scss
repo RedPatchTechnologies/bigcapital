@@ -61,7 +61,7 @@
 
       &:last-child {
         .td {
-          border-bottom: 0;
+          border-bottom-width: 0;
         }
       }
 
@@ -135,12 +135,15 @@
         }
       }
 
-      .bp4-control.bp4-checkbox input:not(:checked):not(:indeterminate) ~ .bp4-control-indicator{
-        box-shadow: inset 0 0 0 1px #C5CBD3;
+      .bp4-control.bp4-checkbox
+        input:not(:checked):not(:indeterminate)
+        ~ .bp4-control-indicator {
+        box-shadow: inset 0 0 0 1px #c5cbd3;
       }
 
       .skeleton {
-        animation: skeleton-fade-in 0.3s linear forwards,
+        animation:
+          skeleton-fade-in 0.3s linear forwards,
           skeleton-glow 1s linear infinite alternate;
 
         animation-delay: 0s, 0.3s;
@@ -175,7 +178,7 @@
       overflow: auto;
 
       .tbody-inner {
-        >.loading {
+        > .loading {
           padding-top: 40px;
         }
       }
@@ -183,7 +186,6 @@
       .tr .td {
         border-bottom: 1px solid var(--color-datatable-cell-border);
         align-items: center;
-        
 
         .placeholder {
           color: #a0a0a0;
@@ -247,7 +249,7 @@
           color: #777;
           align-items: center;
           font-size: 14px;
-          border-bottom: 0;
+          border-bottom-width: 0;
 
           &:hover {
             background: transparent;
@@ -255,7 +257,7 @@
         }
       }
 
-      >.loading {
+      > .loading {
         padding-top: 50px;
       }
     }
@@ -278,7 +280,7 @@
           border-bottom: 5px solid transparent;
           border-left: 8px solid var(--color-datatable-caret);
           display: block;
-          transition: all 0.1s cubic-bezier(.4, 1, .75, .9);
+          transition: all 0.1s cubic-bezier(0.4, 1, 0.75, 0.9);
 
           &.is-expanded {
             transform: rotate(90deg);
@@ -299,7 +301,6 @@
     }
 
     &-size {
-
       &--medium {
         .tbody .tr {
           background-size: red;
@@ -334,7 +335,6 @@
   }
 
   &.has-sticky {
-
     .thead,
     .tfoot {
       position: sticky;
@@ -358,9 +358,11 @@
       position: sticky;
     }
 
-    [data-sticky-last-left-td] {}
+    [data-sticky-last-left-td] {
+    }
 
-    [data-sticky-first-right-td] {}
+    [data-sticky-first-right-td] {
+    }
   }
 
   &.has-virtualized-rows {
@@ -378,8 +380,6 @@
 .table-constrant,
 .table--constrant {
   .table {
-    color: var(--color-datatable-constrant-text);
-
     .thead {
       .tr:first-of-type .th {
         border-top: 1px solid var(--color-datatable-constrant-head-border);
@@ -387,15 +387,17 @@
     }
     .thead .th {
       background: transparent;
-      color: var(--color-datatable-text);
+      color: var(--color-datatable-constrant-head-text);
       border-bottom: 1px solid var(--color-datatable-constrant-head-border);
       padding: 0.5rem;
     }
-
+    
     .tbody .tr .td {
       background: transparent;
       padding: 0.5rem 0.5rem;
-      border-bottom: 0;
+      border-bottom-width: 0;
+      color: var(--color-datatable-constrant-text);
+      border-color: var(--color-datatable-constrant-cell-border);
     }
   }
 }
