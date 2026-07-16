@@ -9,16 +9,13 @@ export class GotenbergUtils {
   }
 
   public static async fetch(endpoint: string, data: FormData): Promise<Buffer> {
-    try {
-      const response = await new Axios({
-        headers: {
-          ...data.getHeaders(),
-        },
-        responseType: 'arraybuffer', // This ensures you get a Buffer bac
-      }).post(endpoint, data);
-      return response.data;
-    } catch (error) {
-      console.error(error);
-    }
+    const response = await new Axios({
+      headers: {
+        ...data.getHeaders(),
+      },
+      responseType: 'arraybuffer', // This ensures you get a Buffer bac
+      validateStatus: (status) => status >= 200 && status < 300,
+    }).post(endpoint, data);
+    return response.data;
   }
 }
