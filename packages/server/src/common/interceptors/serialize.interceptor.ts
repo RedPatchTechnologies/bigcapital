@@ -15,10 +15,9 @@ export function camelToSnake<T = any>(value: T): T {
   }
   return mapKeysDeep(
     value,
-    (_value: string, key: any, parent: any, context: any) => {
-      if (Array.isArray(parent)) {
-        // tell mapKeysDeep to skip mapping inside this branch
-        context.skipChildren = true;
+    (_value: string, key: any, parent: any) => {
+      // Skip numeric keys (array indices) but still recurse into array elements
+      if (typeof key === 'number') {
         return key;
       }
       return key
@@ -35,10 +34,9 @@ export function snakeToCamel<T = any>(value: T): T {
   }
   return mapKeysDeep(
     value,
-    (_value: string, key: any, parent: any, context: any) => {
-      if (Array.isArray(parent)) {
-        // tell mapKeysDeep to skip mapping inside this branch
-        context.skipChildren = true;
+    (_value: string, key: any, parent: any) => {
+      // Skip numeric keys (array indices) but still recurse into array elements
+      if (typeof key === 'number') {
         return key;
       }
       const converted = key.replace(/([-_]\w)/g, (group) =>
