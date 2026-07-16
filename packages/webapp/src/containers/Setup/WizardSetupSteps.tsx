@@ -1,6 +1,6 @@
 // @ts-nocheck
-import React from 'react';
 import classNames from 'classnames';
+import React from 'react';
 import { getSetupWizardSteps } from '@/constants/registerWizard';
 
 function WizardSetupStep({ label, isActive = false }) {
@@ -14,7 +14,7 @@ function WizardSetupStep({ label, isActive = false }) {
 /**
  * Setup wizard setups.
  */
-export default function WizardSetupSteps({ currentStep = 1 }) {
+export function WizardSetupSteps({ currentStep = 1 }) {
   const setupWizardSetups = getSetupWizardSteps();
 
   return (

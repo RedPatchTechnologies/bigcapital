@@ -1,18 +1,16 @@
 // @ts-nocheck
-import React from 'react';
-import moment from 'moment';
-import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
+import moment from 'moment';
+import React from 'react';
+import intl from 'react-intl-universal';
 
 import '@/style/pages/TransactionsLocking/TransactionsLockingDialog.scss';
 
-import { AppToaster } from '@/components';
 import { CreateLockingTransactionsFormSchema } from './LockingTransactionsForm.schema';
-
+import { LockingTransactionsFormContent } from './LockingTransactionsFormContent';
 import { useLockingTransactionsContext } from './LockingTransactionsFormProvider';
-import LockingTransactionsFormContent from './LockingTransactionsFormContent';
-
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose, transformToForm } from '@/utils';
 
@@ -25,7 +23,7 @@ const defaultInitialValues = {
 /**
  * Locking Transactions Form.
  */
-function LockingTransactionsForm({
+function LockingTransactionsFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -67,11 +65,7 @@ function LockingTransactionsForm({
     };
 
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       setSubmitting(false);
     };
 
@@ -87,4 +81,6 @@ function LockingTransactionsForm({
     />
   );
 }
-export default compose(withDialogActions)(LockingTransactionsForm);
+export const LockingTransactionsForm = compose(withDialogActions)(
+  LockingTransactionsFormInner,
+);

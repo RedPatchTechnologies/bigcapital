@@ -1,46 +1,46 @@
 // @ts-nocheck
-import React from 'react';
 import { ProgressBar, Intent } from '@blueprintjs/core';
-import * as R from 'ramda';
-import { x } from '@xstyled/emotion';
 import { css } from '@emotion/css';
-import { useIsDarkMode } from '@/hooks/useDarkMode';
-
-import { useJob, useCurrentOrganization } from '@/hooks/query';
+import { x } from '@xstyled/emotion';
+import React from 'react';
 import { FormattedMessage as T } from '@/components';
-
 import { withOrganizationActions } from '@/containers/Organization/withOrganizationActions';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
-import { withOrganization } from '../Organization/withOrganization';
+import { useJob, useCurrentOrganization } from '@/hooks/query';
+import { useIsDarkMode } from '@/hooks/useDarkMode';
 
 /**
  * Setup initializing step form.
  */
-function SetupInitializingForm({
-  setOrganizationSetupCompleted,
-  organization,
-}) {
-  const { refetch, isSuccess } = useCurrentOrganization({ enabled: false });
+function SetupInitializingFormInner({ setOrganizationSetupCompleted }) {
+  const {
+    data: organization,
+    refetch,
+    isSuccess,
+  } = useCurrentOrganization({ enabled: false });
 
   // Job done state.
   const [isJobDone, setIsJobDone] = React.useState(false);
 
-  const {
-    data: { isRunning, isWaiting, isFailed, isCompleted },
-    isFetching: isJobFetching,
-  } = useJob(organization?.build_job_id, {
-    refetchInterval: 2000,
-    enabled: !!organization?.build_job_id,
-  });
+  const { data: jobState, isFetching: isJobFetching } = useJob(
+    organization?.buildJobId,
+    {
+      refetchInterval: 2000,
+      enabled: !!organization?.buildJobId,
+    },
+  );
+  const isRunning = Boolean(jobState?.isRunning);
+  const isWaiting = Boolean(jobState?.isWaiting);
+  const isFailed = Boolean(jobState?.isFailed);
+  const isCompleted = Boolean(jobState?.isCompleted);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isCompleted) {
       refetch();
       setIsJobDone(true);
     }
   }, [refetch, isCompleted, setOrganizationSetupCompleted]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (isSuccess && isJobDone) {
       setOrganizationSetupCompleted(true);
       setIsJobDone(false);
@@ -62,13 +62,9 @@ function SetupInitializingForm({
   );
 }
 
-export default R.compose(
-  withOrganizationActions,
-  withCurrentOrganization(({ organizationTenantId }) => ({
-    organizationId: organizationTenantId,
-  })),
-  withOrganization(({ organization }) => ({ organization })),
-)(SetupInitializingForm);
+export const SetupInitializingForm = withOrganizationActions(
+  SetupInitializingFormInner,
+);
 
 /**
  * State initializing failed state.

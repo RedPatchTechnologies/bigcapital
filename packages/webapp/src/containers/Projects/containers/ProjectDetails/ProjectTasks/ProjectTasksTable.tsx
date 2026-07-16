@@ -1,20 +1,19 @@
 // @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
+import { ActionsMenu } from './components';
+import { useProjectTaskColumns } from './hooks';
+import { useProjectTaskContext } from './ProjectTaskProvider';
 import {
   DataTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
 import { TABLES } from '@/constants/tables';
-import { ActionsMenu } from './components';
-import { useProjectTaskColumns } from './hooks';
-import { useMemorizedColumnsWidths } from '@/hooks';
-import { useProjectTaskContext } from './ProjectTaskProvider';
-import { withSettings } from '@/containers/Settings/withSettings';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useMemorizedColumnsWidths } from '@/hooks';
 import { compose } from '@/utils';
 
 function ProjectTaskTableRoot({
@@ -85,14 +84,14 @@ const ProjectTaksDataTable = styled(DataTable)`
       }
     }
 
-    .tbody .tr .td{
+    .tbody .tr .td {
       padding-top: 0.7rem;
       padding-bottom: 0.7rem;
 
-      &:first-of-type{
+      &:first-of-type {
         padding-left: 1rem;
       }
-      &.td-actions{
+      &.td-actions {
         padding-right: 1rem;
       }
     }

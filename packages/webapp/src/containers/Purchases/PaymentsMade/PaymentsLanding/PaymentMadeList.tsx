@@ -1,30 +1,33 @@
-// @ts-nocheck
 import React from 'react';
 
 import '@/style/pages/PaymentMade/List.scss';
 
-import { DashboardPageContent } from '@/components';
+import { PaymentMadeActionsBar } from './PaymentMadeActionsBar';
+import { PaymentMadeListDrawers } from './PaymentMadeListDrawers';
 import { PaymentMadesListProvider } from './PaymentMadesListProvider';
-import PaymentMadeActionsBar from './PaymentMadeActionsBar';
-import PaymentMadesTable from './PaymentMadesTable';
-
+import { PaymentMadesTable } from './PaymentMadesTable';
 import { withPaymentMade } from './withPaymentMade';
 import { withPaymentMadeActions } from './withPaymentMadeActions';
-
+import type { WithPaymentMadeProps } from './withPaymentMade';
+import { DashboardPageContent } from '@/components';
 import { compose, transformTableStateToQuery } from '@/utils';
 
-/**
- * Payment mades list.
- */
-function PaymentMadeList({
-  // #withPaymentMade
+interface WithPaymentMadeActionsProps {
+  resetPaymentMadesTableState: () => void;
+}
+
+interface PaymentMadeListProps
+  extends Pick<
+      WithPaymentMadeProps,
+      'paymentMadesTableState' | 'paymentsTableStateChanged'
+    >,
+    WithPaymentMadeActionsProps {}
+
+function PaymentMadeListInner({
   paymentMadesTableState,
   paymentsTableStateChanged,
-
-  // #withPaymentMadeActions
   resetPaymentMadesTableState,
-}) {
-  // Resets the invoices table state once the page unmount.
+}: PaymentMadeListProps) {
   React.useEffect(
     () => () => {
       resetPaymentMadesTableState();
@@ -38,6 +41,7 @@ function PaymentMadeList({
       tableStateChanged={paymentsTableStateChanged}
     >
       <PaymentMadeActionsBar />
+      <PaymentMadeListDrawers />
 
       <DashboardPageContent>
         <PaymentMadesTable />
@@ -46,10 +50,10 @@ function PaymentMadeList({
   );
 }
 
-export default compose(
+export const PaymentMadeList = compose(
   withPaymentMade(({ paymentMadesTableState, paymentsTableStateChanged }) => ({
     paymentMadesTableState,
     paymentsTableStateChanged,
   })),
   withPaymentMadeActions,
-)(PaymentMadeList);
+)(PaymentMadeListInner);

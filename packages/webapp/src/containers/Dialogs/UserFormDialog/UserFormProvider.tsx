@@ -1,13 +1,12 @@
 // @ts-nocheck
 import React, { createContext, useContext } from 'react';
+import { DialogContent } from '@/components';
 import {
   useEditUser,
   useUser,
   useRoles,
   useAuthenticatedAccount,
 } from '@/hooks/query';
-
-import { DialogContent } from '@/components';
 
 const UserFormContext = createContext();
 
@@ -27,13 +26,11 @@ function UserFormProvider({ userId, dialogName, ...props }) {
   const { data: roles, isLoading: isRolesLoading } = useRoles();
 
   // Retrieve authenticated user information.
-  const {
-    data: { id },
-  } = useAuthenticatedAccount();
+  const { data: authAccountData } = useAuthenticatedAccount();
 
   const isEditMode = userId;
 
-  const isAuth = user.system_user_id == id
+  const isAuth = user.system_user_id == authAccountData?.id;
 
   // Provider state.
   const provider = {

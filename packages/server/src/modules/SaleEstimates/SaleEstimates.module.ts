@@ -2,9 +2,8 @@ import { Module } from '@nestjs/common';
 import { BullBoardModule } from '@bull-board/nestjs';
 import { BullMQAdapter } from '@bull-board/api/bullMQAdapter';
 import { BullModule } from '@nestjs/bullmq';
-import { TenancyContext } from '../Tenancy/TenancyContext.service';
+import { TenancyModule } from '../Tenancy/Tenancy.module';
 import { TenancyDatabaseModule } from '../Tenancy/TenancyDB/TenancyDB.module';
-import { TransformerInjectable } from '../Transformer/TransformerInjectable.service';
 import { ApproveSaleEstimateService } from './commands/ApproveSaleEstimate.service';
 import { ConvertSaleEstimate } from './commands/ConvetSaleEstimate.service';
 import { CreateSaleEstimate } from './commands/CreateSaleEstimate.service';
@@ -48,6 +47,7 @@ import { SendSaleEstimateMailProcess } from './processes/SendSaleEstimateMail.pr
 
 @Module({
   imports: [
+    TenancyModule,
     TenancyDatabaseModule,
     DynamicListModule,
     MailNotificationModule,
@@ -83,8 +83,6 @@ import { SendSaleEstimateMailProcess } from './processes/SendSaleEstimateMail.pr
     BranchTransactionDTOTransformer,
     WarehouseTransactionDTOTransform,
     SaleEstimateDTOTransformer,
-    TenancyContext,
-    TransformerInjectable,
     SaleEstimatesApplication,
     SendSaleEstimateMail,
     GetSaleEstimatePdf,

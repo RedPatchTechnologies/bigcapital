@@ -5,7 +5,9 @@ import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
 const LockingTransactionsDialogContent = React.lazy(() =>
-  import('./LockingTransactionsDialogContent'),
+  import('./LockingTransactionsDialogContent').then((m) => ({
+    default: m.LockingTransactionsDialogContent,
+  })),
 );
 
 /**
@@ -36,4 +38,4 @@ function LockingTransactionsDialog({
   );
 }
 
-export default compose(withDialogRedux())(LockingTransactionsDialog);
+export const index = compose(withDialogRedux())(LockingTransactionsDialog);

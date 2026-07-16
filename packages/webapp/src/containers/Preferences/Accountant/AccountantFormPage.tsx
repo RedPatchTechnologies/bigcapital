@@ -1,19 +1,22 @@
-// @ts-nocheck
-import React, { useEffect } from 'react';
-import * as R from 'ramda';
-import intl from 'react-intl-universal';
-import { Formik } from 'formik';
 import { Intent } from '@blueprintjs/core';
 import { flatten, unflatten } from 'flat';
-
-import { AppToaster } from '@/components';
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-
-import AccountantForm from './AccountantForm';
+import { Formik, FormikHelpers } from 'formik';
+import * as R from 'ramda';
+import { useEffect } from 'react';
+import intl from 'react-intl-universal';
 import { AccountantSchema } from './Accountant.schema';
+import { AccountantForm } from './AccountantForm';
 import { useAccountantFormContext } from './AccountantFormProvider';
 import { transferObjectOptionsToArray } from './utils';
+import { AppToaster } from '@/components';
+import {
+  withDashboardActions,
+  type WithDashboardActionsProps,
+} from '@/containers/Dashboard/withDashboardActions';
+import {
+  withSettings,
+  type WithSettingsProps,
+} from '@/containers/Settings/withSettings';
 import { compose, transformToForm, transfromToSnakeCase } from '@/utils';
 
 import '@/style/pages/Preferences/Accounting.scss';
@@ -33,16 +36,33 @@ const defaultFormValues = flatten({
     preferredDepositAccount: '',
     preferredAdvanceDeposit: '',
   },
-});
+}) as AccountantFormValues;
 
-// Accountant preferences.
-function AccountantFormPage({
-  //# withDashboardActions
+interface AccountantFormValues {
+  organization: {
+    accountingBasis: string;
+  };
+  accounts: {
+    accountCodeRequired: boolean;
+    accountCodeUnique: boolean;
+  };
+  billPayments: {
+    withdrawalAccount: string;
+  };
+  paymentReceives: {
+    preferredDepositAccount: string;
+    preferredAdvanceDeposit: string;
+  };
+}
+
+interface AccountantFormPageInnerProps
+  extends WithDashboardActionsProps,
+    WithSettingsProps {}
+
+function AccountantFormPageInner({
   changePreferencesPageTitle,
-
-  // #withSettings
   allSettings,
-}) {
+}: AccountantFormPageInnerProps) {
   const { saveSettingMutate } = useAccountantFormContext();
 
   useEffect(() => {
@@ -52,9 +72,12 @@ function AccountantFormPage({
   const initialValues = unflatten({
     ...defaultFormValues,
     ...transformToForm(flatten(allSettings), defaultFormValues),
-  });
-  // Handle the form submitting.
-  const handleFormSubmit = (values, { setSubmitting }) => {
+  }) as AccountantFormValues;
+
+  const handleFormSubmit = (
+    values: AccountantFormValues,
+    { setSubmitting }: FormikHelpers<AccountantFormValues>,
+  ) => {
     const options = R.compose(
       transferObjectOptionsToArray,
       transfromToSnakeCase,
@@ -84,9 +107,9 @@ function AccountantFormPage({
   );
 }
 
-export default compose(
+export const AccountantFormPage = compose(
   withSettings(({ allSettings }) => ({
     allSettings,
   })),
   withDashboardActions,
-)(AccountantFormPage);
+)(AccountantFormPageInner);

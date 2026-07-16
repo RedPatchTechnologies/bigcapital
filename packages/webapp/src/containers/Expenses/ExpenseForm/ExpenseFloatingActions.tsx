@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React from 'react';
 import {
   Intent,
   Button,
@@ -11,16 +10,16 @@ import {
   MenuItem,
 } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-import { FormattedMessage as T, PageForm, Group } from '@/components';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
-
-import { Icon, If } from '@/components';
 import { useExpenseFormContext } from './ExpenseFormPageProvider';
+import { FormattedMessage as T, PageForm, Group } from '@/components';
+import { Icon, If } from '@/components';
 
 /**
  * Expense form floating actions.
  */
-export default function ExpenseFloatingFooter() {
+export function ExpenseFloatingFooter() {
   const history = useHistory();
 
   // Formik context.

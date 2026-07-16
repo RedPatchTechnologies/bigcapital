@@ -1,7 +1,10 @@
 // @ts-nocheck
-import React from 'react';
-import { Form, useFormikContext } from 'formik';
 import { Button, Classes, FormGroup, Intent } from '@blueprintjs/core';
+import { Form, useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useAccountDialogContext } from './AccountDialogProvider';
+import { parentAccountShouldUpdate } from './utils';
 import {
   If,
   FieldRequiredHint,
@@ -15,14 +18,9 @@ import {
   FCheckbox,
   FTextArea,
 } from '@/components';
-import { withAccounts } from '@/containers/Accounts/withAccounts';
-
 import { FOREIGN_CURRENCY_ACCOUNTS } from '@/constants/accountTypes';
-
+import { withAccounts } from '@/containers/Accounts/withAccounts';
 import { useAutofocus } from '@/hooks';
-import { useAccountDialogContext } from './AccountDialogProvider';
-
-import { parentAccountShouldUpdate } from './utils';
 import { compose } from '@/utils';
 
 /**
@@ -45,7 +43,7 @@ function AccountFormDialogFields({
       <div className={Classes.DIALOG_BODY}>
         <FFormGroup
           inline={true}
-          label={<T id={'account_type'} />}
+          label={intl.get('account_type')}
           labelInfo={<FieldRequiredHint />}
           name={'account_type'}
           fastField={true}
@@ -66,7 +64,7 @@ function AccountFormDialogFields({
 
         <FFormGroup
           name={'name'}
-          label={<T id={'account_name'} />}
+          label={intl.get('account_name')}
           labelInfo={<FieldRequiredHint />}
           inline={true}
           fastField={true}
@@ -80,7 +78,7 @@ function AccountFormDialogFields({
         </FFormGroup>
 
         <FFormGroup
-          label={<T id={'account_code'} />}
+          label={intl.get('account_code')}
           name={'code'}
           labelInfo={<Hint content={<T id="account_code_hint" />} />}
           inline={true}
@@ -97,7 +95,7 @@ function AccountFormDialogFields({
         >
           <FCheckbox
             inline={true}
-            label={<T id={'sub_account'} />}
+            label={intl.get('sub_account')}
             name={'subaccount'}
             fastField={true}
           />
@@ -107,7 +105,7 @@ function AccountFormDialogFields({
           <FFormGroup
             name={'parent_account_id'}
             shouldUpdate={parentAccountShouldUpdate}
-            label={<T id={'parent_account'} />}
+            label={intl.get('parent_account')}
             inline={true}
             fastField={true}
           >
@@ -128,7 +126,7 @@ function AccountFormDialogFields({
         <If condition={FOREIGN_CURRENCY_ACCOUNTS.includes(values.account_type)}>
           {/*------------ Currency  -----------*/}
           <FFormGroup
-            label={<T id={'currency'} />}
+            label={intl.get('currency')}
             name={'currency_code'}
             inline={true}
             fastField={true}
@@ -144,7 +142,7 @@ function AccountFormDialogFields({
         </If>
 
         <FFormGroup
-          label={<T id={'description'} />}
+          label={intl.get('description')}
           name={'description'}
           inline={true}
           fastField={true}
@@ -183,7 +181,7 @@ function AccountFormDialogFields({
   );
 }
 
-export default compose(
+export const AccountDialogFormContent = compose(
   withAccounts(({ accountsTypes, accountsList }) => ({
     accountsTypes,
     accounts: accountsList,

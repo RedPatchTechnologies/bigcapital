@@ -1,7 +1,7 @@
 // @ts-nocheck
-import MODIFIER from './modifiers';
-import ContextMenu from './ContextMenu';
 import AvatarCell from './AvatarCell';
+import ContextMenu from './ContextMenu';
+import MODIFIER from './modifiers';
 
 export * from './Money/Money';
 export * from './Dialog';
@@ -62,5 +62,6 @@ export * from './EmptyStatus';
 export * from './Postbox';
 export * from './AppToaster';
 export * from './Layout';
+export * from '@/ee/workspaces/components/WorkspaceSwitchingOverlay';
 
 export { MODIFIER, ContextMenu, AvatarCell };

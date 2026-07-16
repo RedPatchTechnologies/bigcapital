@@ -7,10 +7,12 @@ import {
   ApiExtraModels,
   ApiOperation,
   ApiProduces,
+  ApiQuery,
   ApiResponse,
   ApiTags,
   getSchemaPath,
 } from '@nestjs/swagger';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { VendorBalanceSummaryQueryDto } from './VendorBalanceSummaryQuery.dto';
 import {
   VendorBalanceSummaryResponseDto,
@@ -21,7 +23,11 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 @Controller('/reports/vendor-balance-summary')
 @ApiTags('Reports')
 @ApiCommonHeaders()
-@ApiExtraModels(VendorBalanceSummaryResponseDto, VendorBalanceSummaryTableResponseDto)
+@ApiExtraModels(
+  VendorBalanceSummaryResponseDto,
+  VendorBalanceSummaryTableResponseDto,
+  NumberFormatQueryDto,
+)
 export class VendorBalanceSummaryController {
   constructor(
     private readonly vendorBalanceSummaryApp: VendorBalanceSummaryApplication,
@@ -29,6 +35,13 @@ export class VendorBalanceSummaryController {
 
   @Get()
   @ApiOperation({ summary: 'Get vendor balance summary' })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
+  })
   @ApiResponse({
     status: 200,
     description: 'Vendor balance summary',

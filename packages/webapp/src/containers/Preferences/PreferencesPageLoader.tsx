@@ -1,8 +1,8 @@
 // @ts-nocheck
-import { useIsDarkMode } from '@/hooks/useDarkMode';
 import ContentLoader from 'react-content-loader';
+import { useIsDarkMode } from '@/hooks/useDarkMode';
 
-export default function PreferencesPageLoader(props) {
+export function PreferencesPageLoader(props) {
   const isDarkmode = useIsDarkMode();
 
   return (

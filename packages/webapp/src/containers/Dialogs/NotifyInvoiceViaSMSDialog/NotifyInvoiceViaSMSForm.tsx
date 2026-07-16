@@ -1,15 +1,13 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { pick } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { pick } from 'lodash';
-import { Intent } from '@blueprintjs/core';
-import { AppToaster } from '@/components';
-
-import NotifyViaSMSForm from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
 import { useNotifyInvoiceViaSMSContext } from './NotifyInvoiceViaSMSFormProvider';
-import { transformErrors } from '@/containers/NotifyViaSMS/utils';
-
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { NotifyViaSMSForm } from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
+import { transformErrors } from '@/containers/NotifyViaSMS/utils';
 import { compose } from '@/utils';
 
 const transformFormValuesToRequest = (values) => {
@@ -31,7 +29,7 @@ const notificationTypes = [
 /**
  * Notify Invoice Via SMS Form.
  */
-function NotifyInvoiceViaSMSForm({
+function NotifyInvoiceViaSMSFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -60,11 +58,7 @@ function NotifyInvoiceViaSMSForm({
       closeDialog(dialogName);
     };
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors) {
         transformErrors(errors, { setErrors, setCalloutCode });
       }
@@ -106,4 +100,6 @@ function NotifyInvoiceViaSMSForm({
   );
 }
 
-export default compose(withDialogActions)(NotifyInvoiceViaSMSForm);
+export const NotifyInvoiceViaSMSForm = compose(withDialogActions)(
+  NotifyInvoiceViaSMSFormInner,
+);

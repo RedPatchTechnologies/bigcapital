@@ -1,18 +1,17 @@
 // @ts-nocheck
-import React from 'react';
-import { useFormikContext } from 'formik';
-import { useCurrencyFormContext } from './CurrencyFormProvider';
 
 import { Button, Classes, Intent } from '@blueprintjs/core';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import { useCurrencyFormContext } from './CurrencyFormProvider';
 import { FormattedMessage as T } from '@/components';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
 /**
  * Currency dialog form footer action.
  */
-function CurrencyFormFooter({
+function CurrencyFormFooterInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -38,4 +37,6 @@ function CurrencyFormFooter({
   );
 }
 
-export default compose(withDialogActions)(CurrencyFormFooter);
+export const CurrencyFormFooter = compose(withDialogActions)(
+  CurrencyFormFooterInner,
+);

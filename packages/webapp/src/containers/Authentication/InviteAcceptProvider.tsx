@@ -1,8 +1,8 @@
 // @ts-nocheck
 import React, { createContext, useContext, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import { useInviteMetaByToken, useAuthInviteAccept } from '@/hooks/query';
 import { InviteAcceptLoading } from './components';
+import { useInviteMetaByToken, useAuthInviteAccept } from '@/hooks/query';
 
 const InviteAcceptContext = createContext();
 
@@ -26,7 +26,9 @@ function InviteAcceptProvider({ token, ...props }) {
   const history = useHistory();
 
   useEffect(() => {
-    if (inviteMetaError) { history.push('/auth/login'); }
+    if (inviteMetaError) {
+      history.push('/auth/login');
+    }
   }, [history, inviteMetaError]);
 
   // Transform the backend response to match frontend expectations.

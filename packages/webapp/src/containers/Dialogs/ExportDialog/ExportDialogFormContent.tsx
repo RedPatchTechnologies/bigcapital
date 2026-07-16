@@ -1,12 +1,12 @@
 // @ts-nocheck
-import { FFormGroup, FRadioGroup, FSelect, Group } from '@/components';
 import { Button, Intent, Radio } from '@blueprintjs/core';
-import { Form, useFormikContext } from 'formik';
 import { x } from '@xstyled/emotion';
+import { Form, useFormikContext } from 'formik';
 import { ExportResources } from './constants';
-import { compose } from '@/utils';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { FFormGroup, FRadioGroup, FSelect, Group } from '@/components';
 import { DialogsName } from '@/constants/dialogs';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { compose } from '@/utils';
 
 function ExportDialogFormContentRoot({
   // #withDialogActions
@@ -24,10 +24,7 @@ function ExportDialogFormContentRoot({
           You can export data from Bigcapital in CSV or XLSX format
         </x.p>
 
-        <FFormGroup
-          name={'resource'}
-          label={'Select Resource'}
-        >
+        <FFormGroup name={'resource'} label={'Select Resource'}>
           <x.div maxWidth="280px">
             <FSelect
               name={'resource'}

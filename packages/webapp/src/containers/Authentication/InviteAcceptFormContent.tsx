@@ -1,12 +1,13 @@
 // @ts-nocheck
+import { Button, InputGroup, Intent } from '@blueprintjs/core';
+import { Tooltip2 } from '@blueprintjs/popover2';
+import { Form, useFormikContext } from 'formik';
 import React, { useState } from 'react';
 import intl from 'react-intl-universal';
-import { Button, InputGroup, Intent } from '@blueprintjs/core';
-import { Form, useFormikContext } from 'formik';
 import { Link } from 'react-router-dom';
-import { Tooltip2 } from '@blueprintjs/popover2';
 import styled from 'styled-components';
-
+import { AuthSubmitButton } from './_components';
+import { useInviteAcceptContext } from './InviteAcceptProvider';
 import {
   Col,
   FFormGroup,
@@ -14,13 +15,11 @@ import {
   Row,
   FormattedMessage as T,
 } from '@/components';
-import { useInviteAcceptContext } from './InviteAcceptProvider';
-import { AuthSubmitButton } from './_components';
 
 /**
  * Invite user form.
  */
-export default function InviteUserFormContent() {
+export function InviteUserFormContent() {
   const [showPassword, setShowPassword] = useState<boolean>(false);
 
   const { inviteMeta } = useInviteAcceptContext();
@@ -46,19 +45,19 @@ export default function InviteUserFormContent() {
     <Form>
       <Row>
         <Col md={6}>
-          <FFormGroup name={'first_name'} label={<T id={'first_name'} />}>
+          <FFormGroup name={'first_name'} label={intl.get('first_name')}>
             <FInputGroup name={'first_name'} large={true} />
           </FFormGroup>
         </Col>
 
         <Col md={6}>
-          <FFormGroup name={'last_name'} label={<T id={'last_name'} />}>
+          <FFormGroup name={'last_name'} label={intl.get('last_name')}>
             <FInputGroup name={'last_name'} large={true} />
           </FFormGroup>
         </Col>
       </Row>
 
-      <FFormGroup name={'password'} label={<T id={'password'} />}>
+      <FFormGroup name={'password'} label={intl.get('password')}>
         <FInputGroup
           name={'password'}
           large={true}

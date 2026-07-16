@@ -1,29 +1,28 @@
 // @ts-nocheck
 import React from 'react';
-import styled from 'styled-components';
 import { useHistory } from 'react-router-dom';
+import styled from 'styled-components';
+import { useProjectsListColumns, ActionsMenu } from './components';
+import { ProjectsEmptyStatus } from './ProjectsEmptyStatus';
+import { useProjectsListContext } from './ProjectsListProvider';
+import { withProjectsActions } from './withProjectsActions';
 import {
   DataTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
 import { TABLES } from '@/constants/tables';
-import ProjectsEmptyStatus from './ProjectsEmptyStatus';
-import { useProjectsListContext } from './ProjectsListProvider';
-import { useMemorizedColumnsWidths } from '@/hooks';
-import { useProjectsListColumns, ActionsMenu } from './components';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
-import { withProjectsActions } from './withProjectsActions';
-
+import { useMemorizedColumnsWidths } from '@/hooks';
 import { compose } from '@/utils';
 
 /**
  * Projects list datatable.
  * @returns
  */
-function ProjectsDataTable({
+function ProjectsDataTableInner({
   // #withDial
   openDialog,
 
@@ -119,14 +118,14 @@ function ProjectsDataTable({
   );
 }
 
-export default compose(
+export const ProjectsDataTable = compose(
   withDialogActions,
   withAlertActions,
   withProjectsActions,
   withSettings(({ projectSettings }) => ({
     projectsTableSize: projectSettings?.tableSize,
   })),
-)(ProjectsDataTable);
+)(ProjectsDataTableInner);
 
 const ProjectsTable = styled(DataTable)`
   .tbody {

@@ -1,11 +1,11 @@
 // @ts-nocheck
-import React from 'react';
-import { FastField } from 'formik';
-import { CLASSES } from '@/constants/classes';
 import classNames from 'classnames';
-import AllocateLandedCostEntriesTable from './AllocateLandedCostEntriesTable';
+import { FastField } from 'formik';
+import React from 'react';
+import { AllocateLandedCostEntriesTable } from './AllocateLandedCostEntriesTable';
+import { CLASSES } from '@/constants/classes';
 
-export default function AllocateLandedCostFormBody() {
+export function AllocateLandedCostFormBody() {
   return (
     <div className={classNames(CLASSES.PAGE_FORM_BODY)}>
       <FastField name={'items'}>

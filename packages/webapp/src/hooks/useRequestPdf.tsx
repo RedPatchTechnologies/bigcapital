@@ -1,6 +1,8 @@
 // @ts-nocheck
 import React from 'react';
+import { normalizeApiPath } from '../utils';
 import useApiRequest from './useRequest';
+import { useApiFetcher } from './useRequest';
 
 export const useRequestPdf = (httpProps) => {
   const apiRequest = useApiRequest();
@@ -17,7 +19,7 @@ export const useRequestPdf = (httpProps) => {
         headers: { accept: 'application/pdf' },
         responseType: 'blob',
         ...httpProps,
-        url: `/api/${httpProps?.url}`,
+        url: `/api/${normalizeApiPath(httpProps?.url)}`,
       })
       .then((response) => {
         // Create a Blob from the PDF Stream.
@@ -49,6 +51,21 @@ export const useRequestPdf = (httpProps) => {
     isLoaded,
     pdfUrl,
     response,
-    filename
+    filename,
   };
+};
+
+export const useFetcherPdf = (fetchFn: () => Promise<Blob>) => {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [pdfUrl, setPdfUrl] = React.useState('');
+
+  React.useEffect(() => {
+    setIsLoading(true);
+    fetchFn().then((blob) => {
+      setPdfUrl(URL.createObjectURL(blob));
+      setIsLoading(false);
+    });
+  }, []);
+
+  return { isLoading, pdfUrl };
 };

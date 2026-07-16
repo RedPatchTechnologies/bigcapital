@@ -1,20 +1,17 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { AppToaster, FormattedMessage as T } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-
-import { useDeliverEstimate } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useDeliverEstimate } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * Estimate delivered alert.
  */
-function EstimateDeliveredAlert({
+function EstimateDeliveredAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -64,7 +61,7 @@ function EstimateDeliveredAlert({
   );
 }
 
-export default compose(
+export const EstimateDeliveredAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(EstimateDeliveredAlert);
+)(EstimateDeliveredAlertInner);

@@ -1,35 +1,30 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { Intent } from '@blueprintjs/core';
 
 import '@/style/pages/Preferences/branchesList.scss';
 
-import { DataTable, Card, AppToaster, TableSkeletonRows } from '@/components';
-import { useBranchesTableColumns, ActionsMenu } from './components';
 import { useBranchesContext } from './BranchesProvider';
-import { useMarkBranchAsPrimary } from '@/hooks/query';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { useBranchesTableColumns, ActionsMenu } from './components';
+import { DataTable, Card, AppToaster, TableSkeletonRows } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { useMarkBranchAsPrimary } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * Branches data table.
  */
-function BranchesDataTable({
+function BranchesDataTableInner({
   // #withDialogAction
   openDialog,
 
   // #withAlertActions
   openAlert,
 }) {
-  // Table columns.
   const columns = useBranchesTableColumns();
-
-  // MarkBranchAsPrimary
   const { mutateAsync: markBranchAsPrimaryMutate } = useMarkBranchAsPrimary();
 
   const { branches, isBranchesLoading, isBranchesFetching } =
@@ -59,7 +54,7 @@ function BranchesDataTable({
     <BranchesTableCard>
       <BranchesTable
         columns={columns}
-        data={branches}
+        data={branches ?? []}
         loading={isBranchesLoading}
         headerLoading={isBranchesLoading}
         progressBarLoading={isBranchesFetching}
@@ -76,7 +71,10 @@ function BranchesDataTable({
   );
 }
 
-export default compose(withDialogActions, withAlertActions)(BranchesDataTable);
+export const BranchesDataTable = compose(
+  withDialogActions,
+  withAlertActions,
+)(BranchesDataTableInner);
 
 const BranchesTableCard = styled(Card)`
   padding: 0;

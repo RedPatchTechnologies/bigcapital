@@ -1,21 +1,31 @@
-import { ItemAction } from "@/interfaces/Item";
-import { ReportsAction } from "../FinancialStatements/types/Report.types";
-import { InventoryAdjustmentAction } from "../InventoryAdjutments/types/InventoryAdjustments.types";
-import { CashflowAction } from "../BankingTransactions/types/BankingTransactions.types";
-import { ManualJournalAction } from "../ManualJournals/types/ManualJournals.types";
-import { AccountAction } from "@/interfaces/Account";
-import { VendorCreditAction } from "../VendorCredit/types/VendorCredit.types";
-import { IPaymentMadeAction } from "../BillPayments/types/BillPayments.types";
-import { ExpenseAction } from "../Expenses/Expenses.types";
-import { CustomerAction, VendorAction } from "../Customers/types/Customers.types";
-import { SaleEstimateAction } from "../SaleEstimates/types/SaleEstimates.types";
-import { SaleInvoiceAction } from "../SaleInvoices/SaleInvoice.types";
-import { CreditNoteAction } from "../CreditNotes/types/CreditNotes.types";
-import { SaleReceiptAction } from "../SaleReceipts/types/SaleReceipts.types";
-import { BillAction } from "../Bills/Bills.types";
-import { AbilitySubject, ISubjectAbilitiesSchema, ISubjectAbilitySchema } from "./Roles.types";
-import { PaymentReceiveAction } from "../PaymentReceived/types/PaymentReceived.types";
-import { PreferencesAction } from "../Settings/Settings.types";
+import { ItemAction } from '@/interfaces/Item';
+import { ReportsAction } from '../FinancialStatements/types/Report.types';
+import { InventoryAdjustmentAction } from '../InventoryAdjutments/types/InventoryAdjustments.types';
+import { CashflowAction } from '../BankingTransactions/types/BankingTransactions.types';
+import { ManualJournalAction } from '../ManualJournals/types/ManualJournals.types';
+import { AccountAction } from '@/interfaces/Account';
+import { VendorCreditAction } from '../VendorCredit/types/VendorCredit.types';
+import { IPaymentMadeAction } from '../BillPayments/types/BillPayments.types';
+import { ExpenseAction } from '../Expenses/Expenses.types';
+import {
+  CustomerAction,
+  VendorAction,
+} from '../Customers/types/Customers.types';
+import { SaleEstimateAction } from '../SaleEstimates/types/SaleEstimates.types';
+import { SaleInvoiceAction } from '../SaleInvoices/SaleInvoice.types';
+import { CreditNoteAction } from '../CreditNotes/types/CreditNotes.types';
+import { SaleReceiptAction } from '../SaleReceipts/types/SaleReceipts.types';
+import { BillAction } from '../Bills/Bills.types';
+import {
+  AbilitySubject,
+  ISubjectAbilitiesSchema,
+  ISubjectAbilitySchema,
+} from './Roles.types';
+import { PaymentReceiveAction } from '../PaymentReceived/types/PaymentReceived.types';
+import { PreferencesAction } from '../Settings/Settings.types';
+import { AuditLogAction } from '../EE/AuditLogs/types/AuditLogs.types';
+import { AttachmentAction } from '../Attachments/Attachments.types';
+import { WarehouseTransferAction } from '../Warehouses/Warehouse.types';
 
 export const AbilitySchema: ISubjectAbilitiesSchema[] = [
   {
@@ -305,6 +315,45 @@ export const AbilitySchema: ISubjectAbilitiesSchema[] = [
       },
     ],
   },
+  {
+    subject: AbilitySubject.AuditLog,
+    subjectLabel: 'ability.audit_log',
+    abilities: [{ key: AuditLogAction.View, label: 'ability.view' }],
+  },
+  {
+    subject: AbilitySubject.Attachment,
+    subjectLabel: 'ability.attachments',
+    abilities: [
+      { key: AttachmentAction.View, label: 'ability.view', default: true },
+      { key: AttachmentAction.Delete, label: 'ability.delete', default: true },
+    ],
+  },
+  {
+    subject: AbilitySubject.Warehouse,
+    subjectLabel: 'ability.warehouse_transfers',
+    abilities: [
+      {
+        key: WarehouseTransferAction.VIEW,
+        label: 'ability.view',
+        default: true,
+      },
+      {
+        key: WarehouseTransferAction.CREATE,
+        label: 'ability.create',
+        default: true,
+      },
+      {
+        key: WarehouseTransferAction.EDIT,
+        label: 'ability.edit',
+        default: true,
+      },
+      {
+        key: WarehouseTransferAction.DELETE,
+        label: 'ability.delete',
+        default: true,
+      },
+    ],
+  },
 ];
 
 /**
@@ -313,7 +362,7 @@ export const AbilitySchema: ISubjectAbilitiesSchema[] = [
  * @returns {ISubjectAbilitiesSchema | null}
  */
 export const getPermissionsSubject = (
-  key: string
+  key: string,
 ): ISubjectAbilitiesSchema | null => {
   return AbilitySchema.find((subject) => subject.subject === key);
 };
@@ -326,7 +375,7 @@ export const getPermissionsSubject = (
  */
 export const getPermissionAbility = (
   subjectKey: string,
-  abilityKey: string
+  abilityKey: string,
 ): ISubjectAbilitySchema | null => {
   const subject = getPermissionsSubject(subjectKey);
 

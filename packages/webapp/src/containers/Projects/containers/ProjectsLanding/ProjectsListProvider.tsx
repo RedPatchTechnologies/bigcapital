@@ -1,9 +1,9 @@
 // @ts-nocheck
-import React from 'react';
 import { isEmpty } from 'lodash';
-import { useResourceViews, useResourceMeta } from '@/hooks/query';
-import { DashboardInsider } from '@/components';
+import React from 'react';
 import { useProjects } from '../../hooks';
+import { DashboardInsider } from '@/components';
+import { useResourceViews, useResourceMeta } from '@/hooks/query';
 
 const ProjectsListContext = React.createContext();
 
@@ -18,18 +18,18 @@ function ProjectsListProvider({ query, tableStateChanged, ...props }) {
 
   // Fetch accounts list according to the given custom view id.
   const {
-    data: { projects },
+    data: projectsData,
     isFetching: isProjectsFetching,
     isLoading: isProjectsLoading,
   } = useProjects(query, { keepPreviousData: true });
 
   // Detarmines the datatable empty status.
   const isEmptyStatus =
-    isEmpty(projects) && !tableStateChanged && !isProjectsLoading;
+    isEmpty(projectsData?.data) && !tableStateChanged && !isProjectsLoading;
 
   // provider payload.
   const provider = {
-    projects,
+    projects: projectsData?.data,
 
     projectsViews,
 

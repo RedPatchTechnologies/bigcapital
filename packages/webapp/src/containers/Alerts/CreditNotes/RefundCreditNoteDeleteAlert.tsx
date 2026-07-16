@@ -1,22 +1,19 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import { FormattedMessage as T, AppToaster } from '@/components';
-
-import { useDeleteRefundCreditNote } from '@/hooks/query';
-
+import { DRAWERS } from '@/constants/drawers';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
+import { useDeleteRefundCreditNote } from '@/hooks/query';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
 
 /**
  * Refund credit transactions delete alert
  */
-function RefundCreditNoteDeleteAlert({
+function RefundCreditNoteDeleteAlertInner({
   name,
   // #withAlertStoreConnect
   isOpen,
@@ -71,8 +68,8 @@ function RefundCreditNoteDeleteAlert({
   );
 }
 
-export default compose(
+export const RefundCreditNoteDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(RefundCreditNoteDeleteAlert);
+)(RefundCreditNoteDeleteAlertInner);

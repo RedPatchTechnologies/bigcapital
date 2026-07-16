@@ -1,27 +1,23 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import { pick, snakeCase } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import { pick, snakeCase } from 'lodash';
-import { AppToaster } from '@/components';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { InviteUserFormSchema } from './InviteUserDialog.schema';
-import InviteUserFormContent from './InviteUserFormContent';
+import { InviteUserFormContent } from './InviteUserFormContent';
 import { useInviteUserFormContext } from './InviteUserFormProvider';
-
 import { transformApiErrors } from './utils';
-
+import { AppToaster } from '@/components';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose, objectKeysTransform } from '@/utils';
 
 const initialValues = {
   email: '',
-  role_id: ''
-}
+  role_id: '',
+};
 
-function InviteUserForm({
+function InviteUserFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -56,9 +52,7 @@ function InviteUserForm({
     // Handle the response error.
     const onError = (error) => {
       const {
-        response: {
-          data: { errors },
-        },
+        data: { errors },
       } = error;
 
       const errorsTransformed = transformApiErrors(errors);
@@ -79,4 +73,4 @@ function InviteUserForm({
     </Formik>
   );
 }
-export default compose(withDialogActions)(InviteUserForm);
+export const InviteUserForm = compose(withDialogActions)(InviteUserFormInner);

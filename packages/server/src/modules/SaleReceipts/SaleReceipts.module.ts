@@ -15,7 +15,7 @@ import { SaleReceiptDTOTransformer } from './commands/SaleReceiptDTOTransformer.
 import { SaleReceiptValidators } from './commands/SaleReceiptValidators.service';
 import { ChromiumlyTenancyModule } from '../ChromiumlyTenancy/ChromiumlyTenancy.module';
 import { TemplateInjectableModule } from '../TemplateInjectable/TemplateInjectable.module';
-import { TenancyContext } from '../Tenancy/TenancyContext.service';
+import { TenancyModule } from '../Tenancy/Tenancy.module';
 import { SaleReceiptBrandingTemplate } from './queries/SaleReceiptBrandingTemplate.service';
 import { BranchesModule } from '../Branches/Branches.module';
 import { WarehousesModule } from '../Warehouses/Warehouses.module';
@@ -50,6 +50,7 @@ import { ValidateBulkDeleteSaleReceiptsService } from './ValidateBulkDeleteSaleR
 @Module({
   controllers: [SaleReceiptsController],
   imports: [
+    TenancyModule,
     ItemsModule,
     ChromiumlyTenancyModule,
     TemplateInjectableModule,
@@ -70,7 +71,6 @@ import { ValidateBulkDeleteSaleReceiptsService } from './ValidateBulkDeleteSaleR
     }),
   ],
   providers: [
-    TenancyContext,
     SaleReceiptValidators,
     SaleReceiptApplication,
     CreateSaleReceipt,

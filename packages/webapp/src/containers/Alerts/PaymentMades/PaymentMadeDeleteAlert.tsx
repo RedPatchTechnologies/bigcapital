@@ -1,23 +1,20 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { AppToaster, FormattedMessage as T } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
-import { useDeletePaymentMade } from '@/hooks/query';
-
-import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
 import { handleDeleteErrors } from './_utils';
+import { AppToaster, FormattedMessage as T } from '@/components';
+import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { useDeletePaymentMade } from '@/hooks/query';
+import { compose } from '@/utils';
 
 /**
  * Payment made delete alert.
  */
-function PaymentMadeDeleteAlert({
+function PaymentMadeDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -48,15 +45,9 @@ function PaymentMadeDeleteAlert({
         });
         closeDrawer(DRAWERS.PAYMENT_MADE_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });
@@ -80,8 +71,8 @@ function PaymentMadeDeleteAlert({
   );
 }
 
-export default compose(
+export const PaymentMadeDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(PaymentMadeDeleteAlert);
+)(PaymentMadeDeleteAlertInner);

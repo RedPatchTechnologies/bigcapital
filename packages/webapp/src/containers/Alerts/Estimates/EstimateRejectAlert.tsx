@@ -1,20 +1,17 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { AppToaster, FormattedMessage as T } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-
-import { useRejectEstimate } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useRejectEstimate } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  *  Estimate reject delete alerts.
  */
-function EstimateRejectAlert({
+function EstimateRejectAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -63,7 +60,7 @@ function EstimateRejectAlert({
   );
 }
 
-export default compose(
+export const EstimateRejectAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(EstimateRejectAlert);
+)(EstimateRejectAlertInner);

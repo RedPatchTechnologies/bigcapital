@@ -1,8 +1,7 @@
 import { Module } from '@nestjs/common';
 import { I18nContext } from 'nestjs-i18n';
 import { TenancyDatabaseModule } from '../Tenancy/TenancyDB/TenancyDB.module';
-import { TenancyContext } from '../Tenancy/TenancyContext.service';
-import { TransformerInjectable } from '../Transformer/TransformerInjectable.service';
+import { TenancyModule } from '../Tenancy/Tenancy.module';
 import { CreateWarehouse } from './commands/CreateWarehouse.service';
 import { EditWarehouse } from './commands/EditWarehouse.service';
 import { DeleteWarehouseService } from './commands/DeleteWarehouse.service';
@@ -47,7 +46,7 @@ import { ValidateWarehouseExistance } from './Integrations/ValidateWarehouseExis
 const models = [RegisterTenancyModel(Warehouse)];
 
 @Module({
-  imports: [TenancyDatabaseModule, ...models],
+  imports: [TenancyModule, TenancyDatabaseModule, ...models],
   controllers: [WarehousesController, WarehouseItemsController],
   providers: [
     CreateWarehouse,
@@ -63,8 +62,6 @@ const models = [RegisterTenancyModel(Warehouse)];
     CreateInitialWarehouse,
     WarehousesSettings,
     I18nContext,
-    TenancyContext,
-    TransformerInjectable,
     WarehouseTransactionDTOTransform,
     BillsActivateWarehousesSubscriber,
     CreditsActivateWarehousesSubscriber,
@@ -89,8 +86,13 @@ const models = [RegisterTenancyModel(Warehouse)];
     WarehousesDTOValidators,
     DeleteItemWarehousesQuantity,
     InventoryTransactionsWarehouses,
-    ValidateWarehouseExistance
+    ValidateWarehouseExistance,
   ],
-  exports: [WarehousesSettings, WarehouseTransactionDTOTransform, WarehousesApplication, ...models],
+  exports: [
+    WarehousesSettings,
+    WarehouseTransactionDTOTransform,
+    WarehousesApplication,
+    ...models,
+  ],
 })
 export class WarehousesModule {}

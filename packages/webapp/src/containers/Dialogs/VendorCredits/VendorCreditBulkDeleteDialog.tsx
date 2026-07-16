@@ -1,17 +1,16 @@
 // @ts-nocheck
-import React from 'react';
 import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
-import { FormattedMessage as T, AppToaster } from '@/components';
+import React from 'react';
 import intl from 'react-intl-universal';
-
-import BulkDeleteDialogContent from '@/containers/Dialogs/components/BulkDeleteDialogContent';
-import { useBulkDeleteVendorCredits } from '@/hooks/query/vendorCredit';
+import { FormattedMessage as T, AppToaster } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
 import { withVendorsCreditNotesActions } from '@/containers/Purchases/CreditNotes/CreditNotesLanding/withVendorsCreditNotesActions';
+import { useBulkDeleteVendorCredits } from '@/hooks/query/vendor-credit';
 import { compose } from '@/utils';
 
-function VendorCreditBulkDeleteDialog({
+function VendorCreditBulkDeleteDialogInner({
   dialogName,
   isOpen,
   payload: {
@@ -41,9 +40,7 @@ function VendorCreditBulkDeleteDialog({
     })
       .then(() => {
         AppToaster.show({
-          message: intl.get(
-            'the_vendor_credits_has_been_deleted_successfully',
-          ),
+          message: intl.get('the_vendor_credits_has_been_deleted_successfully'),
           intent: Intent.SUCCESS,
         });
         setVendorsCreditNoteSelectedRows([]);
@@ -98,9 +95,8 @@ function VendorCreditBulkDeleteDialog({
   );
 }
 
-export default compose(
+export const VendorCreditBulkDeleteDialog = compose(
   withDialogRedux(),
   withDialogActions,
   withVendorsCreditNotesActions,
-)(VendorCreditBulkDeleteDialog);
-
+)(VendorCreditBulkDeleteDialogInner);

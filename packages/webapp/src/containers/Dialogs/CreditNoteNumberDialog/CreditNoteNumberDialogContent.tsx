@@ -1,24 +1,22 @@
 // @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
-import { useSaveSettings } from '@/hooks/query';
-
 import { CreditNoteNumberDialogProvider } from './CreditNoteNumberDialogProvider';
-import ReferenceNumberForm from '@/containers/JournalNumber/ReferenceNumberForm';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { compose } from '@/utils';
+import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
 import {
   transformFormToSettings,
   transformSettingsToForm,
 } from '@/containers/JournalNumber/utils';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
+import { useSaveSettings } from '@/hooks/query';
+import { compose } from '@/utils';
 
 /**
  * credit note number dialog content
  */
-function CreditNoteNumberDialogContent({
+function CreditNoteNumberDialogContentInner({
   // #ownProps
   initialValues,
   onConfirm,
@@ -91,7 +89,7 @@ function CreditNoteNumberDialogContent({
   );
 }
 
-export default compose(
+export const CreditNoteNumberDialogContent = compose(
   withDialogActions,
   withSettingsActions,
   withSettings(({ creditNoteSettings }) => ({
@@ -99,4 +97,4 @@ export default compose(
     nextNumber: creditNoteSettings?.nextNumber,
     numberPrefix: creditNoteSettings?.numberPrefix,
   })),
-)(CreditNoteNumberDialogContent);
+)(CreditNoteNumberDialogContentInner);

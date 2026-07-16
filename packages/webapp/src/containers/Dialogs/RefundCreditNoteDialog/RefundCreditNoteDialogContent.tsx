@@ -2,13 +2,13 @@
 import React from 'react';
 
 import '@/style/pages/RefundCreditNote/RefundCreditNote.scss';
+import { RefundCreditNoteForm } from './RefundCreditNoteForm';
 import { RefundCreditNoteFormProvider } from './RefundCreditNoteFormProvider';
-import RefundCreditNoteForm from './RefundCreditNoteForm';
 
 /**
  * Refund credit note dialog content.
  */
-export default function RefundCreditNoteDialogContent({
+export function RefundCreditNoteDialogContent({
   // #ownProps
   dialogName,
   creditNoteId,

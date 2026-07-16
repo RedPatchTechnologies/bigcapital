@@ -1,15 +1,15 @@
 // @ts-nocheck
 import { Button, Intent } from '@blueprintjs/core';
 import { x } from '@xstyled/emotion';
-import AuthInsider from './AuthInsider';
 import { AuthInsiderCard } from './_components';
-import { AppToaster, Stack } from '@/components';
-import { useAuthActions, useAuthUserVerifyEmail } from '@/hooks/state';
-import { useAuthSignUpVerifyResendMail } from '@/hooks/query';
 import { AuthContainer } from './AuthContainer';
+import { AuthInsider } from './AuthInsider';
+import { AppToaster, Stack } from '@/components';
+import { useAuthSignUpVerifyResendMail } from '@/hooks/query';
+import { useAuthActions, useAuthUserVerifyEmail } from '@/hooks/state';
 import { useIsDarkMode } from '@/hooks/useDarkMode';
 
-export default function RegisterVerify() {
+export function RegisterVerify() {
   const { setLogout } = useAuthActions();
   const { mutateAsync: resendSignUpVerifyMail, isLoading } =
     useAuthSignUpVerifyResendMail();

@@ -1,17 +1,15 @@
-// @ts-nocheck
-import React from 'react';
+import { SalesByItemsTableQuery } from '@bigcapital/sdk-ts';
 import moment from 'moment';
-import * as Yup from 'yup';
-import { castArray } from 'lodash';
+import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
-import { transformToForm } from '@/utils';
-import { useAppQueryString } from '@/hooks';
+import * as Yup from 'yup';
 import { salesTaxLiabilitySummaryDynamicColumns } from './dynamicColumns';
 import { useSalesTaxLiabilitySummaryContext } from './SalesTaxLiabilitySummaryBoot';
+import { useAppQueryString } from '@/hooks';
+import { transformToForm } from '@/utils';
 
 /**
  * Retrieves the default sales tax liability summary query.
- * @returns {}
  */
 export const getDefaultSalesTaxLiablitySummaryQuery = () => ({
   fromDate: moment().startOf('month').format('YYYY-MM-DD'),
@@ -22,7 +20,9 @@ export const getDefaultSalesTaxLiablitySummaryQuery = () => ({
 /**
  * Parses the sales tax liability summary query.
  */
-const parseSalesTaxLiabilitySummaryQuery = (locationQuery) => {
+const parseSalesTaxLiabilitySummaryQuery = (
+  locationQuery: Record<string, any>,
+): SalesByItemsTableQuery => {
   const defaultQuery = getDefaultSalesTaxLiablitySummaryQuery();
 
   const transformed = {
@@ -33,7 +33,7 @@ const parseSalesTaxLiabilitySummaryQuery = (locationQuery) => {
     ...transformed,
 
     // Ensures the branches ids is always array.
-    branchesIds: castArray(transformed.branchesIds),
+    // branchesIds: castArray(transformed.branchesIds).map(Number),
   };
 };
 
@@ -45,11 +45,11 @@ export const useSalesTaxLiabilitySummaryQuery = () => {
   const [locationQuery, setLocationQuery] = useAppQueryString();
 
   // Merges the default filter query with location URL query.
-  const parsedQuery = React.useMemo(
+  const parsedQuery = useMemo(
     () => parseSalesTaxLiabilitySummaryQuery(locationQuery),
     [locationQuery],
   );
-  return [parsedQuery, setLocationQuery];
+  return [parsedQuery, setLocationQuery] as const;
 };
 
 /**
@@ -78,12 +78,11 @@ export const getSalesTaxLiabilitySummaryQueryValidation = () =>
 
 /**
  * Retrieves the sales tax liability summary columns.
- * @returns {ITableColumn[]}
  */
 export const useSalesTaxLiabilitySummaryColumns = () => {
-  const {
-    salesTaxLiabilitySummary: { table },
-  } = useSalesTaxLiabilitySummaryContext();
+  const { salesTaxLiabilitySummary } = useSalesTaxLiabilitySummaryContext();
 
-  return salesTaxLiabilitySummaryDynamicColumns(table.columns, table.rows);
+  const table = (salesTaxLiabilitySummary as any)?.table;
+
+  return salesTaxLiabilitySummaryDynamicColumns(table?.columns, table?.rows);
 };

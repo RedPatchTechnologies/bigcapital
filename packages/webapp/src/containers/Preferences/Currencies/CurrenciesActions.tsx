@@ -1,11 +1,11 @@
 // @ts-nocheck
-import React, { useCallback } from 'react';
 import { Button, Intent } from '@blueprintjs/core';
-import { compose } from '@/utils';
+import React, { useCallback } from 'react';
 import { Icon, FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { compose } from '@/utils';
 
-function CurrenciesActions({ openDialog }) {
+function CurrenciesActionsInner({ openDialog }) {
   const handleClickNewCurrency = useCallback(() => {
     openDialog('currency-form');
   }, [openDialog]);
@@ -23,4 +23,6 @@ function CurrenciesActions({ openDialog }) {
   );
 }
 
-export default compose(withDialogActions)(CurrenciesActions);
+export const CurrenciesActions = compose(withDialogActions)(
+  CurrenciesActionsInner,
+);

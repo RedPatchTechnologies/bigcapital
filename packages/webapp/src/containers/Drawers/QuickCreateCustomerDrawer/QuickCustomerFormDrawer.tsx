@@ -1,19 +1,15 @@
 // @ts-nocheck
-import React from 'react';
 import * as R from 'ramda';
+import React from 'react';
 import styled from 'styled-components';
-
 import { Card, DrawerLoading } from '@/components';
+import { DRAWERS } from '@/constants/drawers';
+import { CustomerFormFormik } from '@/containers/Customers/CustomerForm/CustomerFormFormik';
 import {
   CustomerFormProvider,
   useCustomerFormContext,
 } from '@/containers/Customers/CustomerForm/CustomerFormProvider';
-import CustomerFormFormik, {
-  CustomerFormHeaderPrimary,
-} from '@/containers/Customers/CustomerForm/CustomerFormFormik';
-
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { DRAWERS } from '@/constants/drawers';
 import { useAddAutofillRef } from '@/hooks/state/autofill';
 
 /**
@@ -29,7 +25,7 @@ function DrawerCustomerFormLoading({ children }) {
 /**
  * Quick customer form of the drawer.
  */
-function QuickCustomerFormDrawer({
+function QuickCustomerFormDrawerInner({
   displayName,
   autofillRef,
   closeDrawer,
@@ -55,34 +51,16 @@ function QuickCustomerFormDrawer({
   return (
     <CustomerFormProvider customerId={customerId}>
       <DrawerCustomerFormLoading>
-        <CustomerFormCard>
-          <CustomerFormFormik
-            initialValues={{ first_name: displayName }}
-            onSubmitSuccess={handleSubmitSuccess}
-            onCancel={handleCancelForm}
-          />
-        </CustomerFormCard>
+        <CustomerFormFormik
+          initialValues={{ first_name: displayName }}
+          onSubmitSuccess={handleSubmitSuccess}
+          onCancel={handleCancelForm}
+        />
       </DrawerCustomerFormLoading>
     </CustomerFormProvider>
   );
 }
 
-export default R.compose(withDrawerActions)(QuickCustomerFormDrawer);
-
-const CustomerFormCard = styled(Card)`
-  margin: 15px;
-  padding: 25px;
-  margin-bottom: calc(15px + 65px);
-
-  ${CustomerFormHeaderPrimary} {
-    padding-top: 0;
-  }
-  .page-form {
-    padding: 0;
-
-    &__floating-actions {
-      margin-left: -41px;
-      margin-right: -41px;
-    }
-  }
-`;
+export const QuickCustomerFormDrawer = R.compose(withDrawerActions)(
+  QuickCustomerFormDrawerInner,
+);

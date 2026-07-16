@@ -1,5 +1,3 @@
-// @ts-nocheck
-import React, { useMemo } from 'react';
 import {
   Button,
   NavbarGroup,
@@ -16,8 +14,19 @@ import {
   Tooltip,
   MenuDivider,
 } from '@blueprintjs/core';
-import { useHistory } from 'react-router-dom';
 import { isEmpty } from 'lodash';
+import React, { useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
+import { withBanking } from '../withBanking';
+import { withBankingActions } from '../withBankingActions';
+import { useAccountTransactionsContext } from './AccountTransactionsProvider';
+import { CashFlowMenuItems } from './utils';
+import type { CashFlowMenuItem } from './utils';
+import type { WithBankingProps } from '../withBanking';
+import type { WithBankingActionsProps } from '../withBankingActions';
+import type { WithAlertActionsProps } from '@/containers/Alert/withAlertActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithSettingsActionsProps } from '@/containers/Settings/withSettingsActions';
 import {
   Icon,
   DashboardActionsBar,
@@ -26,33 +35,44 @@ import {
   AppToaster,
   If,
 } from '@/components';
-
-import { CashFlowMenuItems } from './utils';
+import { useAppShellContext } from '@/components/AppShell/AppContentShell/AppContentShellProvider';
 import {
   getAddMoneyOutOptions,
   getAddMoneyInOptions,
 } from '@/constants/cashflowOptions';
-import { useRefreshCashflowTransactions } from '@/hooks/query';
-import { useAccountTransactionsContext } from './AccountTransactionsProvider';
-import { useMediaQuery } from '@/hooks/useMediaQuery';
-import { useAppShellContext } from '@/components/AppShell/AppContentShell/AppContentShellProvider';
-
+import { DialogsName } from '@/constants/dialogs';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { withBankingActions } from '../withBankingActions';
-import { withBanking } from '../withBanking';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { useRefreshCashflowTransactions } from '@/hooks/query';
 import {
   useUpdateBankAccount,
   useExcludeUncategorizedTransactions,
   useUnexcludeUncategorizedTransactions,
-} from '@/hooks/query/bank-rules';
-
-import { DialogsName } from '@/constants/dialogs';
+} from '@/hooks/query/banking';
+import { useMediaQuery } from '@/hooks/useMediaQuery';
 import { compose } from '@/utils';
 
-function AccountTransactionsActionsBar({
+interface WithSettingsProps {
+  cashflowTansactionsTableSize?: string | null;
+}
+
+interface AccountTransactionsActionsBarInnerProps
+  extends WithSettingsProps,
+    Pick<WithDialogActionsProps, 'openDialog'>,
+    Pick<WithSettingsActionsProps, 'addSetting'>,
+    Pick<
+      WithBankingProps,
+      | 'uncategorizedTransationsIdsSelected'
+      | 'excludedTransactionsIdsSelected'
+      | 'openMatchingTransactionAside'
+      | 'categorizedTransactionsSelected'
+    >,
+    Pick<WithBankingActionsProps, 'enableMultipleCategorization'>,
+    Pick<WithAlertActionsProps, 'openAlert'> {}
+
+function AccountTransactionsActionsBarInner({
   // #withDialogActions
   openDialog,
 
@@ -73,7 +93,7 @@ function AccountTransactionsActionsBar({
 
   // #withAlerts
   openAlert,
-}) {
+}: AccountTransactionsActionsBarInnerProps) {
   const history = useHistory();
   const { accountId, currentAccount } = useAccountTransactionsContext();
 
@@ -86,16 +106,16 @@ function AccountTransactionsActionsBar({
   const addMoneyInOptions = useMemo(() => getAddMoneyInOptions(), []);
   const addMoneyOutOptions = useMemo(() => getAddMoneyOutOptions(), []);
 
-  const isFeedsActive = !!currentAccount.is_feeds_active;
-  const isFeedsPaused = currentAccount.is_feeds_paused;
-  const isSyncingOwner = currentAccount.is_syncing_owner;
+  const isFeedsActive = !!currentAccount?.isFeedsActive;
+  const isFeedsPaused = !!currentAccount?.isFeedsPaused;
+  const isSyncingOwner = !!currentAccount?.isSyncingOwner;
 
   // Handle table row size change.
-  const handleTableRowSizeChange = (size) => {
+  const handleTableRowSizeChange = (size: unknown) => {
     addSetting('cashflowTransactions', 'tableSize', size);
   };
   // Handle money in form
-  const handleMoneyInFormTransaction = (account) => {
+  const handleMoneyInFormTransaction = (account: CashFlowMenuItem) => {
     openDialog('money-in', {
       account_id: accountId,
       account_type: account.value,
@@ -103,7 +123,7 @@ function AccountTransactionsActionsBar({
     });
   };
   // Handle money out form
-  const handlMoneyOutFormTransaction = (account) => {
+  const handlMoneyOutFormTransaction = (account: CashFlowMenuItem) => {
     openDialog('money-out', {
       account_id: accountId,
       account_type: account.value,
@@ -143,23 +163,23 @@ function AccountTransactionsActionsBar({
   };
   // Handle the refresh button click.
   const handleRefreshBtnClick = () => {
-    refresh(accountId);
+    refresh();
   };
 
   const {
     mutateAsync: excludeUncategorizedTransactions,
-    isLoading: isExcludingLoading,
+    isPending: isExcludingLoading,
   } = useExcludeUncategorizedTransactions();
 
   const {
     mutateAsync: unexcludeUncategorizedTransactions,
-    isLoading: isUnexcludingLoading,
+    isPending: isUnexcludingLoading,
   } = useUnexcludeUncategorizedTransactions();
 
   // Handles the exclude uncategorized transactions in bulk.
   const handleExcludeUncategorizedBtnClick = () => {
     excludeUncategorizedTransactions({
-      ids: uncategorizedTransationsIdsSelected,
+      ids: uncategorizedTransationsIdsSelected as number[],
     })
       .then(() => {
         AppToaster.show({
@@ -178,7 +198,7 @@ function AccountTransactionsActionsBar({
   // Handles the unexclude categorized button click.
   const handleUnexcludeUncategorizedBtnClick = () => {
     unexcludeUncategorizedTransactions({
-      ids: excludedTransactionsIdsSelected,
+      ids: excludedTransactionsIdsSelected as number[],
     })
       .then(() => {
         AppToaster.show({
@@ -186,7 +206,7 @@ function AccountTransactionsActionsBar({
           intent: Intent.SUCCESS,
         });
       })
-      .catch((error) => {
+      .catch(() => {
         AppToaster.show({
           message: 'Something went wrong',
           intent: Intent.DANGER,
@@ -195,7 +215,9 @@ function AccountTransactionsActionsBar({
   };
 
   // Handle multi select transactions for categorization or matching.
-  const handleMultipleCategorizingSwitch = (event) => {
+  const handleMultipleCategorizingSwitch = (
+    event: React.ChangeEvent<HTMLInputElement>,
+  ) => {
     enableMultipleCategorization(event.currentTarget.checked);
   };
   // Handle resume bank feeds syncing.
@@ -444,7 +466,7 @@ function AccountTransactionsActionsBar({
   );
 }
 
-export default compose(
+export const AccountTransactionsActionsBar = compose(
   withDialogActions,
   withAlertActions,
   withSettingsActions,
@@ -465,4 +487,4 @@ export default compose(
     }),
   ),
   withBankingActions,
-)(AccountTransactionsActionsBar);
+)(AccountTransactionsActionsBarInner);

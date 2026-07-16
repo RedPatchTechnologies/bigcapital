@@ -3,13 +3,13 @@ import React from 'react';
 
 import '@/style/pages/PaymentReceive/QuickPaymentReceiveDialog.scss';
 
+import { QuickPaymentReceiveForm } from './QuickPaymentReceiveForm';
 import { QuickPaymentReceiveFormProvider } from './QuickPaymentReceiveFormProvider';
-import QuickPaymentReceiveForm from './QuickPaymentReceiveForm';
 
 /**
  * Quick payment receive form dialog content.
  */
-export default function QuickPaymentReceiveFormDialogContent({
+export function QuickPaymentReceiveFormDialogContent({
   // #ownProps
   dialogName,
   invoice,

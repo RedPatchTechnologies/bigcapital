@@ -1,18 +1,18 @@
 // @ts-nocheck
 import React, { lazy } from 'react';
 import { Switch, Route } from 'react-router';
-
-import Dashboard from '@/components/Dashboard/Dashboard';
-
-import { PrivatePagesProvider } from './PrivatePagesProvider';
-import EnsureOrganizationIsReady from '../Guards/EnsureOrganizationIsReady';
 import { EnsureAuthenticated } from '../Guards/EnsureAuthenticated';
+import EnsureOrganizationIsReady from '../Guards/EnsureOrganizationIsReady';
 import { EnsureUserEmailVerified } from '../Guards/EnsureUserEmailVerified';
+import { PrivatePagesProvider } from './PrivatePagesProvider';
+import Dashboard from '@/components/Dashboard/Dashboard';
 
 import '@/style/pages/Dashboard/Dashboard.scss';
 
-const SetupWizardPage = lazy(
-  () => import('@/containers/Setup/WizardSetupPage'),
+const SetupWizardPage = lazy(() =>
+  import('@/containers/Setup/WizardSetupPage').then((m) => ({
+    default: m.WizardSetupPage,
+  })),
 );
 /**
  * Dashboard inner private pages.

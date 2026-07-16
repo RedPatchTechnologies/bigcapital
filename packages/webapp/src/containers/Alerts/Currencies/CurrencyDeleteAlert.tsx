@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import {
@@ -6,19 +7,15 @@ import {
   FormattedMessage as T,
   FormattedHTMLMessage,
 } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-
-import { useDeleteCurrency } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useDeleteCurrency } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * Currency delete alerts.
  */
-function CurrencyDeleteAlert({
+function CurrencyDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -43,21 +40,15 @@ function CurrencyDeleteAlert({
         });
         closeAlert(name);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (errors.find((e) => e.type === 'CANNOT_DELETE_BASE_CURRENCY')) {
-            AppToaster.show({
-              intent: Intent.DANGER,
-              message: 'Cannot delete the base currency.',
-            });
-          }
-          closeAlert(name);
-        },
-      );
+      .catch(({ data: { errors } }) => {
+        if (errors.find((e) => e.type === 'CANNOT_DELETE_BASE_CURRENCY')) {
+          AppToaster.show({
+            intent: Intent.DANGER,
+            message: 'Cannot delete the base currency.',
+          });
+        }
+        closeAlert(name);
+      });
   };
 
   return (
@@ -79,7 +70,7 @@ function CurrencyDeleteAlert({
   );
 }
 
-export default compose(
+export const CurrencyDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(CurrencyDeleteAlert);
+)(CurrencyDeleteAlertInner);

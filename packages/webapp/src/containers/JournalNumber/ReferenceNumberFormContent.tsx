@@ -1,36 +1,26 @@
 // @ts-nocheck
-import React from 'react';
-import { useFormikContext } from 'formik';
 import { Radio } from '@blueprintjs/core';
-
-import {
-  FormattedMessage as T,
-  Row,
-  Col,
-  FFormGroup,
-  FInputGroup,
-  FRadioGroup,
-} from '@/components';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { Row, Col, FFormGroup, FInputGroup, FRadioGroup } from '@/components';
 
 /**
  * Reference number form content.
  */
-export default function ReferenceNumberFormContent() {
+export function ReferenceNumberFormContent() {
   return (
     <>
       {/* ------------- Auto increment mode ------------- */}
       <FRadioGroup name={'incrementMode'} fastField>
-        <Radio
-          label={<T id={'auto_increment.field.auto'} />}
-          value="auto"
-        />
+        <Radio label={intl.get('auto_increment.field.auto')} value="auto" />
       </FRadioGroup>
       <ReferenceNumberAutoIncrement />
 
       {/* ------------- Manual increment mode ------------- */}
       <FRadioGroup name={'incrementMode'} fastField>
         <Radio
-          label={<T id={'auto_increment.field.manually'} />}
+          label={intl.get('auto_increment.field.manually')}
           value="manual"
         />
       </FRadioGroup>
@@ -51,7 +41,7 @@ function ReferenceNumberAutoIncrement() {
       <Col xs={4}>
         <FFormGroup
           name={'numberPrefix'}
-          label={<T id={'prefix'} />}
+          label={intl.get('prefix')}
           className={'form-group--'}
           fastField
         >
@@ -63,7 +53,7 @@ function ReferenceNumberAutoIncrement() {
       <Col xs={6}>
         <FFormGroup
           name={'nextNumber'}
-          label={<T id={'next_number'} />}
+          label={intl.get('next_number')}
           className={'form-group--next-number'}
           fastField
         >
@@ -84,7 +74,7 @@ function ReferenceNumberManualOnce() {
     <FFormGroup name={'incrementMode'} fastField>
       <FRadioGroup name={'incrementMode'} fastField>
         <Radio
-          label={<T id={'auto_increment.field.manual_this_transaction'} />}
+          label={intl.get('auto_increment.field.manual_this_transaction')}
           value="manual-transaction"
         />
       </FRadioGroup>

@@ -1,15 +1,13 @@
-// @ts-nocheck
 import React from 'react';
-
+import { FinancialStatementDateRange } from '../FinancialStatementDateRange';
+import { FinancialStatementsFilter } from '../FinancialStatementsFilter';
+import { RadiosAccountingBasis } from '../RadiosAccountingBasis';
 import { Row, Col } from '@/components';
-import FinancialStatementDateRange from '../FinancialStatementDateRange';
-import RadiosAccountingBasis from '../RadiosAccountingBasis';
-import FinancialStatementsFilter from '../FinancialStatementsFilter';
 
 /**
  * Trial balance sheet - Drawer header - General panel.
  */
-export default function TrialBalanceSheetHeaderGeneralPanel({}) {
+export function TrialBalanceSheetHeaderGeneralPanel() {
   return (
     <div>
       <FinancialStatementDateRange />

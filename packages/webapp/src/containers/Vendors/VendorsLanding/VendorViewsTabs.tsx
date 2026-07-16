@@ -1,18 +1,16 @@
 // @ts-nocheck
-import React from 'react';
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
+import React from 'react';
 import { useVendorsListContext } from './VendorsListProvider';
-import { DashboardViewsTabs } from '@/components';
-
-import { withVendorsActions } from './withVendorsActions';
 import { withVendors } from './withVendors';
-
+import { withVendorsActions } from './withVendorsActions';
+import { DashboardViewsTabs } from '@/components';
 import { transfromViewsToTabs, compose } from '@/utils';
 
 /**
  * Vendors views tabs.
  */
-function VendorViewsTabs({
+function VendorViewsTabsInner({
   // #withVendorsActions
   setVendorsTableState,
 
@@ -43,9 +41,9 @@ function VendorViewsTabs({
   );
 }
 
-export default compose(
+export const VendorViewsTabs = compose(
   withVendorsActions,
   withVendors(({ vendorsTableState }) => ({
     vendorsCurrentView: vendorsTableState.viewSlug,
   })),
-)(VendorViewsTabs);
+)(VendorViewsTabsInner);

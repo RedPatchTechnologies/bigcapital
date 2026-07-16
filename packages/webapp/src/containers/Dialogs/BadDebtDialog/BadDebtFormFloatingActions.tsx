@@ -1,18 +1,16 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Button, Classes } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-import { FormattedMessage as T } from '@/components';
-
+import React from 'react';
 import { useBadDebtContext } from './BadDebtFormProvider';
+import { FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
-
 
 /**
  * Bad bebt form floating actions.
  */
-function BadDebtFormFloatingActions({
+function BadDebtFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -46,4 +44,6 @@ function BadDebtFormFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(BadDebtFormFloatingActions);
+export const BadDebtFormFloatingActions = compose(withDialogActions)(
+  BadDebtFormFloatingActionsInner,
+);

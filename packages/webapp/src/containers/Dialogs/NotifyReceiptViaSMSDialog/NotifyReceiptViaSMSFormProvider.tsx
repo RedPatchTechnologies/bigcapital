@@ -1,12 +1,15 @@
 // @ts-nocheck
 import React from 'react';
 import { DialogContent } from '@/components';
-import { useCreateNotifyReceiptBySMS, useReceiptSMSDetail } from '@/hooks/query';
+import {
+  useCreateNotifyReceiptBySMS,
+  useReceiptSMSDetail,
+} from '@/hooks/query';
 
 const NotifyReceiptViaSMSContext = React.createContext();
 
 /**
- * 
+ *
  */
 function NotifyReceiptViaSMSFormProvider({ receiptId, dialogName, ...props }) {
   // Create notfiy receipt via SMS mutations.

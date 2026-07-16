@@ -1,24 +1,22 @@
 // @ts-nocheck
-import intl from 'react-intl-universal';
-import { Formik } from 'formik';
-import { Link } from 'react-router-dom';
 import { Intent } from '@blueprintjs/core';
-
-import { AppToaster, FormattedMessage as T } from '@/components';
-import AuthInsider from '@/containers/Authentication/AuthInsider';
-import { useAuthLogin, useAuthRegister } from '@/hooks/query/authentication';
-
-import RegisterForm from './RegisterForm';
-import {
-  RegisterSchema,
-  transformRegisterErrorsToForm,
-  transformRegisterToastMessages,
-} from './utils';
+import { Formik } from 'formik';
+import intl from 'react-intl-universal';
+import { Link } from 'react-router-dom';
 import {
   AuthFooterLinks,
   AuthFooterLink,
   AuthInsiderCard,
 } from './_components';
+import { RegisterForm } from './RegisterForm';
+import {
+  RegisterSchema,
+  transformRegisterErrorsToForm,
+  transformRegisterToastMessages,
+} from './utils';
+import { AppToaster, FormattedMessage as T } from '@/components';
+import { AuthInsider } from '@/containers/Authentication/AuthInsider';
+import { useAuthLogin, useAuthRegister } from '@/hooks/query/authentication';
 
 const initialValues = {
   first_name: '',
@@ -30,7 +28,7 @@ const initialValues = {
 /**
  * Register form.
  */
-export default function RegisterUserForm() {
+export function RegisterUserForm() {
   const { mutateAsync: authLoginMutate } = useAuthLogin();
   const { mutateAsync: authRegisterMutate } = useAuthRegister();
 
@@ -40,24 +38,18 @@ export default function RegisterUserForm() {
         authLoginMutate({
           email: values.email,
           password: values.password,
-        }).catch(
-          ({
-            response: {
-              data: { errors },
-            },
-          }) => {
-            AppToaster.show({
-              message: intl.get('something_wentwrong'),
-              intent: Intent.SUCCESS,
-            });
-          },
-        );
+        }).catch(({ data: { errors } }) => {
+          AppToaster.show({
+            message: intl.get('something_wentwrong'),
+            intent: Intent.SUCCESS,
+          });
+        });
       })
       .catch(({ response }) => {
         const {
           data: { errors },
         } = response;
-        
+
         const formErrors = transformRegisterErrorsToForm(errors);
         const toastMessages = transformRegisterToastMessages(errors);
 

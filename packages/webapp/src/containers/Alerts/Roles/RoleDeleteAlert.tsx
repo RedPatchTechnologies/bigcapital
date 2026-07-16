@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import {
@@ -6,20 +7,16 @@ import {
   FormattedMessage as T,
   FormattedHTMLMessage,
 } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-
-import { useDeleteRole } from '@/hooks/query';
-import { handleDeleteErrors } from '@/containers/Preferences/Users/Roles/utils';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { handleDeleteErrors } from '@/containers/Preferences/Users/Roles/utils';
+import { useDeleteRole } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * Role delete alert.
  */
-function RoleDeleteAlert({
+function RoleDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -45,15 +42,9 @@ function RoleDeleteAlert({
           intent: Intent.SUCCESS,
         });
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });
@@ -81,7 +72,7 @@ function RoleDeleteAlert({
   );
 }
 
-export default compose(
+export const RoleDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(RoleDeleteAlert);
+)(RoleDeleteAlertInner);

@@ -1,5 +1,3 @@
-// @ts-nocheck
-import React from 'react';
 import {
   Button,
   Classes,
@@ -13,8 +11,16 @@ import {
   PopoverInteractionKind,
   Position,
 } from '@blueprintjs/core';
-import { useHistory } from 'react-router-dom';
 import { isEmpty } from 'lodash';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
+import { useCreditNoteListContext } from './CreditNotesListProvider';
+import { useBulkDeleteCreditNotesDialog } from './hooks/use-bulk-delete-credit-notes-dialog';
+import { withCreditNotes } from './withCreditNotes';
+import { withCreditNotesActions } from './withCreditNotesActions';
+import type { WithCreditNotesProps } from './withCreditNotes';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   Icon,
   Can,
@@ -25,98 +31,86 @@ import {
   DashboardRowsHeightButton,
   DashboardActionsBar,
 } from '@/components';
-
-import { useCreditNoteListContext } from './CreditNotesListProvider';
-import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
-
 import { CreditNoteAction, AbilitySubject } from '@/constants/abilityOption';
-import { withCreditNotes } from './withCreditNotes';
-import { withCreditNotesActions } from './withCreditNotesActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
+import { DialogsName } from '@/constants/dialogs';
+import { DRAWERS } from '@/constants/drawers';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
-import { DialogsName } from '@/constants/dialogs';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
+import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
-import { useBulkDeleteCreditNotesDialog } from './hooks/use-bulk-delete-credit-notes-dialog';
 
-/**
- * Credit note table actions bar.
- */
-function CreditNotesActionsBar({
-  // #withCreditNotes
+interface WithCreditNotesActionsProps {
+  setCreditNotesTableState: (state: Record<string, any>) => void;
+}
+
+interface WithSettingsActionsProps {
+  addSetting: (group: string, key: string, value: any) => void;
+}
+
+interface WithSettingsProps {
+  creditNoteTableSize?: string | null;
+}
+
+interface CreditNotesActionsBarProps
+  extends Pick<WithCreditNotesProps, 'creditNotesSelectedRows'>,
+    WithCreditNotesActionsProps,
+    WithSettingsActionsProps,
+    WithDialogActionsProps,
+    WithDrawerActionsProps,
+    WithSettingsProps {
+  creditNoteFilterRoles: any[];
+}
+
+function CreditNotesActionsBarInner({
   creditNoteFilterRoles,
   creditNotesSelectedRows,
-
-  // #withCreditNotesActions
   setCreditNotesTableState,
-
-  // #withSettings
   creditNoteTableSize,
-
-  // #withSettingsActions
   addSetting,
-
-  // #withDialogActions
   openDialog,
-
-  // #withDrawerActions
   openDrawer,
-}) {
+}: CreditNotesActionsBarProps) {
   const history = useHistory();
 
-  // credit note list context.
   const { CreditNotesView, fields, refresh } = useCreditNoteListContext();
 
-  // Exports pdf document.
   const { downloadAsync: downloadExportPdf } = useDownloadExportPdf();
 
-  // Handle view tab change.
-  const handleTabChange = (view) => {
+  const handleTabChange = (view: { slug?: string } | null) => {
     setCreditNotesTableState({ viewSlug: view ? view.slug : null });
   };
 
-  // Handle click a new Credit.
   const handleClickNewCreateNote = () => {
     history.push('/credit-notes/new');
   };
 
-  // Handle click a refresh credit note.
   const handleRefreshBtnClick = () => {
     refresh();
   };
-  // Handle table row size change.
-  const handleTableRowSizeChange = (size) => {
+  const handleTableRowSizeChange = (size: any) => {
     addSetting('creditNote', 'tableSize', size);
   };
-  // Handle import button click.
   const handleImportBtnClick = () => {
     history.push('/credit-notes/import');
   };
-  // Handle the export button click.
   const handleExportBtnClick = () => {
     openDialog(DialogsName.Export, { resource: 'credit_note' });
   };
-  // Handle print button click.
   const handlePrintBtnClick = () => {
     downloadExportPdf({ resource: 'CreditNote' });
   };
-  // Handle the customize button click.
   const handleCustomizeBtnClick = () => {
     openDrawer(DRAWERS.BRANDING_TEMPLATES, { resource: 'CreditNote' });
-  }
+  };
 
-  const {
-    openBulkDeleteDialog,
-    isValidatingBulkDeleteCreditNotes,
-  } = useBulkDeleteCreditNotesDialog();
+  const { openBulkDeleteDialog, isValidatingBulkDeleteCreditNotes } =
+    useBulkDeleteCreditNotesDialog();
 
-  // Show bulk delete button when rows are selected.
   if (!isEmpty(creditNotesSelectedRows)) {
     const handleBulkDelete = () => {
-      openBulkDeleteDialog(creditNotesSelectedRows);
+      openBulkDeleteDialog(creditNotesSelectedRows as number[]);
     };
     return (
       <DashboardActionsBar>
@@ -157,7 +151,7 @@ function CreditNotesActionsBar({
             conditions: creditNoteFilterRoles,
             defaultFieldKey: 'created_at',
             fields: fields,
-            onFilterChange: (filterConditions) => {
+            onFilterChange: (filterConditions: any) => {
               setCreditNotesTableState({ filterRoles: filterConditions });
             },
           }}
@@ -169,7 +163,7 @@ function CreditNotesActionsBar({
 
         <Button
           className={Classes.MINIMAL}
-          icon={<Icon icon={'print-16'} iconSize={'16'} />}
+          icon={<Icon icon={'print-16'} iconSize={16} />}
           text={<T id={'print'} />}
           onClick={handlePrintBtnClick}
         />
@@ -181,7 +175,7 @@ function CreditNotesActionsBar({
         />
         <Button
           className={Classes.MINIMAL}
-          icon={<Icon icon={'file-export-16'} iconSize={'16'} />}
+          icon={<Icon icon={'file-export-16'} iconSize={16} />}
           text={<T id={'export'} />}
           onClick={handleExportBtnClick}
         />
@@ -222,16 +216,16 @@ function CreditNotesActionsBar({
   );
 }
 
-export default compose(
+export const CreditNotesActionsBar = compose(
   withCreditNotesActions,
   withSettingsActions,
   withCreditNotes(({ creditNoteTableState, creditNotesSelectedRows }) => ({
     creditNoteFilterRoles: creditNoteTableState.filterRoles,
     creditNotesSelectedRows,
   })),
-  withSettings(({ creditNoteSettings }) => ({
+  withSettings(({ creditNoteSettings }: any) => ({
     creditNoteTableSize: creditNoteSettings?.tableSize,
   })),
   withDialogActions,
   withDrawerActions,
-)(CreditNotesActionsBar);
+)(CreditNotesActionsBarInner);

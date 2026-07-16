@@ -1,9 +1,16 @@
-// @ts-nocheck
 import { connect } from 'react-redux';
-import { setItemsCategoriesTableState } from '@/store/itemCategories/itemsCategory.actions';
+import { Dispatch } from 'redux';
+import type { TableQuery } from '@/store/store.types';
+import { setItemsCategoriesTableState } from '@/store/item-categories/items-category.actions';
 
-export const mapDispatchToProps = (dispatch) => ({
-  setItemsCategoriesTableState: (state) =>
+export interface WithItemCategoriesActionsProps {
+  setItemsCategoriesTableState: (state: Partial<TableQuery>) => void;
+}
+
+export const mapDispatchToProps = (
+  dispatch: Dispatch,
+): WithItemCategoriesActionsProps => ({
+  setItemsCategoriesTableState: (state: Partial<TableQuery>) =>
     dispatch(setItemsCategoriesTableState(state)),
 });
 

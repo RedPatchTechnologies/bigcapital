@@ -1,16 +1,15 @@
 // @ts-nocheck
+import { Intent, Position } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import { isEmpty } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Formik } from 'formik';
 import { useHistory } from 'react-router-dom';
-import { Intent, Position } from '@blueprintjs/core';
-import { isEmpty } from 'lodash';
-
-import { useInviteAcceptContext } from './InviteAcceptProvider';
-import { AppToaster } from '@/components';
-import { InviteAcceptSchema } from './utils';
-import InviteAcceptFormContent from './InviteAcceptFormContent';
 import { AuthInsiderCard } from './_components';
+import { InviteUserFormContent as InviteAcceptFormContent } from './InviteAcceptFormContent';
+import { useInviteAcceptContext } from './InviteAcceptProvider';
+import { InviteAcceptSchema } from './utils';
+import { AppToaster } from '@/components';
 
 const initialValues = {
   organization_name: '',
@@ -20,7 +19,7 @@ const initialValues = {
   password: '',
 };
 
-export default function InviteAcceptForm() {
+export function InviteAcceptForm() {
   const history = useHistory();
 
   // Invite accept context.
@@ -52,28 +51,22 @@ export default function InviteAcceptForm() {
         });
         history.push('/auth/login');
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (errors.find((e) => e.type === 'INVITE_TOKEN_INVALID')) {
-            AppToaster.show({
-              message: intl.get('an_unexpected_error_occurred'),
-              intent: Intent.DANGER,
-              position: Position.BOTTOM,
-            });
-            history.push('/auth/login');
-          }
-          if (errors.find((e) => e.type === 'PHONE_MUMNER.ALREADY.EXISTS')) {
-            setErrors({
-              phone_number: 'This phone number is used in another account.',
-            });
-          }
-          setSubmitting(false);
-        },
-      );
+      .catch(({ data: { errors } }) => {
+        if (errors.find((e) => e.type === 'INVITE_TOKEN_INVALID')) {
+          AppToaster.show({
+            message: intl.get('an_unexpected_error_occurred'),
+            intent: Intent.DANGER,
+            position: Position.BOTTOM,
+          });
+          history.push('/auth/login');
+        }
+        if (errors.find((e) => e.type === 'PHONE_MUMNER.ALREADY.EXISTS')) {
+          setErrors({
+            phone_number: 'This phone number is used in another account.',
+          });
+        }
+        setSubmitting(false);
+      });
   };
 
   return (

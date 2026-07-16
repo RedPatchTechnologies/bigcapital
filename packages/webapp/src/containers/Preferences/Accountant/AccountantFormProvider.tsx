@@ -1,35 +1,39 @@
-// @ts-nocheck
-import React from 'react';
 import classNames from 'classnames';
+import React, { ReactNode } from 'react';
 import styled from 'styled-components';
-
+import { PreferencesPageLoader } from '../PreferencesPageLoader';
+import type { AccountsList } from '@bigcapital/sdk-ts';
 import { Card } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { useAccounts, useSaveSettings, useSettings } from '@/hooks/query';
-import PreferencesPageLoader from '../PreferencesPageLoader';
 
-const AccountantFormContext = React.createContext();
+interface AccountantFormContextValue {
+  accounts: AccountsList | undefined;
+  isAccountsLoading: boolean;
+  saveSettingMutate: ReturnType<typeof useSaveSettings>['mutateAsync'];
+}
 
-/**
- * Accountant data provider.
- */
-function AccountantFormProvider({ ...props }) {
-  // Fetches the accounts list.
+const AccountantFormContext = React.createContext<AccountantFormContextValue>(
+  {} as AccountantFormContextValue,
+);
+
+interface AccountantFormProviderProps {
+  children: ReactNode;
+}
+
+function AccountantFormProvider({
+  children,
+  ...props
+}: AccountantFormProviderProps) {
   const { isLoading: isAccountsLoading, data: accounts } = useAccounts();
-
-  // Fetches Organization Settings.
   const { isLoading: isSettingsLoading } = useSettings();
-
-  // Save Organization Settings.
   const { mutateAsync: saveSettingMutate } = useSaveSettings();
 
-  // Provider state.
-  const provider = {
+  const provider: AccountantFormContextValue = {
     accounts,
     isAccountsLoading,
     saveSettingMutate,
   };
-  // Detarmines whether if any query is loading.
   const isLoading = isSettingsLoading || isAccountsLoading;
 
   return (
@@ -43,7 +47,9 @@ function AccountantFormProvider({ ...props }) {
         {isLoading ? (
           <PreferencesPageLoader />
         ) : (
-          <AccountantFormContext.Provider value={provider} {...props} />
+          <AccountantFormContext.Provider value={provider} {...props}>
+            {children}
+          </AccountantFormContext.Provider>
         )}
       </AccountantFormCard>
     </div>

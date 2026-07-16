@@ -1,47 +1,43 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { css } from '@emotion/css';
+import { Formik, Form } from 'formik';
+import { defaultTo, sumBy, isEmpty } from 'lodash';
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
-import { Intent } from '@blueprintjs/core';
-import { defaultTo, sumBy, isEmpty } from 'lodash';
-import { Formik, Form } from 'formik';
 import { useHistory } from 'react-router-dom';
-import { css } from '@emotion/css';
-
-import ExpenseFormBody from './ExpenseFormBody';
-import ExpenseFormHeader from './ExpenseFormHeader';
-import ExpenseFloatingFooter from './ExpenseFloatingActions';
-import ExpenseFormFooter from './ExpenseFormFooter';
-import ExpenseFormTopBar from './ExpenseFormTopBar';
-
-import { useExpenseFormContext } from './ExpenseFormPageProvider';
-
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
-
-import { AppToaster, Box } from '@/components';
-import { PageForm } from '@/components/PageForm';
+import { ExpenseFloatingFooter } from './ExpenseFloatingActions';
 import {
   CreateExpenseFormSchema,
   EditExpenseFormSchema,
 } from './ExpenseForm.schema';
+import { ExpenseFormBody } from './ExpenseFormBody';
+import { ExpenseFormFooter } from './ExpenseFormFooter';
+import { ExpenseFormHeader } from './ExpenseFormHeader';
+import { useExpenseFormContext } from './ExpenseFormPageProvider';
+import { ExpenseFormTopBar } from './ExpenseFormTopBar';
 import {
   transformErrors,
   defaultExpense,
   transformToEditForm,
   transformFormValuesToRequest,
 } from './utils';
+import { AppToaster, Box } from '@/components';
+import { PageForm } from '@/components/PageForm';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * Expense form.
  */
-function ExpenseForm({
+function ExpenseFormInner({
   // #withSettings
   preferredPaymentAccount,
-  // #withCurrentOrganization
-  organization: { base_currency },
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   // Expense form context.
   const {
     editExpenseMutate,
@@ -61,15 +57,15 @@ function ExpenseForm({
     () => ({
       ...(!isEmpty(expense)
         ? {
-          ...transformToEditForm(expense, defaultExpense),
-        }
+            ...transformToEditForm(expense, defaultExpense),
+          }
         : {
-          ...defaultExpense,
-          currency_code: base_currency,
-          payment_account_id: defaultTo(preferredPaymentAccount, ''),
-        }),
+            ...defaultExpense,
+            currencyCode: baseCurrency,
+            paymentAccountId: defaultTo(preferredPaymentAccount, ''),
+          }),
     }),
-    [expense, base_currency, preferredPaymentAccount],
+    [expense, baseCurrency, preferredPaymentAccount],
   );
 
   //  Handle form submit.
@@ -100,7 +96,7 @@ function ExpenseForm({
           isNewMode
             ? 'the_expense_has_been_created_successfully'
             : 'the_expense_has_been_edited_successfully',
-          { number: values.payment_account_id },
+          { number: values.paymentAccountId },
         ),
         intent: Intent.SUCCESS,
       });
@@ -115,11 +111,7 @@ function ExpenseForm({
     };
 
     // Handle the request error.
-    const handleError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const handleError = ({ data: { errors } }) => {
       transformErrors(errors, { setErrors });
       setSubmitting(false);
     };
@@ -168,7 +160,7 @@ function ExpenseForm({
   );
 }
 
-export default compose(
+export const ExpenseForm = compose(
   withDashboardActions,
   withSettings(({ expenseSettings }) => ({
     preferredPaymentAccount: parseInt(
@@ -176,5 +168,4 @@ export default compose(
       10,
     ),
   })),
-  withCurrentOrganization(),
-)(ExpenseForm);
+)(ExpenseFormInner);

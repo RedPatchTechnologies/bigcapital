@@ -1,17 +1,16 @@
 // @ts-nocheck
-import React from 'react';
 import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
-import { FormattedMessage as T, AppToaster } from '@/components';
+import React from 'react';
 import intl from 'react-intl-universal';
-
-import BulkDeleteDialogContent from '@/containers/Dialogs/components/BulkDeleteDialogContent';
-import { useBulkDeleteExpenses } from '@/hooks/query/expenses';
+import { FormattedMessage as T, AppToaster } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
 import { withExpensesActions } from '@/containers/Expenses/ExpensesLanding/withExpensesActions';
+import { useBulkDeleteExpenses } from '@/hooks/query/expenses';
 import { compose } from '@/utils';
 
-function ExpenseBulkDeleteDialog({
+function ExpenseBulkDeleteDialogInner({
   dialogName,
   isOpen,
   payload: {
@@ -96,9 +95,8 @@ function ExpenseBulkDeleteDialog({
   );
 }
 
-export default compose(
+export const ExpenseBulkDeleteDialog = compose(
   withDialogRedux(),
   withDialogActions,
   withExpensesActions,
-)(ExpenseBulkDeleteDialog);
-
+)(ExpenseBulkDeleteDialogInner);

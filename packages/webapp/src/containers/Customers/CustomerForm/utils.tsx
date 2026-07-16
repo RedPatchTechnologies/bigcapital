@@ -1,11 +1,10 @@
 // @ts-nocheck
-import React from 'react';
-import moment from 'moment';
 import { useFormikContext } from 'formik';
 import { first } from 'lodash';
-
+import moment from 'moment';
+import React from 'react';
 import { useCustomerFormContext } from './CustomerFormProvider';
-import { useCurrentOrganization } from '@/hooks/state';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 
 export const defaultInitialValues = {
   customer_type: 'business',
@@ -14,6 +13,7 @@ export const defaultInitialValues = {
   last_name: '',
   company_name: '',
   display_name: '',
+  code: '',
 
   email: '',
   work_phone: '',
@@ -62,14 +62,14 @@ export const useSetPrimaryBranchToForm = () => {
 };
 
 /**
- * Detarmines whether the current customer has foreign currency. 
+ * Detarmines whether the current customer has foreign currency.
  * @returns {boolean}
  */
 export const useIsCustomerForeignCurrency = () => {
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
   const { values } = useFormikContext();
 
-  return currentOrganization.base_currency !== values.currency_code;
+  return baseCurrency !== values.currency_code;
 };
 
 /**

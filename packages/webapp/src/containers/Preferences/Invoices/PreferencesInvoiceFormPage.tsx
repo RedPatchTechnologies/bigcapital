@@ -1,19 +1,17 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import * as R from 'ramda';
 import React, { useEffect } from 'react';
 import intl from 'react-intl-universal';
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import * as R from 'ramda';
-
-import { AppToaster } from '@/components';
+import { transferObjectOptionsToArray } from '../Accountant/utils';
 import { PreferencesInvoiceFormSchema } from './PreferencesInvoiceForm.schema';
 import { PreferencesInvoicesForm } from './PreferencesInvoicesForm';
+import { AppToaster } from '@/components';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-
-import { compose, transformToForm, transfromToSnakeCase } from '@/utils';
 import { withSettings } from '@/containers/Settings/withSettings';
-import { transferObjectOptionsToArray } from '../Accountant/utils';
 import { useSaveSettings } from '@/hooks/query';
+import { compose, transformToForm, transfromToSnakeCase } from '@/utils';
 
 const defaultValues = {
   termsConditions: '',
@@ -23,7 +21,7 @@ const defaultValues = {
 /**
  * Preferences - Invoices.
  */
-function PreferencesInvoiceFormPage({
+function PreferencesInvoiceFormPageInner({
   // #withDashboardActions
   changePreferencesPageTitle,
 
@@ -74,9 +72,9 @@ function PreferencesInvoiceFormPage({
   );
 }
 
-export default compose(
+export const PreferencesInvoiceFormPage = compose(
   withDashboardActions,
   withSettings(({ invoiceSettings }) => ({
     invoiceSettings: invoiceSettings,
   })),
-)(PreferencesInvoiceFormPage);
+)(PreferencesInvoiceFormPageInner);

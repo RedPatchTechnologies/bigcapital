@@ -1,14 +1,12 @@
 // @ts-nocheck
-import React from 'react';
 import { AnchorButton } from '@blueprintjs/core';
-
+import React from 'react';
 import { DialogContent, PdfDocumentPreview, T } from '@/components';
-import { usePdfInvoice } from '@/hooks/query';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { usePdfInvoice } from '@/hooks/query';
 import { compose } from '@/utils';
 
-function InvoicePdfPreviewDialogContent({
+function InvoicePdfPreviewDialogContentInner({
   subscriptionForm: { invoiceId },
   // #withDialog
   closeDialog,
@@ -47,4 +45,6 @@ function InvoicePdfPreviewDialogContent({
   );
 }
 
-export default compose(withDialogActions)(InvoicePdfPreviewDialogContent);
+export const InvoicePdfPreviewDialogContent = compose(withDialogActions)(
+  InvoicePdfPreviewDialogContentInner,
+);

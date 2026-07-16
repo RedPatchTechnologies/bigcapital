@@ -1,20 +1,27 @@
-// @ts-nocheck
 import React, { lazy } from 'react';
 import { FormattedMessage as T } from '@/components';
 import { Dialog, DialogSuspense } from '@/components';
-import withDialogRedux from '@/components/DialogReduxConnect';
+import withDialogRedux, {
+  DialogBaseProps,
+} from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const AccountDialogContent = lazy(() => import('./AccountDialogContent'));
+const AccountDialogContent = lazy(() =>
+  import('./AccountDialogContent').then((m) => ({
+    default: m.AccountDialogContent,
+  })),
+);
 
-/**
- * Account form dialog.
- */
+interface AccountFormDialogProps extends DialogBaseProps {
+  dialogName: string;
+  payload: { action: string; id: number | null };
+}
+
 function AccountFormDialog({
   dialogName,
   payload = { action: '', id: null },
   isOpen,
-}) {
+}: AccountFormDialogProps) {
   return (
     <Dialog
       name={dialogName}
@@ -37,4 +44,4 @@ function AccountFormDialog({
   );
 }
 
-export default compose(withDialogRedux())(AccountFormDialog);
+export const index = compose(withDialogRedux())(AccountFormDialog);

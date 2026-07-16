@@ -1,14 +1,11 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import { AppToaster, FormattedMessage as T } from '@/components';
-
-import { useCancelUnlockingPartialTransactions } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useCancelUnlockingPartialTransactions } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
@@ -46,13 +43,7 @@ function CancelUnlockingPartialTarnsactions({
           intent: Intent.SUCCESS,
         });
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {},
-      )
+      .catch(({ data: { errors } }) => {})
       .finally(() => {
         closeAlert(name);
       });
@@ -75,7 +66,7 @@ function CancelUnlockingPartialTarnsactions({
   );
 }
 
-export default compose(
+export const cancelUnlockingPartialAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
 )(CancelUnlockingPartialTarnsactions);

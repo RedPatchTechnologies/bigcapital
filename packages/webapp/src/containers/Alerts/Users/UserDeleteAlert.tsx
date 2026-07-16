@@ -1,20 +1,17 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import { AppToaster, FormattedMessage as T } from '@/components';
-
-import { useDeleteUser } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useDeleteUser } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * User delete alert.
  */
-function UserDeleteAlert({
+function UserDeleteAlertInner({
   // #ownProps
   name,
 
@@ -40,21 +37,15 @@ function UserDeleteAlert({
         });
         closeAlert(name);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (errors.find((e) => e.type === 'CANNOT_DELETE_LAST_USER')) {
-            AppToaster.show({
-              message: 'Cannot delete the last user in the system.',
-              intent: Intent.DANGER,
-            });
-          }
-          closeAlert(name);
-        },
-      );
+      .catch(({ data: { errors } }) => {
+        if (errors.find((e) => e.type === 'CANNOT_DELETE_LAST_USER')) {
+          AppToaster.show({
+            message: 'Cannot delete the last user in the system.',
+            intent: Intent.DANGER,
+          });
+        }
+        closeAlert(name);
+      });
   };
 
   return (
@@ -75,7 +66,7 @@ function UserDeleteAlert({
   );
 }
 
-export default compose(
+export const UserDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(UserDeleteAlert);
+)(UserDeleteAlertInner);

@@ -1,21 +1,18 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Alert } from '@blueprintjs/core';
+import React from 'react';
 import { AppToaster, FormattedMessage as T } from '@/components';
-
-import { useDeleteTaxRate } from '@/hooks/query/taxRates';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { useDeleteTaxRate } from '@/hooks/query/tax-rates';
+import { compose } from '@/utils';
 
 /**
  * Item delete alerts.
  */
-function TaxRateDeleteAlert({
+function TaxRateDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -44,18 +41,12 @@ function TaxRateDeleteAlert({
         });
         closeDrawer(DRAWERS.TAX_RATE_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          AppToaster.show({
-            message: 'Something went wrong.',
-            intent: Intent.DANGER,
-          });
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        AppToaster.show({
+          message: 'Something went wrong.',
+          intent: Intent.DANGER,
+        });
+      })
       .finally(() => {
         closeAlert(name);
       });
@@ -85,8 +76,8 @@ function TaxRateDeleteAlert({
   );
 }
 
-export default compose(
+export const TaxRateDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(TaxRateDeleteAlert);
+)(TaxRateDeleteAlertInner);

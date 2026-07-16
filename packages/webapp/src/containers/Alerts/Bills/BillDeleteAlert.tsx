@@ -1,22 +1,20 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { AppToaster, FormattedMessage as T } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { DRAWERS } from '@/constants/drawers';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
 import { handleDeleteErrors } from '@/containers/Purchases/Bills/BillForm/utils';
 import { useDeleteBill } from '@/hooks/query';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
 
 /**
  * Bill delete alert.
  */
-function BillDeleteAlert({
+function BillDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -46,15 +44,9 @@ function BillDeleteAlert({
         });
         closeDrawer(DRAWERS.BILL_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });
@@ -78,8 +70,8 @@ function BillDeleteAlert({
   );
 }
 
-export default compose(
+export const BillDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(BillDeleteAlert);
+)(BillDeleteAlertInner);

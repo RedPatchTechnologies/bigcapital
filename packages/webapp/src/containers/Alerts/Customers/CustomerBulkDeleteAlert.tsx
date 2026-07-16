@@ -1,20 +1,18 @@
 // @ts-nocheck
-import React, { useCallback, useState } from 'react';
-import { FormattedMessage as T } from '@/components';
-import intl from 'react-intl-universal';
 import { Intent, Alert } from '@blueprintjs/core';
+import React, { useCallback, useState } from 'react';
+import intl from 'react-intl-universal';
+import { FormattedMessage as T } from '@/components';
 import { AppToaster } from '@/components';
-import { transformErrors } from '@/containers/Customers/utils';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { transformErrors } from '@/containers/Customers/utils';
 import { compose } from '@/utils';
 
 /**
  * Customer bulk delete alert.
  */
-function CustomerBulkDeleteAlert({
+function CustomerBulkDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -24,15 +22,12 @@ function CustomerBulkDeleteAlert({
   // #withAlertActions
   closeAlert,
 }) {
-  
   const [isLoading, setLoading] = useState(false);
 
   // handle cancel delete  alert.
   const handleCancelDeleteAlert = () => {
     closeAlert(name);
   };
-
-
 
   // Handle confirm customers bulk delete.
   const handleConfirmBulkDelete = useCallback(() => {
@@ -71,7 +66,7 @@ function CustomerBulkDeleteAlert({
   );
 }
 
-export default compose(
+export const CustomerBulkDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(CustomerBulkDeleteAlert);
+)(CustomerBulkDeleteAlertInner);

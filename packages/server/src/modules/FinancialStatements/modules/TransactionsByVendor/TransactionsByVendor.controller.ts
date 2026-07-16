@@ -3,18 +3,30 @@ import { ITransactionsByVendorsFilter } from './TransactionsByVendor.types';
 import { AcceptType } from '@/constants/accept-type';
 import { Response } from 'express';
 import { TransactionsByVendorApplication } from './TransactionsByVendorApplication';
-import { ApiExtraModels, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiQuery,
+  getSchemaPath,
+} from '@nestjs/swagger';
 import {
   TransactionsByVendorResponseDto,
   TransactionsByVendorTableResponseDto,
 } from './TransactionsByVendorResponse.dto';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { TransactionsByVendorQueryDto } from './TransactionsByVendorQuery.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 
 @Controller('/reports/transactions-by-vendors')
 @ApiTags('Reports')
 @ApiCommonHeaders()
-@ApiExtraModels(TransactionsByVendorResponseDto, TransactionsByVendorTableResponseDto)
+@ApiExtraModels(
+  TransactionsByVendorResponseDto,
+  TransactionsByVendorTableResponseDto,
+  NumberFormatQueryDto,
+)
 export class TransactionsByVendorController {
   constructor(
     private readonly transactionsByVendorsApp: TransactionsByVendorApplication,
@@ -22,6 +34,13 @@ export class TransactionsByVendorController {
 
   @Get()
   @ApiOperation({ summary: 'Get transactions by vendor' })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
+  })
   @ApiResponse({
     status: 200,
     description: 'Transactions by vendor',

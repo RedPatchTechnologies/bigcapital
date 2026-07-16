@@ -1,12 +1,13 @@
 // @ts-nocheck
-import React from 'react';
 import * as R from 'ramda';
-
+import React from 'react';
 import { Drawer, DrawerSuspense } from '@/components';
 import { withDrawers } from '@/containers/Drawer/withDrawers';
 
 const QuickWriteVendorDrawerContent = React.lazy(() =>
-  import('./QuickWriteVendorDrawerContent'),
+  import('./QuickWriteVendorDrawerContent').then((m) => ({
+    default: m.QuickWriteVendorDrawerContent,
+  })),
 );
 
 /**
@@ -27,10 +28,13 @@ function QuickWriteVendorDrawer({
       size={'80%'}
     >
       <DrawerSuspense>
-        <QuickWriteVendorDrawerContent displayName={displayName} autofillRef={autofillRef} />
+        <QuickWriteVendorDrawerContent
+          displayName={displayName}
+          autofillRef={autofillRef}
+        />
       </DrawerSuspense>
     </Drawer>
   );
 }
 
-export default R.compose(withDrawers())(QuickWriteVendorDrawer);
+export const index = R.compose(withDrawers())(QuickWriteVendorDrawer);

@@ -1,7 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
-import { TenancyContext } from '../Tenancy/TenancyContext.service';
+import { TenancyModule } from '../Tenancy/Tenancy.module';
 import { TenancyDatabaseModule } from '../Tenancy/TenancyDB/TenancyDB.module';
-import { TransformerInjectable } from '../Transformer/TransformerInjectable.service';
 import { CreateSaleInvoice } from './commands/CreateSaleInvoice.service';
 import { DeleteSaleInvoice } from './commands/DeleteSaleInvoice.service';
 import { DeliverSaleInvoice } from './commands/DeliverSaleInvoice.service';
@@ -67,6 +66,7 @@ import { ValidateBulkDeleteSaleInvoicesService } from './ValidateBulkDeleteSaleI
 
 @Module({
   imports: [
+    TenancyModule,
     TenancyDatabaseModule,
     PdfTemplatesModule,
     AutoIncrementOrdersModule,
@@ -103,8 +103,6 @@ import { ValidateBulkDeleteSaleInvoicesService } from './ValidateBulkDeleteSaleI
     GetInvoicePaymentMail,
     SaleInvoicePdf,
     SaleInvoiceApplication,
-    TenancyContext,
-    TransformerInjectable,
     ItemsEntriesService,
     CommandSaleInvoiceValidators,
     CommandSaleInvoiceDTOTransformer,

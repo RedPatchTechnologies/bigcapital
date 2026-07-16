@@ -1,13 +1,12 @@
 // @ts-nocheck
-import React from 'react';
 import { Button, Intent } from '@blueprintjs/core';
-
-import { Features } from '@/constants';
+import React from 'react';
 import { FeatureCan, FormattedMessage as T, Icon } from '@/components';
+import { Features } from '@/constants';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function BranchesActions({
+function BranchesActionsInner({
   //#ownProps
   openDialog,
 }) {
@@ -30,4 +29,4 @@ function BranchesActions({
   );
 }
 
-export default compose(withDialogActions)(BranchesActions);
+export const BranchesActions = compose(withDialogActions)(BranchesActionsInner);

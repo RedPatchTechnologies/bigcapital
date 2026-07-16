@@ -27,6 +27,12 @@ export type VendorCreditsListResponse = OpResponseBody<
 export type VendorCredit = OpResponseBody<
   OpForPath<typeof VENDOR_CREDITS_ROUTES.BY_ID, 'get'>
 >;
+export type VendorCreditRefund = OpResponseBody<
+  OpForPath<typeof VENDOR_CREDITS_ROUTES.REFUND, 'get'>
+>[number];
+export type VendorCreditAppliedBill = OpResponseBody<
+  OpForPath<typeof VENDOR_CREDITS_ROUTES.APPLIED_BILLS, 'get'>
+>[number];
 export type CreateVendorCreditBody = OpRequestBody<
   OpForPath<typeof VENDOR_CREDITS_ROUTES.LIST, 'post'>
 >;
@@ -131,7 +137,7 @@ export async function validateBulkDeleteVendorCredits(
 export async function fetchVendorCreditRefunds(
   fetcher: ApiFetcher,
   vendorCreditId: number
-): Promise<unknown> {
+): Promise<VendorCreditRefund[]> {
   const get = fetcher.path(VENDOR_CREDITS_ROUTES.REFUND).method('get').create();
   const { data } = await get({ vendorCreditId: String(vendorCreditId) });
   return data;
@@ -154,7 +160,7 @@ export async function fetchRefundVendorCreditTransaction(
     .path(VENDOR_CREDITS_ROUTES.REFUND_BY_ID)
     .method('get')
     .create();
-  const { data } = await get({ refundCreditId });
+  const { data } = await get({ refundCreditId: String(refundCreditId) });
   return data;
 }
 
@@ -197,7 +203,7 @@ export async function applyVendorCreditToBills(
 export async function fetchAppliedBillsToVendorCredit(
   fetcher: ApiFetcher,
   vendorCreditId: number
-): Promise<unknown> {
+): Promise<VendorCreditAppliedBill[]> {
   const get = fetcher
     .path(VENDOR_CREDITS_ROUTES.APPLIED_BILLS)
     .method('get')

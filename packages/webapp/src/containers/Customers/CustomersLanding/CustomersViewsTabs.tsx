@@ -1,20 +1,17 @@
 // @ts-nocheck
-import React from 'react';
 import { Alignment, Navbar, NavbarGroup } from '@blueprintjs/core';
-
-import { DashboardViewsTabs } from '@/components';
+import React from 'react';
 import { useCustomersListContext } from './CustomersListProvider';
-import { compose, transfromViewsToTabs } from '@/utils';
-
 import { withCustomers } from './withCustomers';
 import { withCustomersActions } from './withCustomersActions';
+import { DashboardViewsTabs } from '@/components';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-
+import { compose, transfromViewsToTabs } from '@/utils';
 
 /**
  * Customers views tabs.
  */
-function CustomersViewsTabs({
+function CustomersViewsTabsInner({
   // #withCustomersActions
   setCustomersTableState,
 
@@ -46,10 +43,10 @@ function CustomersViewsTabs({
   );
 }
 
-export default compose(
+export const CustomersViewsTabs = compose(
   withDashboardActions,
   withCustomersActions,
   withCustomers(({ customersTableState }) => ({
     customersCurrentView: customersTableState.viewSlug,
   })),
-)(CustomersViewsTabs);
+)(CustomersViewsTabsInner);

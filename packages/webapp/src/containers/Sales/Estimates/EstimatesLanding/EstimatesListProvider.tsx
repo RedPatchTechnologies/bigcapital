@@ -1,47 +1,64 @@
-// @ts-nocheck
-import React, { createContext } from 'react';
 import { isEmpty } from 'lodash';
-
+import React, { createContext } from 'react';
+import type { EstimateTableRow } from './components';
 import { DashboardInsider } from '@/components/Dashboard';
-
 import { useResourceViews, useResourceMeta, useEstimates } from '@/hooks/query';
 import { getFieldsFromResourceMeta } from '@/utils';
+import type { IResourceField } from '@/components/AdvancedFilter/interfaces';
 
-// Estimates list context.
-const EstimatesListContext = createContext();
+interface EstimatesListProviderProps {
+  query?: any;
+  tableStateChanged?: boolean;
+  children?: React.ReactNode;
+}
 
-/**
- * Sale estimates data provider.
- */
-function EstimatesListProvider({ query, tableStateChanged, ...props }) {
-  // Fetches estimates resource views and fields.
+export interface EstimatesListContextValue {
+  estimates: EstimateTableRow[] | undefined;
+  pagination: { total?: number; [key: string]: any } | undefined;
+  fields: IResourceField[];
+  estimatesViews: any;
+  isResourceLoading: boolean;
+  isResourceFetching: boolean;
+  isEstimatesLoading: boolean;
+  isEstimatesFetching: boolean;
+  isViewsLoading: boolean;
+  isEmptyStatus: boolean;
+}
+
+const EstimatesListContext = createContext<EstimatesListContextValue>(
+  {} as EstimatesListContextValue,
+);
+
+function EstimatesListProvider({
+  query,
+  tableStateChanged,
+  ...props
+}: EstimatesListProviderProps) {
   const { data: estimatesViews, isLoading: isViewsLoading } =
     useResourceViews('sale_estimates');
 
-  // Fetches the estimates resource fields.
   const {
     data: resourceMeta,
     isLoading: isResourceLoading,
     isFetching: isResourceFetching,
   } = useResourceMeta('sale_estimates');
 
-  // Fetches estimates list according to the given custom view id.
   const {
-    data: { estimates, pagination, filterMeta },
+    data: estimatesData,
     isLoading: isEstimatesLoading,
     isFetching: isEstimatesFetching,
-  } = useEstimates(query, { keepPreviousData: true });
+  } = useEstimates(query);
 
-  // Detarmines the datatable empty status.
   const isEmptyStatus =
-    !isEstimatesLoading && !tableStateChanged && isEmpty(estimates);
+    !isEstimatesLoading && !tableStateChanged && isEmpty(estimatesData?.data);
 
-  // Provider payload.
-  const provider = {
-    estimates,
-    pagination,
+  const provider: EstimatesListContextValue = {
+    estimates: estimatesData?.data as EstimateTableRow[] | undefined,
+    pagination: estimatesData?.pagination,
 
-    fields: getFieldsFromResourceMeta(resourceMeta.fields),
+    fields: resourceMeta?.fields
+      ? getFieldsFromResourceMeta(resourceMeta.fields)
+      : [],
     estimatesViews,
 
     isResourceLoading,

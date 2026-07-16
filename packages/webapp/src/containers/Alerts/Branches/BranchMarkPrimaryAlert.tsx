@@ -1,20 +1,17 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import { AppToaster, FormattedMessage as T } from '@/components';
-
-import { useMarkBranchAsPrimary } from '@/hooks/query';
-
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-
+import { useMarkBranchAsPrimary } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * branch mark primary alert.
  */
-function BranchMarkPrimaryAlert({
+function BranchMarkPrimaryAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -64,7 +61,7 @@ function BranchMarkPrimaryAlert({
   );
 }
 
-export default compose(
+export const BranchMarkPrimaryAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(BranchMarkPrimaryAlert);
+)(BranchMarkPrimaryAlertInner);

@@ -1,15 +1,11 @@
 // @ts-nocheck
-import * as Yup from 'yup';
 import intl from 'react-intl-universal';
+import * as Yup from 'yup';
 import { DATATYPES_LENGTH } from '@/constants/dataTypes';
 
 const Schema = Yup.object().shape({
-  vendor_id: Yup.string()
-    .label(intl.get('vendor_name_'))
-    .required(),
-  payment_date: Yup.date()
-    .required()
-    .label(intl.get('payment_date_')),
+  vendor_id: Yup.string().label(intl.get('vendor_name_')).required(),
+  payment_date: Yup.date().required().label(intl.get('payment_date_')),
   payment_number: Yup.string()
     .nullable()
     .max(DATATYPES_LENGTH.STRING)

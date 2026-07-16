@@ -1,17 +1,16 @@
 // @ts-nocheck
-import React from 'react';
-import { useFormikContext } from 'formik';
 import { Intent, Button, Classes } from '@blueprintjs/core';
-import { FormattedMessage as T } from '@/components';
-
+import { useFormikContext } from 'formik';
+import React from 'react';
 import { useReconcileCreditNoteContext } from './ReconcileCreditNoteFormProvider';
+import { FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
 /**
  * Reconcile credit note floating actions.
  */
-function ReconcileCreditNoteFormFloatingActions({
+function ReconcileCreditNoteFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -43,6 +42,6 @@ function ReconcileCreditNoteFormFloatingActions({
     </div>
   );
 }
-export default compose(withDialogActions)(
-  ReconcileCreditNoteFormFloatingActions,
-);
+export const ReconcileCreditNoteFormFloatingActions = compose(
+  withDialogActions,
+)(ReconcileCreditNoteFormFloatingActionsInner);

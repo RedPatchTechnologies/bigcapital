@@ -5,7 +5,9 @@ import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
 const ReconcileCreditNoteDialogContent = React.lazy(() =>
-  import('./ReconcileCreditNoteDialogContent'),
+  import('./ReconcileCreditNoteDialogContent').then((m) => ({
+    default: m.ReconcileCreditNoteDialogContent,
+  })),
 );
 
 /**
@@ -34,4 +36,4 @@ function ReconcileCreditNoteDialog({
   );
 }
 
-export default compose(withDialogRedux())(ReconcileCreditNoteDialog);
+export const index = compose(withDialogRedux())(ReconcileCreditNoteDialog);

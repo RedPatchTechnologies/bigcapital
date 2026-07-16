@@ -1,27 +1,24 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import {
   AppToaster,
   FormattedMessage as T,
   FormattedHTMLMessage,
 } from '@/components';
-import { useDeleteInvoice } from '@/hooks/query';
-
-import { handleDeleteErrors } from '@/containers/Sales/Invoices/InvoicesLanding/components';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { handleDeleteErrors } from '@/containers/Sales/Invoices/InvoicesLanding/components';
+import { useDeleteInvoice } from '@/hooks/query';
+import { compose } from '@/utils';
 
 /**
  * Invoice delete alert.
  */
-function InvoiceDeleteAlert({
+function InvoiceDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -51,15 +48,9 @@ function InvoiceDeleteAlert({
         });
         closeDrawer(DRAWERS.INVOICE_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });
@@ -85,8 +76,8 @@ function InvoiceDeleteAlert({
   );
 }
 
-export default compose(
+export const InvoiceDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(InvoiceDeleteAlert);
+)(InvoiceDeleteAlertInner);

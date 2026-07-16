@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React, { useState } from 'react';
 import {
   Button,
   Classes,
@@ -13,8 +12,13 @@ import {
   Menu,
   MenuItem,
 } from '@blueprintjs/core';
-
+import { isEmpty } from 'lodash';
+import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
+import { useBulkDeleteReceiptsDialog } from './hooks/use-bulk-delete-receipts-dialog';
+import { useReceiptsListContext } from './ReceiptsListProvider';
+import { withReceipts } from './withReceipts';
+import { withReceiptsActions } from './withReceiptsActions';
 import {
   Icon,
   AdvancedFilterPopover,
@@ -22,38 +26,27 @@ import {
   FormattedMessage as T,
   DashboardRowsHeightButton,
 } from '@/components';
-
 import {
   Can,
   If,
   DashboardActionsBar,
   DashboardActionViewsList,
 } from '@/components';
-
-import { withReceipts } from './withReceipts';
-import { withReceiptsActions } from './withReceiptsActions';
+import { SaleReceiptAction, AbilitySubject } from '@/constants/abilityOption';
+import { DialogsName } from '@/constants/dialogs';
+import { DRAWERS } from '@/constants/drawers';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
-import { useReceiptsListContext } from './ReceiptsListProvider';
-import {
-  useRefreshReceipts,
-} from '@/hooks/query/receipts';
 import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
-import { SaleReceiptAction, AbilitySubject } from '@/constants/abilityOption';
-import { useBulkDeleteReceiptsDialog } from './hooks/use-bulk-delete-receipts-dialog';
-
-import { DialogsName } from '@/constants/dialogs';
+import { useRefreshReceipts } from '@/hooks/query/receipts';
 import { compose } from '@/utils';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { DRAWERS } from '@/constants/drawers';
-import { isEmpty } from 'lodash';
 
 /**
  * Receipts actions bar.
  */
-function ReceiptActionsBar({
+function ReceiptActionsBarInner({
   // #withReceiptsActions
   setReceiptsTableState,
   setReceiptsSelectedRows,
@@ -124,10 +117,8 @@ function ReceiptActionsBar({
     openDrawer(DRAWERS.BRANDING_TEMPLATES, { resource: 'SaleReceipt' });
   };
 
-  const {
-    openBulkDeleteDialog,
-    isValidatingBulkDeleteReceipts,
-  } = useBulkDeleteReceiptsDialog();
+  const { openBulkDeleteDialog, isValidatingBulkDeleteReceipts } =
+    useBulkDeleteReceiptsDialog();
 
   if (!isEmpty(receiptSelectedRows)) {
     const handleBulkDelete = () => {
@@ -247,7 +238,7 @@ function ReceiptActionsBar({
   );
 }
 
-export default compose(
+export const ReceiptActionsBar = compose(
   withReceiptsActions,
   withSettingsActions,
   withReceipts(({ receiptTableState, receiptSelectedRows }) => ({
@@ -259,4 +250,4 @@ export default compose(
   })),
   withDialogActions,
   withDrawerActions,
-)(ReceiptActionsBar);
+)(ReceiptActionsBarInner);

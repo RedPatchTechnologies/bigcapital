@@ -1,21 +1,25 @@
 // @ts-nocheck
-import React from 'react';
 import { Classes } from '@blueprintjs/core';
-import { useFormikContext } from 'formik';
-import { FormattedMessage as T } from '@/components';
 import classNames from 'classnames';
-
-import { CLASSES } from '@/constants/classes';
+import { useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { useCurrencyFormContext } from './CurrencyFormProvider';
-import { FieldRequiredHint, FFormGroup, FInputGroup, FSelect } from '@/components';
-
+import { FormattedMessage as T } from '@/components';
+import {
+  FieldRequiredHint,
+  FFormGroup,
+  FInputGroup,
+  FSelect,
+} from '@/components';
+import { CLASSES } from '@/constants/classes';
 import { useAutofocus } from '@/hooks';
 import { currenciesOptions } from '@/utils';
 
 /**
  * Currency form fields.
  */
-export default function CurrencyFormFields() {
+export function CurrencyFormFields() {
   const currencyNameFieldRef = useAutofocus();
   const { isEditMode } = useCurrencyFormContext();
   const { setFieldValue } = useFormikContext();
@@ -33,10 +37,7 @@ export default function CurrencyFormFields() {
 
   return (
     <div className={Classes.DIALOG_BODY}>
-      <FFormGroup
-        name={'currency_code'}
-        label={<T id={'currency_code'} />}
-      >
+      <FFormGroup name={'currency_code'} label={intl.get('currency_code')}>
         <FSelect
           name={'currency_code'}
           items={currenciesOptions}
@@ -57,7 +58,7 @@ export default function CurrencyFormFields() {
       {/* ----------- Currency name ----------- */}
       <FFormGroup
         name={'currency_name'}
-        label={<T id={'currency_name'} />}
+        label={intl.get('currency_name')}
         labelInfo={<FieldRequiredHint />}
       >
         <FInputGroup
@@ -69,7 +70,7 @@ export default function CurrencyFormFields() {
       {/* ----------- Currency Code ----------- */}
       <FFormGroup
         name={'currency_sign'}
-        label={<T id={'currency_sign'} />}
+        label={intl.get('currency_sign')}
         labelInfo={<FieldRequiredHint />}
       >
         <FInputGroup name={'currency_sign'} />

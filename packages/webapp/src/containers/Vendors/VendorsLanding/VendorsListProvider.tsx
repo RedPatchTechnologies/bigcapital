@@ -1,11 +1,10 @@
 // @ts-nocheck
-import React, { createContext } from 'react';
 import { isEmpty } from 'lodash';
-
+import React, { createContext } from 'react';
+import { transformVendorsStateToQuery } from './utils';
 import { DashboardInsider } from '@/components';
 import { useResourceMeta, useResourceViews, useVendors } from '@/hooks/query';
 import { getFieldsFromResourceMeta } from '@/utils';
-import { transformVendorsStateToQuery } from './utils';
 
 const VendorsListContext = createContext();
 
@@ -15,7 +14,7 @@ function VendorsListProvider({ tableState, tableStateChanged, ...props }) {
 
   // Fetch vendors list with pagination meta.
   const {
-    data: { vendors, pagination, filterMeta },
+    data: vendorsData,
     isLoading: isVendorsLoading,
     isFetching: isVendorsFetching,
   } = useVendors(tableQuery, { keepPreviousData: true });
@@ -33,14 +32,16 @@ function VendorsListProvider({ tableState, tableStateChanged, ...props }) {
 
   // Detarmines the datatable empty status.
   const isEmptyStatus =
-    isEmpty(vendors) && !isVendorsLoading && !tableStateChanged;
+    isEmpty(vendorsData?.data) && !isVendorsLoading && !tableStateChanged;
 
   const provider = {
-    vendors,
-    pagination,
+    vendors: vendorsData?.data,
+    pagination: vendorsData?.pagination,
     vendorsViews,
 
-    fields: getFieldsFromResourceMeta(resourceMeta.fields),
+    fields: resourceMeta?.fields
+      ? getFieldsFromResourceMeta(resourceMeta.fields)
+      : [],
     resourceMeta,
     isResourceMetaLoading,
     isResourceMetaFetching,

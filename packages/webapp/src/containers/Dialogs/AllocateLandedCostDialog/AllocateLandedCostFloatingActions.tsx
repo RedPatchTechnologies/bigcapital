@@ -1,15 +1,14 @@
 // @ts-nocheck
-import React from 'react';
-import styled from 'styled-components';
 import { Intent, Button } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
+import React from 'react';
+import styled from 'styled-components';
+import { useAllocateLandedConstDialogContext } from './AllocateLandedCostDialogProvider';
 import {
   DialogFooter,
   DialogFooterActions,
   FormattedMessage as T,
 } from '@/components';
-
-import { useAllocateLandedConstDialogContext } from './AllocateLandedCostDialogProvider';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
@@ -17,7 +16,7 @@ import { compose } from '@/utils';
  * Allocate landed cost floating actions.
  * @returns {React.JSX}
  */
-function AllocateLandedCostFloatingActions({
+function AllocateLandedCostFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -61,7 +60,9 @@ function AllocateLandedCostFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(AllocateLandedCostFloatingActions);
+export const AllocateLandedCostFloatingActions = compose(withDialogActions)(
+  AllocateLandedCostFloatingActionsInner,
+);
 
 const AllocateDialogFooter = styled(DialogFooter)`
   display: flex;

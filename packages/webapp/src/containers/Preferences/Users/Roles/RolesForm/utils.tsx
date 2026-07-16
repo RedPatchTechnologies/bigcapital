@@ -1,7 +1,7 @@
 // @ts-nocheck
+import { DepGraph } from 'dependency-graph';
 import { chain, isEmpty, castArray, memoize } from 'lodash';
 import * as R from 'ramda';
-import { DepGraph } from 'dependency-graph';
 import {
   getPermissionsSchema,
   getPermissionsSchemaService,
@@ -225,8 +225,8 @@ function detarmineCheckboxState(isFullChecked, isFullUnchecked) {
   return isFullChecked
     ? FULL_ACCESS_CHECKBOX_STATE.ON
     : isFullUnchecked
-    ? FULL_ACCESS_CHECKBOX_STATE.OFF
-    : FULL_ACCESS_CHECKBOX_STATE.INDETARMINE;
+      ? FULL_ACCESS_CHECKBOX_STATE.OFF
+      : FULL_ACCESS_CHECKBOX_STATE.INDETARMINE;
 }
 
 /**

@@ -1,16 +1,14 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import { omit } from 'lodash';
+import moment from 'moment';
 import React from 'react';
 import intl from 'react-intl-universal';
-import moment from 'moment';
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import { omit } from 'lodash';
-
-import { AppToaster } from '@/components';
-import { useRefundVendorCreditContext } from './RefundVendorCreditFormProvider';
 import { CreateVendorRefundCreditFormSchema } from './RefundVendorCreditForm.schema';
-import RefundVendorCreditFormContent from './RefundVendorCreditFormContent';
-
+import { RefundVendorCreditFormContent } from './RefundVendorCreditFormContent';
+import { useRefundVendorCreditContext } from './RefundVendorCreditFormProvider';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
@@ -26,7 +24,7 @@ const defaultInitialValues = {
 /**
  * Refund Vendor credit form.
  */
-function RefundVendorCreditForm({
+function RefundVendorCreditFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -54,11 +52,7 @@ function RefundVendorCreditForm({
       closeDialog(dialogName);
     };
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       setSubmitting(false);
     };
 
@@ -77,4 +71,6 @@ function RefundVendorCreditForm({
   );
 }
 
-export default compose(withDialogActions)(RefundVendorCreditForm);
+export const RefundVendorCreditForm = compose(withDialogActions)(
+  RefundVendorCreditFormInner,
+);

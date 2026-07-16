@@ -1,19 +1,17 @@
 // @ts-nocheck
+import { Alert, Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Alert, Intent } from '@blueprintjs/core';
 import { AppToaster, FormattedMessage as T } from '@/components';
-import { useActivateUser } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useActivateUser } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * User inactivate alert.
  */
-function UserActivateAlert({
+function UserActivateAlertInner({
   // #ownProps
   name,
 
@@ -60,7 +58,7 @@ function UserActivateAlert({
   );
 }
 
-export default compose(
+export const UserActivateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(UserActivateAlert);
+)(UserActivateAlertInner);

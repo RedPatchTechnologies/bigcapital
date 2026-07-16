@@ -1,14 +1,14 @@
 // @ts-nocheck
-import React, { useState, useEffect } from 'react';
-import { Formik } from 'formik';
-import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import React, { useState, useEffect } from 'react';
+import intl from 'react-intl-universal';
+import { ApiKeyDisplayView } from './ApiKeyDisplayView';
+import { CreateApiKeyFormSchema as ApiKeysGenerateFormSchema } from './ApiKeysGenerateForm.schema';
+import { ApiKeysGenerateFormContent } from './ApiKeysGenerateFormContent';
 import { AppToaster } from '@/components';
-import { useGenerateApiKey } from '@/hooks/query';
-import ApiKeysGenerateFormContent from './ApiKeysGenerateFormContent';
-import ApiKeysGenerateFormSchema from './ApiKeysGenerateForm.schema';
-import ApiKeyDisplayView from './ApiKeyDisplayView';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { useGenerateApiKey } from '@/hooks/query';
 import { compose } from '@/utils';
 
 const defaultInitialValues = {
@@ -18,7 +18,7 @@ const defaultInitialValues = {
 /**
  * API Keys Generate form dialog content.
  */
-function ApiKeysGenerateDialogContent({
+function ApiKeysGenerateDialogContentInner({
   // #withDialogActions
   closeDialog,
   dialogName,
@@ -83,4 +83,6 @@ function ApiKeysGenerateDialogContent({
   );
 }
 
-export default compose(withDialogActions)(ApiKeysGenerateDialogContent);
+export const ApiKeysGenerateDialogContent = compose(withDialogActions)(
+  ApiKeysGenerateDialogContentInner,
+);

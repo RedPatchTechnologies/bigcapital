@@ -3,6 +3,7 @@ import {
   ApiExtraModels,
   ApiOperation,
   ApiProduces,
+  ApiQuery,
   ApiResponse,
   ApiTags,
   getSchemaPath,
@@ -10,6 +11,7 @@ import {
 import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
 import { AcceptType } from '@/constants/accept-type';
 import { SalesTaxLiabilitySummaryApplication } from './SalesTaxLiabilitySummaryApplication';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { SalesTaxLiabilitySummaryQueryDto } from './dtos/SalesTaxLiabilityQuery.dto';
 import {
   SalesTaxLiabilitySummaryResponseDto,
@@ -20,7 +22,11 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 @Controller('/reports/sales-tax-liability-summary')
 @ApiTags('Reports')
 @ApiCommonHeaders()
-@ApiExtraModels(SalesTaxLiabilitySummaryResponseDto, SalesTaxLiabilitySummaryTableResponseDto)
+@ApiExtraModels(
+  SalesTaxLiabilitySummaryResponseDto,
+  SalesTaxLiabilitySummaryTableResponseDto,
+  NumberFormatQueryDto,
+)
 export class SalesTaxLiabilitySummaryController {
   constructor(
     private readonly salesTaxLiabilitySummaryApp: SalesTaxLiabilitySummaryApplication,
@@ -35,11 +41,20 @@ export class SalesTaxLiabilitySummaryController {
         schema: { $ref: getSchemaPath(SalesTaxLiabilitySummaryResponseDto) },
       },
       [AcceptType.ApplicationJsonTable]: {
-        schema: { $ref: getSchemaPath(SalesTaxLiabilitySummaryTableResponseDto) },
+        schema: {
+          $ref: getSchemaPath(SalesTaxLiabilitySummaryTableResponseDto),
+        },
       },
     },
   })
   @ApiOperation({ summary: 'Get sales tax liability summary report' })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
+  })
   @ApiProduces(
     AcceptType.ApplicationJson,
     AcceptType.ApplicationJsonTable,

@@ -1,17 +1,13 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
 import React from 'react';
 import intl from 'react-intl-universal';
-
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-
-import { AppToaster } from '@/components';
 import { CreateBranchFormSchema } from './BranchForm.schema';
-import { transformErrors } from './utils';
-
-import BranchFormContent from './BranchFormContent';
+import { BranchFormContent } from './BranchFormContent';
 import { useBranchFormContext } from './BranchFormProvider';
-
+import { transformErrors } from './utils';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose, transformToForm } from '@/utils';
 
@@ -26,7 +22,7 @@ const defaultInitialValues = {
   country: '',
 };
 
-function BranchForm({
+function BranchFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -53,11 +49,7 @@ function BranchForm({
     };
 
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors) {
       }
       transformErrors(errors, { setErrors });
@@ -80,4 +72,4 @@ function BranchForm({
     />
   );
 }
-export default compose(withDialogActions)(BranchForm);
+export const BranchForm = compose(withDialogActions)(BranchFormInner);

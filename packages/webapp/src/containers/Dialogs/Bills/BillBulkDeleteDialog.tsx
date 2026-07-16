@@ -1,17 +1,16 @@
 // @ts-nocheck
-import React from 'react';
 import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
-import { FormattedMessage as T, AppToaster } from '@/components';
+import React from 'react';
 import intl from 'react-intl-universal';
-
-import BulkDeleteDialogContent from '@/containers/Dialogs/components/BulkDeleteDialogContent';
-import { useBulkDeleteBills } from '@/hooks/query/bills';
+import { FormattedMessage as T, AppToaster } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
 import { withBillsActions } from '@/containers/Purchases/Bills/BillsLanding/withBillsActions';
+import { useBulkDeleteBills } from '@/hooks/query/bills';
 import { compose } from '@/utils';
 
-function BillBulkDeleteDialog({
+function BillBulkDeleteDialogInner({
   dialogName,
   isOpen,
   payload: {
@@ -34,10 +33,7 @@ function BillBulkDeleteDialog({
   };
 
   const handleConfirmBulkDelete = () => {
-    bulkDeleteBills({
-      ids,
-      skipUndeletable: true,
-    })
+    bulkDeleteBills({ ids, skipUndeletable: true })
       .then(() => {
         AppToaster.show({
           message: intl.get('the_bills_has_been_deleted_successfully'),
@@ -95,9 +91,8 @@ function BillBulkDeleteDialog({
   );
 }
 
-export default compose(
+export const BillBulkDeleteDialog = compose(
   withDialogRedux(),
   withDialogActions,
   withBillsActions,
-)(BillBulkDeleteDialog);
-
+)(BillBulkDeleteDialogInner);

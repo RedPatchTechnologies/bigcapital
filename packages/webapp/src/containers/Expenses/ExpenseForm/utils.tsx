@@ -1,14 +1,18 @@
 // @ts-nocheck
-import React from 'react';
-import * as R from 'ramda';
-import intl from 'react-intl-universal';
-import moment from 'moment';
-import { AppToaster } from '@/components';
 import { Intent } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
 import { first, sumBy } from 'lodash';
+import moment from 'moment';
+import * as R from 'ramda';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { useExpenseFormContext } from './ExpenseFormPageProvider';
-
+import { AppToaster } from '@/components';
+import {
+  transformAttachmentsToForm,
+  transformAttachmentsToRequest,
+} from '@/containers/Attachments/utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   defaultFastFieldShouldUpdate,
   transformToForm,
@@ -17,11 +21,6 @@ import {
   orderingLinesIndexes,
   formattedAmount,
 } from '@/utils';
-import { useCurrentOrganization } from '@/hooks/state';
-import {
-  transformAttachmentsToForm,
-  transformAttachmentsToRequest,
-} from '@/containers/Attachments/utils';
 
 const ERROR = {
   EXPENSE_ALREADY_PUBLISHED: 'EXPENSE.ALREADY.PUBLISHED',
@@ -33,22 +32,22 @@ export const MIN_LINES_NUMBER = 1;
 
 export const defaultExpenseEntry = {
   amount: '',
-  expense_account_id: '',
+  expenseAccountId: '',
   description: '',
-  landed_cost: 0,
-  project_id: '',
+  landedCost: 0,
+  projectId: '',
 };
 
 export const defaultExpense = {
-  payment_account_id: '',
+  paymentAccountId: '',
   beneficiary: '',
-  payment_date: moment(new Date()).format('YYYY-MM-DD'),
+  paymentDate: moment(new Date()).format('YYYY-MM-DD'),
   description: '',
-  reference_no: '',
-  currency_code: '',
+  referenceNo: '',
+  currencyCode: '',
   publish: '',
-  branch_id: '',
-  exchange_rate: 1,
+  branchId: '',
+  exchangeRate: 1,
   categories: [...repeatValue(defaultExpenseEntry, MIN_LINES_NUMBER)],
   attachments: [],
 };
@@ -132,7 +131,7 @@ export const accountsFieldShouldUpdate = (newProps, oldProps) => {
  */
 export const filterNonZeroEntries = (categories) => {
   return categories.filter(
-    (category) => category.amount && category.expense_account_id,
+    (category) => category.amount && category.expenseAccountId,
   );
 };
 
@@ -159,7 +158,7 @@ export const useSetPrimaryBranchToForm = () => {
       const primaryBranch = branches.find((b) => b.primary) || first(branches);
 
       if (primaryBranch) {
-        setFieldValue('branch_id', primaryBranch.id);
+        setFieldValue('branchId', primaryBranch.id);
       }
     }
   }, [isBranchesSuccess, setFieldValue, branches, isNewMode]);
@@ -185,10 +184,10 @@ export const useExpenseSubtotal = () => {
 export const useExpenseSubtotalFormatted = () => {
   const subtotal = useExpenseSubtotal();
   const {
-    values: { currency_code },
+    values: { currencyCode },
   } = useFormikContext();
 
-  return formattedAmount(subtotal, currency_code);
+  return formattedAmount(subtotal, currencyCode);
 };
 
 /**
@@ -208,10 +207,10 @@ export const useExpenseTotal = () => {
 export const useExpenseTotalFormatted = () => {
   const total = useExpenseTotal();
   const {
-    values: { currency_code },
+    values: { currencyCode },
   } = useFormikContext();
 
-  return formattedAmount(total, currency_code);
+  return formattedAmount(total, currencyCode);
 };
 
 /**
@@ -220,11 +219,11 @@ export const useExpenseTotalFormatted = () => {
  */
 export const useExpensesIsForeign = () => {
   const { values } = useFormikContext();
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
 
   const isForeignExpenses = React.useMemo(
-    () => values.currency_code !== currentOrganization.base_currency,
-    [values.currency_code, currentOrganization.base_currency],
+    () => values.currencyCode !== baseCurrency,
+    [values.currencyCode, baseCurrency],
   );
   return isForeignExpenses;
 };

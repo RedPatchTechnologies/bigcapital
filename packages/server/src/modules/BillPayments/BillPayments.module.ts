@@ -8,7 +8,7 @@ import { BillPaymentBillSync } from './commands/BillPaymentBillSync.service';
 import { GetPaymentBills } from './queries/GetPaymentBills.service';
 import { BillPaymentValidators } from './commands/BillPaymentValidators.service';
 import { CommandBillPaymentDTOTransformer } from './commands/CommandBillPaymentDTOTransformer.service';
-import { TenancyContext } from '../Tenancy/TenancyContext.service';
+import { TenancyModule } from '../Tenancy/Tenancy.module';
 import { BranchTransactionDTOTransformer } from '../Branches/integrations/BranchTransactionDTOTransform';
 import { BranchesSettingsService } from '../Branches/BranchesSettings';
 import { BillPaymentsController } from './BillPayments.controller';
@@ -24,7 +24,7 @@ import { DynamicListModule } from '../DynamicListing/DynamicList.module';
 import { BillPaymentsPages } from './commands/BillPaymentsPages.service';
 
 @Module({
-  imports: [LedgerModule, AccountsModule, DynamicListModule],
+  imports: [TenancyModule, LedgerModule, AccountsModule, DynamicListModule],
   providers: [
     BillPaymentsApplication,
     CreateBillPaymentService,
@@ -37,7 +37,6 @@ import { BillPaymentsPages } from './commands/BillPaymentsPages.service';
     CommandBillPaymentDTOTransformer,
     BranchTransactionDTOTransformer,
     BranchesSettingsService,
-    TenancyContext,
     BillPaymentGLEntries,
     BillPaymentGLEntriesSubscriber,
     BillPaymentBillSyncSubscriber,
@@ -54,4 +53,4 @@ import { BillPaymentsPages } from './commands/BillPaymentsPages.service';
   ],
   controllers: [BillPaymentsController],
 })
-export class BillPaymentsModule { }
+export class BillPaymentsModule {}

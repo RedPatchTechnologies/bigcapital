@@ -1,27 +1,29 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-
-import { TableStyle } from '@/constants';
+import { useInventoryValuationColumns } from './dynamicColumns';
+import { useInventoryValuationContext } from './InventoryValuationProvider';
 import { ReportDataTable, FinancialSheet } from '@/components';
+import { TableStyle } from '@/constants';
 import { tableRowTypesToClassnames } from '@/utils';
 
-import { useInventoryValuationContext } from './InventoryValuationProvider';
-import { useInventoryValuationColumns } from './dynamicColumns';
+interface InventoryValuationTableProps {
+  companyName: string;
+}
 
 /**
  * Inventory valuation data table.
  */
-export default function InventoryValuationTable({
+export function InventoryValuationTable({
   // #ownProps
   companyName,
-}) {
+}: InventoryValuationTableProps) {
   // Inventory valuation context.
-  const {
-    inventoryValuation: { table, query, meta },
-    isLoading,
-  } = useInventoryValuationContext();
+  const { inventoryValuation } = useInventoryValuationContext();
+
+  // Null-safe access for SDK opaque type.
+  const table = inventoryValuation?.table;
+  const meta = inventoryValuation?.meta;
 
   // Inventory valuation table columns.
   const columns = useInventoryValuationColumns();
@@ -30,12 +32,11 @@ export default function InventoryValuationTable({
     <InventoryValuationSheet
       companyName={companyName}
       sheetType={intl.get('inventory_valuation')}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
-      loading={isLoading}
+      dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
     >
       <InventoryValuationDataTable
         columns={columns}
-        data={table.rows}
+        data={table?.rows ?? []}
         expandable={true}
         expandToggleColumn={1}
         expandColumnSpace={1}

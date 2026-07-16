@@ -1,21 +1,18 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
+import { useQueryClient } from '@tanstack/react-query';
 import React, { useCallback } from 'react';
 import intl from 'react-intl-universal';
 import { AppToaster, FormattedMessage as T } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-import { useQueryClient } from 'react-query';
-
-import { useApproveEstimate } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useApproveEstimate } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * Estimate approve alert.
  */
-function EstimateApproveAlert({
+function EstimateApproveAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -41,7 +38,7 @@ function EstimateApproveAlert({
           message: intl.get('the_estimate_has_been_approved_successfully'),
           intent: Intent.SUCCESS,
         });
-        queryClient.invalidateQueries('estimates-table');
+        queryClient.invalidateQueries({ queryKey: ['estimates-table'] });
       })
       .catch((error) => {})
       .finally(() => {
@@ -66,7 +63,7 @@ function EstimateApproveAlert({
   );
 }
 
-export default compose(
+export const EstimateApproveAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(EstimateApproveAlert);
+)(EstimateApproveAlertInner);

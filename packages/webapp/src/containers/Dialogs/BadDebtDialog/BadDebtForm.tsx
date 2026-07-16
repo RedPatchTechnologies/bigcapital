@@ -1,22 +1,17 @@
 // @ts-nocheck
+
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import { omit } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import { omit } from 'lodash';
-
-import { AppToaster } from '@/components';
 import { CreateBadDebtFormSchema } from './BadDebtForm.schema';
-import { transformErrors } from './utils';
-
-import BadDebtFormContent from './BadDebtFormContent';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
-
+import { BadDebtFormContent } from './BadDebtFormContent';
 import { useBadDebtContext } from './BadDebtFormProvider';
-
+import { transformErrors } from './utils';
+import { AppToaster } from '@/components';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import { compose } from '@/utils';
 
 const defaultInitialValues = {
@@ -25,13 +20,11 @@ const defaultInitialValues = {
   amount: '',
 };
 
-function BadDebtForm({
+function BadDebtFormInner({
   // #withDialogActions
   closeDialog,
-
-  // #withCurrentOrganization
-  organization: { base_currency },
 }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
   const { invoice, dialogName, createBadDebtMutate } = useBadDebtContext();
 
   // Initial form values
@@ -56,11 +49,7 @@ function BadDebtForm({
     };
 
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors) {
         transformErrors(errors, { setErrors });
       }
@@ -79,7 +68,4 @@ function BadDebtForm({
   );
 }
 
-export default compose(
-  withDialogActions,
-  withCurrentOrganization(),
-)(BadDebtForm);
+export const BadDebtForm = compose(withDialogActions)(BadDebtFormInner);

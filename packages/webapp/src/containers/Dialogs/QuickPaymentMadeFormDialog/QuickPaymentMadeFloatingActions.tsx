@@ -1,14 +1,13 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Button, Classes } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-import { FormattedMessage as T } from '@/components';
-
+import React from 'react';
 import { useQuickPaymentMadeContext } from './QuickPaymentMadeFormProvider';
+import { FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function QuickPaymentMadeFloatingActions({
+function QuickPaymentMadeFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -41,4 +40,6 @@ function QuickPaymentMadeFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(QuickPaymentMadeFloatingActions);
+export const QuickPaymentMadeFloatingActions = compose(withDialogActions)(
+  QuickPaymentMadeFloatingActionsInner,
+);

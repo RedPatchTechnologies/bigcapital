@@ -23,7 +23,7 @@ import {
   CreateManualJournalDto,
   EditManualJournalDto,
 } from './dtos/ManualJournal.dto';
-import { IManualJournalsFilter } from './types/ManualJournals.types';
+import { GetManualJournalsQueryDto } from './dtos/GetManualJournalsQuery.dto';
 import { ManualJournalResponseDto } from './dtos/ManualJournalResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import {
@@ -43,7 +43,7 @@ import { ManualJournalAction } from './types/ManualJournals.types';
 @ApiCommonHeaders()
 @UseGuards(AuthorizationGuard, PermissionGuard)
 export class ManualJournalsController {
-  constructor(private manualJournalsApplication: ManualJournalsApplication) { }
+  constructor(private manualJournalsApplication: ManualJournalsApplication) {}
 
   @Post('validate-bulk-delete')
   @RequirePermission(ManualJournalAction.Delete, AbilitySubject.ManualJournal)
@@ -194,7 +194,7 @@ export class ManualJournalsController {
     },
   })
   @ApiResponse({ status: 404, description: 'The manual journal not found.' })
-  public getManualJournals(@Query() filterDto: Partial<IManualJournalsFilter>) {
+  public getManualJournals(@Query() filterDto: GetManualJournalsQueryDto) {
     return this.manualJournalsApplication.getManualJournals(filterDto);
   }
 }

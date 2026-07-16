@@ -1,23 +1,25 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-
-import { ReportDataTable, FinancialSheet } from '@/components';
-import { useSalesByItemsContext } from './SalesByItemProvider';
 import { useSalesByItemsTableColumns } from './dynamicColumns';
-import { tableRowTypesToClassnames } from '@/utils';
+import { useSalesByItemsContext } from './SalesByItemProvider';
+import { ReportDataTable, FinancialSheet } from '@/components';
 import { TableStyle } from '@/constants';
+import { tableRowTypesToClassnames } from '@/utils';
+
+interface SalesByItemsTableProps {
+  companyName: string;
+}
 
 /**
  * Sales by items data table.
  */
-export default function SalesByItemsTable({ companyName }) {
+export function SalesByItemsTable({ companyName }: SalesByItemsTableProps) {
   // Sales by items context.
-  const {
-    salesByItems: { table, query, meta },
-    isLoading,
-  } = useSalesByItemsContext();
+  const { salesByItems, isLoading } = useSalesByItemsContext();
+
+  const table = salesByItems?.table;
+  const meta = salesByItems?.meta;
 
   // Sales by items table columns.
   const columns = useSalesByItemsTableColumns();
@@ -26,12 +28,11 @@ export default function SalesByItemsTable({ companyName }) {
     <SalesByItemsSheet
       companyName={companyName}
       sheetType={intl.get('sales_by_items')}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
-      loading={isLoading}
+      dateText={meta?.formattedDateRange}
     >
       <SalesByItemsDataTable
         columns={columns}
-        data={table.rows}
+        data={table?.rows ?? []}
         expandable={true}
         expandToggleColumn={1}
         expandColumnSpace={1}

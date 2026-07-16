@@ -1,17 +1,17 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
 
 import '@/style/pages/ReconcileCreditNote/ReconcileCreditNoteForm.scss';
-import { AppToaster } from '@/components';
 import { CreateReconcileCreditNoteFormSchema } from './ReconcileCreditNoteForm.schema';
+import { ReconcileCreditNoteFormContent } from './ReconcileCreditNoteFormContent';
 import { useReconcileCreditNoteContext } from './ReconcileCreditNoteFormProvider';
-import ReconcileCreditNoteFormContent from './ReconcileCreditNoteFormContent';
+import { transformErrors } from './utils';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose, transformToForm } from '@/utils';
-import { transformErrors } from './utils';
 
 // Default form initial values.
 const defaultInitialValues = {
@@ -26,7 +26,7 @@ const defaultInitialValues = {
 /**
  * Reconcile credit note form.
  */
-function ReconcileCreditNoteForm({
+function ReconcileCreditNoteFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -69,11 +69,7 @@ function ReconcileCreditNoteForm({
       closeDialog(dialogName);
     };
     // Handle the request error.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors) {
         transformErrors(errors, { setErrors });
       }
@@ -95,4 +91,6 @@ function ReconcileCreditNoteForm({
   );
 }
 
-export default compose(withDialogActions)(ReconcileCreditNoteForm);
+export const ReconcileCreditNoteForm = compose(withDialogActions)(
+  ReconcileCreditNoteFormInner,
+);

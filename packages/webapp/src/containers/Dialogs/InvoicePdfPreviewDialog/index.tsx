@@ -1,17 +1,16 @@
 // @ts-nocheck
-import React, { lazy } from 'react';
 import classNames from 'classnames';
-
+import React, { lazy } from 'react';
 import { T, Dialog, DialogSuspense } from '@/components';
-
 import withDialogRedux from '@/components/DialogReduxConnect';
-
 import { CLASSES } from '@/constants/classes';
 import { compose } from '@/utils';
 
 // Lazy loading the content.
 const PdfPreviewDialogContent = lazy(() =>
-  import('./InvoicePdfPreviewDialogContent'),
+  import('./InvoicePdfPreviewDialogContent').then((m) => ({
+    default: m.InvoicePdfPreviewDialogContent,
+  })),
 );
 
 /**
@@ -38,4 +37,4 @@ function InvoicePdfPreviewDialog({ dialogName, payload, isOpen }) {
   );
 }
 
-export default compose(withDialogRedux())(InvoicePdfPreviewDialog);
+export const index = compose(withDialogRedux())(InvoicePdfPreviewDialog);

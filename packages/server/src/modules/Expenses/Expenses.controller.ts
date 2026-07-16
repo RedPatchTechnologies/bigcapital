@@ -10,7 +10,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ExpensesApplication } from './ExpensesApplication.service';
-import { IExpensesFilter } from './Expenses.types';
+import { GetExpensesQueryDto } from './dtos/GetExpensesQuery.dto';
 import {
   ApiExtraModels,
   ApiOperation,
@@ -42,7 +42,7 @@ import { ExpenseAction } from './Expenses.types';
 @ApiCommonHeaders()
 @UseGuards(AuthorizationGuard, PermissionGuard)
 export class ExpensesController {
-  constructor(private readonly expensesApplication: ExpensesApplication) { }
+  constructor(private readonly expensesApplication: ExpensesApplication) {}
 
   @Post('validate-bulk-delete')
   @RequirePermission(ExpenseAction.Delete, AbilitySubject.Expense)
@@ -72,9 +72,7 @@ export class ExpensesController {
     status: 200,
     description: 'Expenses deleted successfully',
   })
-  public bulkDeleteExpenses(
-    @Body() bulkDeleteDto: BulkDeleteDto,
-  ) {
+  public bulkDeleteExpenses(@Body() bulkDeleteDto: BulkDeleteDto) {
     return this.expensesApplication.bulkDeleteExpenses(bulkDeleteDto.ids, {
       skipUndeletable: bulkDeleteDto.skipUndeletable ?? false,
     });
@@ -151,7 +149,7 @@ export class ExpensesController {
       ],
     },
   })
-  public getExpenses(@Query() filterDTO: IExpensesFilter) {
+  public getExpenses(@Query() filterDTO: GetExpensesQueryDto) {
     return this.expensesApplication.getExpenses(filterDTO);
   }
 

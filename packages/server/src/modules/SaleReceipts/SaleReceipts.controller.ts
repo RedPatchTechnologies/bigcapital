@@ -25,10 +25,8 @@ import {
   CreateSaleReceiptDto,
   EditSaleReceiptDto,
 } from './dtos/SaleReceipt.dto';
-import {
-  ISalesReceiptsFilter,
-  SaleReceiptMailOptsDTO,
-} from './types/SaleReceipts.types';
+import { GetSaleReceiptsQueryDto } from './dtos/GetSaleReceiptsQuery.dto';
+import { SaleReceiptMailOptsDTO } from './types/SaleReceipts.types';
 import { AcceptType } from '@/constants/accept-type';
 import { Response } from 'express';
 import { SaleReceiptResponseDto } from './dtos/SaleReceiptResponse.dto';
@@ -39,6 +37,7 @@ import {
   BulkDeleteDto,
   ValidateBulkDeleteResponseDto,
 } from '@/common/dtos/BulkDelete.dto';
+import { SaleReceiptHtmlContentResponseDto } from './dtos/SaleReceiptHtmlResponse.dto';
 
 @Controller('sale-receipts')
 @ApiTags('Sale Receipts')
@@ -47,8 +46,9 @@ import {
 @ApiExtraModels(SaleReceiptStateResponseDto)
 @ApiCommonHeaders()
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
+@ApiExtraModels(SaleReceiptHtmlContentResponseDto)
 export class SaleReceiptsController {
-  constructor(private saleReceiptApplication: SaleReceiptApplication) { }
+  constructor(private saleReceiptApplication: SaleReceiptApplication) {}
 
   @Post('validate-bulk-delete')
   @ApiOperation({
@@ -152,8 +152,13 @@ export class SaleReceiptsController {
   @ApiResponse({
     status: 200,
     description: 'The sale receipt details have been successfully retrieved.',
-    schema: {
-      $ref: getSchemaPath(SaleReceiptResponseDto),
+    content: {
+      'application/json': {
+        schema: { $ref: getSchemaPath(SaleReceiptResponseDto) },
+      },
+      'application/json+html': {
+        schema: { $ref: getSchemaPath(SaleReceiptHtmlContentResponseDto) },
+      },
     },
   })
   @ApiResponse({ status: 404, description: 'The sale receipt not found.' })
@@ -206,7 +211,7 @@ export class SaleReceiptsController {
       ],
     },
   })
-  getSaleReceipts(@Query() filterDTO: Partial<ISalesReceiptsFilter>) {
+  getSaleReceipts(@Query() filterDTO: GetSaleReceiptsQueryDto) {
     return this.saleReceiptApplication.getSaleReceipts(filterDTO);
   }
 

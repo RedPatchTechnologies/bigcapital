@@ -12,28 +12,25 @@ import {
 } from 'react-table';
 import { useSticky } from 'react-table-sticky';
 
-import { useUpdateEffect } from '@/hooks';
-import { saveInvoke } from '@/utils';
-
 import '@/style/components/DataTable/DataTable.scss';
 
-import TableNoResultsRow from './TableNoResultsRow';
-import TableLoadingRow from './TableLoading';
-import TableHeader from './TableHeader';
-import TablePage from './TablePage';
+import TableCell from './TableCell';
+import TableContext from './TableContext';
 import TableFooter from './TableFooter';
+import TableHeader from './TableHeader';
+import TableIndeterminateCheckboxHeader from './TableIndeterminateCheckboxHeader';
+import TableIndeterminateCheckboxRow from './TableIndeterminateCheckboxRow';
+import TableLoadingRow from './TableLoading';
+import TableNoResultsRow from './TableNoResultsRow';
+import TablePage from './TablePage';
+import TablePagination from './TablePagination';
 import TableRow from './TableRow';
 import TableRows from './TableRows';
-import TableCell from './TableCell';
 import TableTBody from './TableTBody';
-import TableContext from './TableContext';
-import TablePagination from './TablePagination';
 import TableWrapper from './TableWrapper';
-
-import TableIndeterminateCheckboxRow from './TableIndeterminateCheckboxRow';
-import TableIndeterminateCheckboxHeader from './TableIndeterminateCheckboxHeader';
-
 import { useResizeObserver } from './utils';
+import { useUpdateEffect } from '@/hooks';
+import { saveInvoke } from '@/utils';
 
 /**
  * Datatable component.
@@ -56,7 +53,7 @@ export function DataTable(props) {
     expandable = false,
     noInitialFetch = false,
 
-    pagesCount: controlledPageCount,
+    rowsCount,
 
     // Pagination props.
     initialPageIndex = 0,
@@ -121,7 +118,10 @@ export function DataTable(props) {
         hiddenColumns: initialHiddenColumns,
       },
       manualPagination,
-      pageCount: controlledPageCount,
+      pageCount:
+        rowsCount && initialPageSize > 0
+          ? Math.ceil(rowsCount / initialPageSize)
+          : 0,
       getSubRows: (row) => row.children,
       manualSortBy,
       expandSubRows,

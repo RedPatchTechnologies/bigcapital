@@ -1,14 +1,13 @@
 // @ts-nocheck
 import React from 'react';
-
+import { CustomerDetails as VendorDetails } from './VendorDetails';
 import { VendorDetailsDrawerProvider } from './VendorDetailsDrawerProvider';
 import { DrawerBody } from '@/components';
-import VendorDetails from './VendorDetails';
 
 /**
  * Contact detail drawer content.
  */
-export default function VendorDetailsDrawerContent({
+export function VendorDetailsDrawerContent({
   // #ownProp
   vendorId,
 }) {

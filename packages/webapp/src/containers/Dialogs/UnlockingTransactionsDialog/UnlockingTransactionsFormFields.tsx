@@ -1,15 +1,16 @@
 // @ts-nocheck
-import React from 'react';
-import { FastField, ErrorMessage } from 'formik';
 import { Classes, FormGroup, TextArea } from '@blueprintjs/core';
-import { FieldRequiredHint, FormattedMessage as T } from '@/components';
+import { FastField, ErrorMessage } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { FieldRequiredHint } from '@/components';
 import { useAutofocus } from '@/hooks';
 import { inputIntent } from '@/utils';
 
 /**
  * Unlocking transactions form fields.
  */
-export default function UnlockingTransactionsFormFields() {
+export function UnlockingTransactionsFormFields() {
   const reasonFieldRef = useAutofocus();
 
   return (
@@ -18,7 +19,7 @@ export default function UnlockingTransactionsFormFields() {
       <FastField name={'reason'}>
         {({ field, meta: { error, touched } }) => (
           <FormGroup
-            label={<T id={'unlocking_transactions.dialog.reason'} />}
+            label={intl.get('unlocking_transactions.dialog.reason')}
             labelInfo={<FieldRequiredHint />}
             className={'form-group--reason'}
             intent={inputIntent({ error, touched })}

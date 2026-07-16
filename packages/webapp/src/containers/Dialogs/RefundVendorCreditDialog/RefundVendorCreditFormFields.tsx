@@ -1,12 +1,13 @@
 // @ts-nocheck
+import { Classes, Position, ControlGroup } from '@blueprintjs/core';
+import classNames from 'classnames';
+import { useFormikContext } from 'formik';
+import { isEqual } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { useFormikContext } from 'formik';
-import { Classes, Position, ControlGroup } from '@blueprintjs/core';
-import classNames from 'classnames';
-import { CLASSES } from '@/constants/classes';
-import { isEqual } from 'lodash';
+import { useRefundVendorCreditContext } from './RefundVendorCreditFormProvider';
+import { useSetPrimaryBranchToForm } from './utils';
 import {
   Icon,
   Col,
@@ -16,7 +17,6 @@ import {
   FAccountsSuggestField,
   InputPrependText,
   FMoneyInputGroup,
-  FormattedMessage as T,
   ExchangeRateMutedField,
   BranchSelect,
   FeatureCan,
@@ -25,20 +25,18 @@ import {
   FInputGroup,
   FTextArea,
 } from '@/components';
-import { momentFormatter, compose } from '@/utils';
-import { useAutofocus } from '@/hooks';
 import { Features, ACCOUNT_TYPE } from '@/constants';
-import { useSetPrimaryBranchToForm } from './utils';
-import { useRefundVendorCreditContext } from './RefundVendorCreditFormProvider';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { CLASSES } from '@/constants/classes';
+import { useAutofocus } from '@/hooks';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { momentFormatter } from '@/utils';
 
 /**
  * Refund Vendor credit form fields.
  */
-function RefundVendorCreditFormFields({
-  // #withCurrentOrganization
-  organization: { base_currency },
-}) {
+function RefundVendorCreditFormFieldsInner() {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const { accounts, branches } = useRefundVendorCreditContext();
   const { values } = useFormikContext();
 
@@ -52,7 +50,7 @@ function RefundVendorCreditFormFields({
       <FeatureCan feature={Features.Branches}>
         <Row>
           <Col xs={5}>
-            <FFormGroup name={'branch_id'} label={<T id={'branch'} />} fill>
+            <FFormGroup name={'branch_id'} label={intl.get('branch')} fill>
               <BranchSelect
                 name={'branch_id'}
                 branches={branches}
@@ -69,7 +67,7 @@ function RefundVendorCreditFormFields({
           {/* ------------- Refund date ------------- */}
           <FFormGroup
             name={'refund_date'}
-            label={<T id={'refund_vendor_credit.dialog.refund_date'} />}
+            label={intl.get('refund_vendor_credit.dialog.refund_date')}
             labelInfo={<FieldRequiredHint />}
             fill
             fastField
@@ -90,7 +88,7 @@ function RefundVendorCreditFormFields({
           {/* ------------ Form account ------------ */}
           <FFormGroup
             name={'deposit_account_id'}
-            label={<T id={'refund_vendor_credit.dialog.deposit_to_account'} />}
+            label={intl.get('refund_vendor_credit.dialog.deposit_to_account')}
             labelInfo={<FieldRequiredHint />}
             fill
           >
@@ -113,7 +111,7 @@ function RefundVendorCreditFormFields({
       {/* ------------- Amount ------------- */}
       <FFormGroup
         name={'amount'}
-        label={<T id={'refund_vendor_credit.dialog.amount'} />}
+        label={intl.get('refund_vendor_credit.dialog.amount')}
         labelInfo={<FieldRequiredHint />}
         fill
         fastField
@@ -129,11 +127,11 @@ function RefundVendorCreditFormFields({
         </ControlGroup>
       </FFormGroup>
 
-      <If condition={!isEqual(base_currency, values.currency_code)}>
+      <If condition={!isEqual(baseCurrency, values.currency_code)}>
         {/*------------ exchange rate -----------*/}
         <ExchangeRateMutedField
           name={'exchange_rate'}
-          fromCurrency={base_currency}
+          fromCurrency={baseCurrency}
           toCurrency={values.currency_code}
           formGroupProps={{ label: '', inline: false }}
           date={values.date}
@@ -144,7 +142,7 @@ function RefundVendorCreditFormFields({
       {/* ------------ Reference No. ------------ */}
       <FFormGroup
         name={'reference_no'}
-        label={<T id={'reference_no'} />}
+        label={intl.get('reference_no')}
         fill
         fastField
       >
@@ -152,14 +150,19 @@ function RefundVendorCreditFormFields({
       </FFormGroup>
 
       {/* --------- Statement --------- */}
-      <FFormGroup name={'description'} label={<T id={'refund_vendor_credit.dialog.description'} />} fill fastField>
+      <FFormGroup
+        name={'description'}
+        label={intl.get('refund_vendor_credit.dialog.description')}
+        fill
+        fastField
+      >
         <FTextArea name={'description'} growVertically fill fastField />
       </FFormGroup>
     </div>
   );
 }
 
-export default compose(withCurrentOrganization())(RefundVendorCreditFormFields);
+export const RefundVendorCreditFormFields = RefundVendorCreditFormFieldsInner;
 
 export const BranchRowDivider = styled.div`
   --x-divider-color: #ebf1f6;

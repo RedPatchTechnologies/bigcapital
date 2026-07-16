@@ -1,7 +1,8 @@
 // @ts-nocheck
-import React, { useState, createContext } from 'react';
 import { omit } from 'lodash';
+import React, { useState, createContext } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Features } from '@/constants';
 import {
   useVendor,
   useContact,
@@ -10,7 +11,6 @@ import {
   useEditVendor,
   useBranches,
 } from '@/hooks/query';
-import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
 
 const VendorFormContext = createContext();
@@ -33,7 +33,6 @@ function VendorFormProvider({ query, vendorId, ...props }) {
   const { data: vendor, isLoading: isVendorLoading } = useVendor(vendorId, {
     enabled: !!vendorId,
   });
-
   // Handle fetch contact duplicate details.
   const { data: contactDuplicate, isLoading: isContactLoading } = useContact(
     contactId,

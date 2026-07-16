@@ -1,10 +1,9 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Button, Classes } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-import { FormattedMessage as T } from '@/components';
-
+import React from 'react';
 import { useCustomerOpeningBalanceContext } from './CustomerOpeningBalanceFormProvider';
+import { FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
@@ -12,7 +11,7 @@ import { compose } from '@/utils';
  * Customer Opening balance floating actions.
  * @returns
  */
-function CustomerOpeningBalanceFormFloatingActions({
+function CustomerOpeningBalanceFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -45,6 +44,6 @@ function CustomerOpeningBalanceFormFloatingActions({
     </div>
   );
 }
-export default compose(withDialogActions)(
-  CustomerOpeningBalanceFormFloatingActions,
-);
+export const CustomerOpeningBalanceFormFloatingActions = compose(
+  withDialogActions,
+)(CustomerOpeningBalanceFormFloatingActionsInner);

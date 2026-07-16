@@ -1,17 +1,16 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Button, Classes } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-import { FormattedMessage as T } from '@/components';
-
+import React from 'react';
 import { useRefundCreditNoteContext } from './RefundCreditNoteFormProvider';
+import { FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
 /**
  * Refund credit note floating actions.
  */
-function RefundCreditNoteFloatingActions({
+function RefundCreditNoteFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -43,4 +42,6 @@ function RefundCreditNoteFloatingActions({
     </div>
   );
 }
-export default compose(withDialogActions)(RefundCreditNoteFloatingActions);
+export const RefundCreditNoteFloatingActions = compose(withDialogActions)(
+  RefundCreditNoteFloatingActionsInner,
+);

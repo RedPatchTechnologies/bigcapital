@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React from 'react';
 import {
   Button,
   PopoverInteractionKind,
@@ -12,14 +11,22 @@ import {
   Position,
 } from '@blueprintjs/core';
 import clsx from 'classnames';
-import { Icon, T } from '@/components';
-
+import React from 'react';
 import Style from './style.module.scss';
+import { Icon, T } from '@/components';
 
 /**
  * Dashboard rows height button control.
  */
-export function DashboardRowsHeightButton({ initialValue, value, onChange }) {
+export function DashboardRowsHeightButton({
+  initialValue,
+  value,
+  onChange,
+}: {
+  initialValue?: any;
+  value?: any;
+  onChange?: (size: any, event?: any) => void;
+}) {
   const [localSize, setLocalSize] = React.useState(initialValue);
 
   // Handle menu item click.

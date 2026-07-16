@@ -1,7 +1,5 @@
-import {
-  IPaymentsReceivedFilter,
-  PaymentReceiveMailOptsDTO,
-} from './types/PaymentReceived.types';
+import { PaymentReceiveMailOptsDTO } from './types/PaymentReceived.types';
+import { GetPaymentsReceivedQueryDto } from './dtos/GetPaymentsReceivedQuery.dto';
 import { Injectable } from '@nestjs/common';
 import { CreatePaymentReceivedService } from './commands/CreatePaymentReceived.serivce';
 import { EditPaymentReceivedService } from './commands/EditPaymentReceived.service';
@@ -37,7 +35,7 @@ export class PaymentReceivesApplication {
     private paymentsReceivedPagesService: PaymentsReceivedPagesService,
     private bulkDeletePaymentReceivedService: BulkDeletePaymentReceivedService,
     private validateBulkDeletePaymentReceivedService: ValidateBulkDeletePaymentReceivedService,
-  ) { }
+  ) {}
 
   /**
    * Creates a new payment receive.
@@ -96,19 +94,18 @@ export class PaymentReceivesApplication {
    * @param {number[]} paymentReceiveIds
    */
   public validateBulkDeletePaymentReceives(paymentReceiveIds: number[]) {
-    return this.validateBulkDeletePaymentReceivedService
-      .validateBulkDeletePaymentReceived(paymentReceiveIds);
+    return this.validateBulkDeletePaymentReceivedService.validateBulkDeletePaymentReceived(
+      paymentReceiveIds,
+    );
   }
 
   /**
    * Retrieve payment receives paginated and filterable.
    * @param {number} tenantId
-   * @param {IPaymentsReceivedFilter} filterDTO
+   * @param {GetPaymentsReceivedQueryDto} filterDTO
    * @returns
    */
-  public async getPaymentsReceived(
-    filterDTO: Partial<IPaymentsReceivedFilter>,
-  ) {
+  public async getPaymentsReceived(filterDTO: GetPaymentsReceivedQueryDto) {
     return this.getPaymentsReceivedService.getPaymentReceives(filterDTO);
   }
 
@@ -173,7 +170,7 @@ export class PaymentReceivesApplication {
 
   /**
    * Retrieves html content of the given payment receive.
-   * @param {number} paymentReceivedId 
+   * @param {number} paymentReceivedId
    * @returns {Promise<string>}
    */
   public getPaymentReceivedHtml(paymentReceivedId: number) {

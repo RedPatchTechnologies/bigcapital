@@ -1,18 +1,15 @@
 // @ts-nocheck
-import React from 'react';
-import moment from 'moment';
-import intl from 'react-intl-universal';
-import { Formik } from 'formik';
 import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
 import { defaultTo } from 'lodash';
-
-import { AppToaster } from '@/components';
+import moment from 'moment';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { CreateVendorOpeningBalanceFormSchema } from './VendorOpeningBalanceForm.schema';
+import { VendorOpeningBalanceFormContent } from './VendorOpeningBalanceFormContent';
 import { useVendorOpeningBalanceContext } from './VendorOpeningBalanceFormProvider';
-
-import VendorOpeningBalanceFormContent from './VendorOpeningBalanceFormContent';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { compose } from '@/utils';
 
 const defaultInitialValues = {
@@ -26,7 +23,7 @@ const defaultInitialValues = {
  * Vendor Opening balance form.
  * @returns
  */
-function VendorOpeningBalanceForm({
+function VendorOpeningBalanceFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -38,14 +35,15 @@ function VendorOpeningBalanceForm({
     ...defaultInitialValues,
     ...vendor,
     opening_balance: defaultTo(vendor.opening_balance, ''),
-
   };
 
   // Handles the form submit.
   const handleFormSubmit = (values, { setSubmitting, setErrors }) => {
     const formValues = {
       ...values,
-      opening_balance_at: moment(values.opening_balance_at).format('YYYY-MM-DD'),
+      opening_balance_at: moment(values.opening_balance_at).format(
+        'YYYY-MM-DD',
+      ),
     };
 
     // Handle request response success.
@@ -58,11 +56,7 @@ function VendorOpeningBalanceForm({
     };
 
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors) {
       }
       setSubmitting(false);
@@ -82,4 +76,6 @@ function VendorOpeningBalanceForm({
     />
   );
 }
-export default compose(withDialogActions)(VendorOpeningBalanceForm);
+export const VendorOpeningBalanceForm = compose(withDialogActions)(
+  VendorOpeningBalanceFormInner,
+);

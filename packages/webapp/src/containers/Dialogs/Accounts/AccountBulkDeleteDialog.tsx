@@ -1,18 +1,17 @@
 // @ts-nocheck
-import React from 'react';
 import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
-import { FormattedMessage as T, AppToaster } from '@/components';
+import React from 'react';
 import intl from 'react-intl-universal';
-
-import BulkDeleteDialogContent from '@/containers/Dialogs/components/BulkDeleteDialogContent';
-import { useBulkDeleteAccounts } from '@/hooks/query/accounts';
+import { FormattedMessage as T, AppToaster } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withAccountsTableActions } from '@/containers/Accounts/withAccountsTableActions';
-import { compose } from '@/utils';
 import { handleDeleteErrors } from '@/containers/Accounts/utils';
+import { withAccountsTableActions } from '@/containers/Accounts/withAccountsTableActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
+import { useBulkDeleteAccounts } from '@/hooks/query/accounts';
+import { compose } from '@/utils';
 
-function AccountBulkDeleteDialog({
+function AccountBulkDeleteDialogInner({
   dialogName,
   isOpen,
   payload: {
@@ -28,7 +27,8 @@ function AccountBulkDeleteDialog({
   // #withDialogActions
   closeDialog,
 }) {
-  const { mutateAsync: bulkDeleteAccounts, isLoading } = useBulkDeleteAccounts();
+  const { mutateAsync: bulkDeleteAccounts, isLoading } =
+    useBulkDeleteAccounts();
 
   const handleCancel = () => {
     closeDialog(dialogName);
@@ -93,9 +93,8 @@ function AccountBulkDeleteDialog({
   );
 }
 
-export default compose(
+export const AccountBulkDeleteDialog = compose(
   withDialogRedux(),
   withDialogActions,
   withAccountsTableActions,
-)(AccountBulkDeleteDialog);
-
+)(AccountBulkDeleteDialogInner);

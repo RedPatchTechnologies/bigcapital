@@ -1,16 +1,14 @@
 // @ts-nocheck
-import React from 'react';
-import moment from 'moment';
-import intl from 'react-intl-universal';
-import { Formik } from 'formik';
 import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
 import { omit } from 'lodash';
-
-import { AppToaster } from '@/components';
-import { useRefundCreditNoteContext } from './RefundCreditNoteFormProvider';
+import moment from 'moment';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { CreateRefundCreditNoteFormSchema } from './RefundCreditNoteForm.schema';
-import RefundCreditNoteFormContent from './RefundCreditNoteFormContent';
-
+import { RefundCreditNoteFormContent } from './RefundCreditNoteFormContent';
+import { useRefundCreditNoteContext } from './RefundCreditNoteFormProvider';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
@@ -26,7 +24,7 @@ const defaultInitialValues = {
 /**
  * Refund credit note form.
  */
-function RefundCreditNoteForm({
+function RefundCreditNoteFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -54,11 +52,7 @@ function RefundCreditNoteForm({
       closeDialog(dialogName);
     };
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       setSubmitting(false);
     };
     createRefundCreditNoteMutate([creditNote.id, form])
@@ -75,4 +69,6 @@ function RefundCreditNoteForm({
     />
   );
 }
-export default compose(withDialogActions)(RefundCreditNoteForm);
+export const RefundCreditNoteForm = compose(withDialogActions)(
+  RefundCreditNoteFormInner,
+);

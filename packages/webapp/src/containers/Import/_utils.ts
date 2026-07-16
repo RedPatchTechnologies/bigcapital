@@ -1,5 +1,4 @@
 // @ts-nocheck
-import { useMemo } from 'react';
 import {
   chain,
   isEmpty,
@@ -10,14 +9,15 @@ import {
   get,
   assign,
 } from 'lodash';
+import { useMemo } from 'react';
+import { ImportFileMappingFormValues } from './_types';
+import { useImportFileMapBootContext } from './ImportFileMappingBoot';
 import {
   EntityColumn,
   SheetColumn,
   useImportFileContext,
 } from './ImportFileProvider';
-import { useImportFileMapBootContext } from './ImportFileMappingBoot';
 import { deepdash, transformToForm } from '@/utils';
-import { ImportFileMappingFormValues } from './_types';
 
 export const getFieldKey = (key: string, group = '') => {
   return group ? `${group}.${key}` : key;
@@ -52,7 +52,7 @@ export const transformValueToReq = (
  * @returns {Record<string, object | string>}
  */
 export const transformResToFormValues = (
-  value: { from: string; to: string , group: string }[],
+  value: { from: string; to: string; group: string }[],
 ): Record<string, object | string> => {
   return value?.reduce((acc, map) => {
     const path = map?.group ? `${map.group}.${map.to}` : map.to;
@@ -62,9 +62,9 @@ export const transformResToFormValues = (
 };
 
 /**
- * Retrieves the initial values of mapping form. 
- * @param {EntityColumn[]} entityColumns 
- * @param {SheetColumn[]} sheetColumns 
+ * Retrieves the initial values of mapping form.
+ * @param {EntityColumn[]} entityColumns
+ * @param {SheetColumn[]} sheetColumns
  */
 const getInitialDefaultValues = (
   entityColumns: EntityColumn[],

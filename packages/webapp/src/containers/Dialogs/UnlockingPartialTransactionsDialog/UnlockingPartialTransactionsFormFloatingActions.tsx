@@ -1,17 +1,16 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Button, Classes } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-import { FormattedMessage as T } from '@/components';
-
+import React from 'react';
 import { useUnlockingPartialTransactionsContext } from './UnlockingPartialTransactionsFormProvider';
+import { FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
 /**
  * Partial Unlocking transactions floating actions
  */
-function UnlockingPartialTransactionsFormFloatingActions({
+function UnlockingPartialTransactionsFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -44,6 +43,6 @@ function UnlockingPartialTransactionsFormFloatingActions({
   );
 }
 
-export default compose(withDialogActions)(
-  UnlockingPartialTransactionsFormFloatingActions,
-);
+export const UnlockingPartialTransactionsFormFloatingActions = compose(
+  withDialogActions,
+)(UnlockingPartialTransactionsFormFloatingActionsInner);

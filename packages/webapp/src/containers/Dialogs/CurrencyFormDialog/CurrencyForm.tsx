@@ -1,18 +1,16 @@
 // @ts-nocheck
-import React, { useMemo } from 'react';
-import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
-import { AppToaster } from '@/components';
-import CurrencyFormContent from './CurrencyFormContent';
-
-import { useCurrencyFormContext } from './CurrencyFormProvider';
+import React, { useMemo } from 'react';
+import intl from 'react-intl-universal';
 import {
   CreateCurrencyFormSchema,
   EditCurrencyFormSchema,
 } from './CurrencyForm.schema';
+import { CurrencyFormContent } from './CurrencyFormContent';
+import { useCurrencyFormContext } from './CurrencyFormProvider';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { compose, transformToForm } from '@/utils';
 
 const defaultInitialValues = {
@@ -24,7 +22,7 @@ const defaultInitialValues = {
 /**
  * Currency form.
  */
-function CurrencyForm({
+function CurrencyFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -71,11 +69,7 @@ function CurrencyForm({
       afterSubmit(response);
     };
     // Handle the response error.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors.find((e) => e.type === 'CURRENCY_CODE_EXISTS')) {
         AppToaster.show({
           message: 'The given currency code is already exists.',
@@ -102,4 +96,4 @@ function CurrencyForm({
   );
 }
 
-export default compose(withDialogActions)(CurrencyForm);
+export const CurrencyForm = compose(withDialogActions)(CurrencyFormInner);

@@ -1,11 +1,9 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Alert } from '@blueprintjs/core';
+import React from 'react';
 import { FormattedMessage as T } from '@/components';
-
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-
 import { saveInvoke, compose } from '@/utils';
 
 /**
@@ -30,7 +28,7 @@ function ClearningAllLinesAlert({
   // Handle confirm delete manual journal.
   const handleConfirm = (event) => {
     closeAlert(name);
-    saveInvoke(onConfirm, event)
+    saveInvoke(onConfirm, event);
   };
 
   return (
@@ -49,7 +47,7 @@ function ClearningAllLinesAlert({
   );
 }
 
-export default compose(
+export const ClearingAllLinesAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
 )(ClearningAllLinesAlert);

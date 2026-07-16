@@ -14,7 +14,9 @@ export * from './bills';
 export * from './items';
 export * from './branches';
 export * from './warehouses';
+export * from './exchange-rates';
 export * from './expenses';
+export * from './import';
 export * from './manual-journals';
 export * from './roles';
 export * from './users';
@@ -37,13 +39,21 @@ export * from './sale-estimates';
 export * from './sale-receipts';
 export * from './payment-receives';
 export * from './payment-mades';
+export * from './payment-links';
+export * from './payment-services';
+export * from './plaid';
+export * from './stripe-integration';
 export * from './inventory-adjustments';
+export * from './inventory-cost';
 export * from './warehouse-transfers';
 export * from './landed-cost';
 export * from './generic-resource';
 export * from './cashflow-accounts';
 export * from './bank-rules';
+export * from './misc';
 export * from './reports';
+export * from './workspaces';
+export * from './audit-logs';
 
 /**
  * Utility types for request/response types from schema paths.

@@ -1,20 +1,18 @@
 // @ts-nocheck
+import { Button, Intent, Classes } from '@blueprintjs/core';
+import { Formik, Form } from 'formik';
 import React from 'react';
 import intl from 'react-intl-universal';
-import * as Yup from 'yup';
-import { Formik, Form } from 'formik';
-import { FFormGroup, FSelect, FieldRequiredHint } from '@/components';
-import { Button, Intent, Classes } from '@blueprintjs/core';
-import { FormattedMessage as T } from '@/components';
 import { useHistory } from 'react-router-dom';
+import * as Yup from 'yup';
 import { useContactDuplicateFromContext } from './ContactDuplicateProvider';
-
+import { FFormGroup, FSelect, FieldRequiredHint } from '@/components';
+import { FormattedMessage as T } from '@/components';
 import { ContactsOptions } from '@/constants/contactsOptions';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function ContactDuplicateForm({
+function ContactDuplicateFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -23,9 +21,7 @@ function ContactDuplicateForm({
   const { dialogName, contactId } = useContactDuplicateFromContext();
 
   const validationSchema = Yup.object().shape({
-    contact_type: Yup.string()
-      .required()
-      .label(intl.get('contact_type_')),
+    contact_type: Yup.string().required().label(intl.get('contact_type_')),
   });
 
   const initialValues = {
@@ -61,7 +57,7 @@ function ContactDuplicateForm({
             {/*------------ Contact Type -----------*/}
             <FFormGroup
               name={'contact_type'}
-              label={<T id={'contact_type'} />}
+              label={intl.get('contact_type')}
               labelInfo={<FieldRequiredHint />}
             >
               <FSelect
@@ -97,4 +93,6 @@ function ContactDuplicateForm({
   );
 }
 
-export default compose(withDialogActions)(ContactDuplicateForm);
+export const ContactDuplicateForm = compose(withDialogActions)(
+  ContactDuplicateFormInner,
+);

@@ -1,6 +1,14 @@
 // @ts-nocheck
 import React from 'react';
-import { FormattedMessage as T, FieldRequiredHint, Card, FFormGroup, FInputGroup, FTextArea } from '@/components';
+import intl from 'react-intl-universal';
+import {
+  FormattedMessage as T,
+  FieldRequiredHint,
+  Card,
+  FFormGroup,
+  FInputGroup,
+  FTextArea,
+} from '@/components';
 import { useAutofocus } from '@/hooks';
 
 /**
@@ -36,7 +44,7 @@ export function RoleFormHeader() {
       {/* ---------- Description ----------  */}
       <FFormGroup
         name={'role_description'}
-        label={<T id={'description'} />}
+        label={intl.get('description')}
         inline
         fastField
       >

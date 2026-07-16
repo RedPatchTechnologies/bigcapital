@@ -1,14 +1,14 @@
 // @ts-nocheck
 import { Intent } from '@blueprintjs/core';
-import { useImportFileMapping } from '@/hooks/query/import';
 import { Form, Formik, FormikHelpers } from 'formik';
-import { useImportFileContext } from './ImportFileProvider';
-import { AppToaster } from '@/components';
 import { ImportFileMappingFormProps } from './_types';
 import {
   transformValueToReq,
   useImportFileMappingInitialValues,
 } from './_utils';
+import { useImportFileContext } from './ImportFileProvider';
+import { AppToaster } from '@/components';
+import { useImportFileMapping } from '@/hooks/query/import';
 
 export function ImportFileMappingForm({
   children,
@@ -30,7 +30,7 @@ export function ImportFileMappingForm({
         setSubmitting(false);
         setStep(2);
       })
-      .catch(({ response: { data } }) => {
+      .catch(({ data }) => {
         if (data.errors.find((e) => e.type === 'DUPLICATED_FROM_MAP_ATTR')) {
           AppToaster.show({
             message: 'Selected the same sheet columns to multiple fields.',

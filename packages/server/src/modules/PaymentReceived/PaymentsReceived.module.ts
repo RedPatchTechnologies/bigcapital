@@ -13,7 +13,7 @@ import { GetPaymentReceivedInvoices } from './queries/GetPaymentReceivedInvoices
 import { GetPaymentReceivedPdfService } from './queries/GetPaymentReceivedPdf.service';
 import { PaymentReceivedValidators } from './commands/PaymentReceivedValidators.service';
 import { PaymentReceiveDTOTransformer } from './commands/PaymentReceivedDTOTransformer';
-import { TenancyContext } from '../Tenancy/TenancyContext.service';
+import { TenancyModule } from '../Tenancy/Tenancy.module';
 import { ChromiumlyTenancyModule } from '../ChromiumlyTenancy/ChromiumlyTenancy.module';
 import { TemplateInjectableModule } from '../TemplateInjectable/TemplateInjectable.module';
 import { PaymentReceivedBrandingTemplate } from './queries/PaymentReceivedBrandingTemplate.service';
@@ -60,7 +60,6 @@ import { ValidateBulkDeletePaymentReceivedService } from './ValidateBulkDeletePa
     PaymentReceivedBrandingTemplate,
     PaymentReceivedIncrement,
     PaymentReceivedGLEntries,
-    TenancyContext,
     PaymentReceivedInvoiceSync,
     PaymentReceivedAutoIncrementSubscriber,
     PaymentReceivedGLEntriesSubscriber,
@@ -85,6 +84,7 @@ import { ValidateBulkDeletePaymentReceivedService } from './ValidateBulkDeletePa
     PaymentReceivedValidators,
   ],
   imports: [
+    TenancyModule,
     ChromiumlyTenancyModule,
     TemplateInjectableModule,
     BranchesModule,

@@ -16,7 +16,6 @@ import {
 } from '@nestjs/common';
 import {
   ISaleInvoiceWriteoffDTO,
-  ISalesInvoicesFilter,
   SaleInvoiceMailState,
   SendInvoiceMailDTO,
 } from './SaleInvoice.types';
@@ -34,6 +33,7 @@ import {
   CreateSaleInvoiceDto,
   EditSaleInvoiceDto,
 } from './dtos/SaleInvoice.dto';
+import { GetSaleInvoicesQueryDto } from './dtos/GetSaleInvoicesQuery.dto';
 import { AcceptType } from '@/constants/accept-type';
 import { SaleInvoiceResponseDto } from './dtos/SaleInvoiceResponse.dto';
 import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
@@ -49,6 +49,8 @@ import { PermissionGuard } from '@/modules/Roles/Permission.guard';
 import { AuthorizationGuard } from '@/modules/Roles/Authorization.guard';
 import { AbilitySubject } from '@/modules/Roles/Roles.types';
 import { SaleInvoiceAction } from './SaleInvoice.types';
+import { InvoicePaymentTransactionDto } from './dtos/InvoicePaymentTransactionResponse.dto';
+import { SaleInvoiceHtmlContentResponseDto } from './dtos/SaleInvoiceHtmlResponse.dto';
 
 @Controller('sale-invoices')
 @ApiTags('Sale Invoices')
@@ -58,9 +60,11 @@ import { SaleInvoiceAction } from './SaleInvoice.types';
 @ApiExtraModels(GenerateSaleInvoiceSharableLinkResponseDto)
 @ApiCommonHeaders()
 @ApiExtraModels(ValidateBulkDeleteResponseDto)
+@ApiExtraModels(InvoicePaymentTransactionDto)
+@ApiExtraModels(SaleInvoiceHtmlContentResponseDto)
 @UseGuards(AuthorizationGuard, PermissionGuard)
 export class SaleInvoicesController {
-  constructor(private saleInvoiceApplication: SaleInvoiceApplication) { }
+  constructor(private saleInvoiceApplication: SaleInvoiceApplication) {}
 
   @Post('validate-bulk-delete')
   @RequirePermission(SaleInvoiceAction.Delete, AbilitySubject.SaleInvoice)
@@ -209,8 +213,13 @@ export class SaleInvoicesController {
   @ApiResponse({
     status: 200,
     description: 'The sale invoice details have been successfully retrieved.',
-    schema: {
-      $ref: getSchemaPath(SaleInvoiceResponseDto),
+    content: {
+      'application/json': {
+        schema: { $ref: getSchemaPath(SaleInvoiceResponseDto) },
+      },
+      'application/json+html': {
+        schema: { $ref: getSchemaPath(SaleInvoiceHtmlContentResponseDto) },
+      },
     },
   })
   @ApiResponse({ status: 404, description: 'The sale invoice not found.' })
@@ -262,7 +271,7 @@ export class SaleInvoicesController {
       ],
     },
   })
-  getSaleInvoices(@Query() filterDTO: Partial<ISalesInvoicesFilter>) {
+  getSaleInvoices(@Query() filterDTO: GetSaleInvoicesQueryDto) {
     return this.saleInvoiceApplication.getSaleInvoices(filterDTO);
   }
 
@@ -330,6 +339,14 @@ export class SaleInvoicesController {
   @Get(':id/payments')
   @RequirePermission(SaleInvoiceAction.View, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Retrieves the sale invoice payments.' })
+  @ApiResponse({
+    status: 200,
+    description: 'List of payment transactions for the invoice.',
+    schema: {
+      type: 'array',
+      items: { $ref: getSchemaPath(InvoicePaymentTransactionDto) },
+    },
+  })
   @ApiResponse({ status: 404, description: 'The sale invoice not found.' })
   @ApiParam({
     name: 'id',
@@ -344,6 +361,12 @@ export class SaleInvoicesController {
   @Get(':id/html')
   @RequirePermission(SaleInvoiceAction.View, AbilitySubject.SaleInvoice)
   @ApiOperation({ summary: 'Retrieves the sale invoice HTML.' })
+  @ApiResponse({
+    status: 200,
+    description:
+      'The sale invoice HTML content has been successfully retrieved.',
+    schema: { type: 'string', example: '<html>...</html>' },
+  })
   @ApiResponse({ status: 404, description: 'The sale invoice not found.' })
   @ApiParam({
     name: 'id',

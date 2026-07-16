@@ -1,25 +1,21 @@
 // @ts-nocheck
 import React, { useCallback } from 'react';
 import intl from 'react-intl-universal';
-
 import { DialogContent } from '@/components';
-
-import { useSettingsReceipts, useSaveSettings } from '@/hooks/query';
-import ReferenceNumberForm from '@/containers/JournalNumber/ReferenceNumberForm';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withSettings } from '@/containers/Settings/withSettings';
-
-import { compose, saveInvoke } from '@/utils';
+import { ReferenceNumberForm } from '@/containers/JournalNumber/ReferenceNumberForm';
 import {
   transformFormToSettings,
   transformSettingsToForm,
 } from '@/containers/JournalNumber/utils';
+import { withSettings } from '@/containers/Settings/withSettings';
+import { useSettingsReceipts, useSaveSettings } from '@/hooks/query';
+import { compose, saveInvoke } from '@/utils';
 
 /**
  * Receipt number dialog's content.
  */
-function ReceiptNumberDialogContent({
+function ReceiptNumberDialogContentInner({
   // #ownProps
   receiptId,
   onConfirm,
@@ -93,11 +89,11 @@ function ReceiptNumberDialogContent({
   );
 }
 
-export default compose(
+export const ReceiptNumberDialogContent = compose(
   withDialogActions,
   withSettings(({ receiptSettings }) => ({
     nextNumber: receiptSettings?.nextNumber,
     numberPrefix: receiptSettings?.numberPrefix,
     autoIncrement: receiptSettings?.autoIncrement,
   })),
-)(ReceiptNumberDialogContent);
+)(ReceiptNumberDialogContentInner);

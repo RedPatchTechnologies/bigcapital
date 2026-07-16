@@ -1,9 +1,8 @@
 // @ts-nocheck
-import { useDispatch, useSelector } from 'react-redux';
+import { useQueryClient } from '@tanstack/react-query';
 import { useCallback } from 'react';
-import { isAuthenticated } from '@/store/authentication/authentication.reducer';
+import { useDispatch, useSelector } from 'react-redux';
 import {
-  setAuthTenantId,
   setAuthToken,
   setAuthUserId,
   setEmailConfirmed,
@@ -11,7 +10,7 @@ import {
   setOrganizationId,
   setLocale,
 } from '@/store/authentication/authentication.actions';
-import { useQueryClient } from 'react-query';
+import { isAuthenticated } from '@/store/authentication/authentication.reducer';
 import { removeCookie } from '@/utils';
 
 /**
@@ -115,15 +114,6 @@ export const useSetAuthToken = () => {
 
   return useCallback(
     (authToken: string) => dispatch(setAuthToken(authToken)),
-    [dispatch],
-  );
-};
-
-export const useSetTenantId = () => {
-  const dispatch = useDispatch();
-
-  return useCallback(
-    (tenantId: string) => dispatch(setAuthTenantId(tenantId)),
     [dispatch],
   );
 };

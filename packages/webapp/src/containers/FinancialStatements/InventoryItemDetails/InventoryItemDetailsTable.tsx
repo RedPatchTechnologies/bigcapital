@@ -1,14 +1,15 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-
-import { ReportDataTable, FinancialSheet } from '@/components';
 import { useInventoryItemDetailsColumns } from './components';
 import { useInventoryItemDetailsContext } from './InventoryItemDetailsProvider';
-
-import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
+import { ReportDataTable, FinancialSheet } from '@/components';
 import { TableStyle } from '@/constants';
+import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
+
+interface InventoryItemDetailsTableProps {
+  companyName: string;
+}
 
 /**
  * Inventory item detail table.
@@ -16,12 +17,12 @@ import { TableStyle } from '@/constants';
 export function InventoryItemDetailsTable({
   // #ownProps
   companyName,
-}) {
-  const {
-    inventoryItemDetails: { tableRows, meta },
-    isInventoryItemDetailsLoading,
-    query,
-  } = useInventoryItemDetailsContext();
+}: InventoryItemDetailsTableProps) {
+  const { inventoryItemDetails } = useInventoryItemDetailsContext();
+
+  // Null-safe access for SDK opaque type.
+  const tableRows = (inventoryItemDetails as any)?.tableRows ?? [];
+  const meta = (inventoryItemDetails as any)?.meta;
 
   const columns = useInventoryItemDetailsColumns();
 
@@ -34,8 +35,7 @@ export function InventoryItemDetailsTable({
     <FinancialSheet
       companyName={companyName}
       sheetType={intl.get('inventory_item_details')}
-      loading={isInventoryItemDetailsLoading}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
+      dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
       fullWidth={true}
     >
       <InventoryItemDetailsDataTable

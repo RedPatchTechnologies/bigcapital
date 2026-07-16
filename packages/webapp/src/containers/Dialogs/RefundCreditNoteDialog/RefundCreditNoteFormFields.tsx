@@ -1,9 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import styled from 'styled-components';
-import intl from 'react-intl-universal';
-import { isEqual } from 'lodash';
-import { FastField, ErrorMessage, useFormikContext } from 'formik';
 import {
   Classes,
   FormGroup,
@@ -12,9 +7,15 @@ import {
   Position,
   ControlGroup,
 } from '@blueprintjs/core';
-import classNames from 'classnames';
-import { CLASSES, Features } from '@/constants';
 import { DateInput } from '@blueprintjs/datetime';
+import classNames from 'classnames';
+import { FastField, ErrorMessage, useFormikContext } from 'formik';
+import { isEqual } from 'lodash';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import { useRefundCreditNoteContext } from './RefundCreditNoteFormProvider';
+import { useSetPrimaryBranchToForm } from './utils';
 import {
   Icon,
   Col,
@@ -24,7 +25,6 @@ import {
   FAccountsSuggestField,
   InputPrependText,
   MoneyInputGroup,
-  FormattedMessage as T,
   ExchangeRateMutedField,
   BranchSelect,
   FeatureCan,
@@ -34,27 +34,23 @@ import {
   FFormGroup,
   FTextArea,
 } from '@/components';
+import { CLASSES, Features } from '@/constants';
+import { ACCOUNT_TYPE } from '@/constants/accountTypes';
+import { useAutofocus } from '@/hooks';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
 import {
   inputIntent,
   momentFormatter,
   tansformDateValue,
   handleDateChange,
-  compose,
 } from '@/utils';
-import { useAutofocus } from '@/hooks';
-import { ACCOUNT_TYPE } from '@/constants/accountTypes';
-import { useSetPrimaryBranchToForm } from './utils';
-import { useRefundCreditNoteContext } from './RefundCreditNoteFormProvider';
-
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
 
 /**
  * Refund credit note form fields.
  */
-function RefundCreditNoteFormFields({
-  // #withCurrentOrganization
-  organization: { base_currency },
-}) {
+function RefundCreditNoteFormFieldsInner() {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   const { accounts, branches } = useRefundCreditNoteContext();
   const { values } = useFormikContext();
 
@@ -68,7 +64,7 @@ function RefundCreditNoteFormFields({
       <FeatureCan feature={Features.Branches}>
         <Row>
           <Col xs={5}>
-            <FFormGroup name={'branch_id'} label={<T id={'branch'} />}>
+            <FFormGroup name={'branch_id'} label={intl.get('branch')}>
               <BranchSelect
                 name={'branch_id'}
                 branches={branches}
@@ -85,7 +81,7 @@ function RefundCreditNoteFormFields({
           {/* ------------- Refund date ------------- */}
           <FFormGroup
             name={'date'}
-            label={<T id={'refund_credit_note.dialog.refund_date'} />}
+            label={intl.get('refund_credit_note.dialog.refund_date')}
             labelInfo={<FieldRequiredHint />}
             fill
           >
@@ -104,7 +100,7 @@ function RefundCreditNoteFormFields({
           {/* ------------ Form account ------------ */}
           <FFormGroup
             name={'from_account_id'}
-            label={<T id={'refund_credit_note.dialog.from_account'} />}
+            label={intl.get('refund_credit_note.dialog.from_account')}
             labelInfo={<FieldRequiredHint />}
             fill
             fastField
@@ -129,7 +125,7 @@ function RefundCreditNoteFormFields({
       {/* ------------- Amount ------------- */}
       <FFormGroup
         name={'amount'}
-        label={<T id={'refund_credit_note.dialog.amount'} />}
+        label={intl.get('refund_credit_note.dialog.amount')}
         labelInfo={<FieldRequiredHint />}
         fill
         fastField
@@ -140,16 +136,15 @@ function RefundCreditNoteFormFields({
             name={'amount'}
             minimal={true}
             inputRef={(ref) => (amountFieldRef.current = ref)}
-
           />
         </ControlGroup>
       </FFormGroup>
 
       {/*------------ exchange rate -----------*/}
-      <If condition={!isEqual(base_currency, values.currency_code)}>
+      <If condition={!isEqual(baseCurrency, values.currency_code)}>
         <ExchangeRateMutedField
           name={'exchange_rate'}
-          fromCurrency={base_currency}
+          fromCurrency={baseCurrency}
           toCurrency={values.currency_code}
           formGroupProps={{ label: '', inline: false }}
           date={values.date}
@@ -158,14 +153,19 @@ function RefundCreditNoteFormFields({
       </If>
 
       {/* ------------ Reference No. ------------ */}
-      <FFormGroup name={'reference_no'} label={<T id={'reference_no'} />} fill fastField>
+      <FFormGroup
+        name={'reference_no'}
+        label={intl.get('reference_no')}
+        fill
+        fastField
+      >
         <FInputGroup name={'reference_no'} minimal fill />
       </FFormGroup>
 
       {/* --------- Statement --------- */}
       <FFormGroup
         name={'description'}
-        label={<T id={'refund_credit_note.dialog.description'} />}
+        label={intl.get('refund_credit_note.dialog.description')}
         fill
         fastField
       >
@@ -175,7 +175,7 @@ function RefundCreditNoteFormFields({
   );
 }
 
-export default compose(withCurrentOrganization())(RefundCreditNoteFormFields);
+export const RefundCreditNoteFormFields = RefundCreditNoteFormFieldsInner;
 
 export const BranchRowDivider = styled.div`
   --x-divider-color: #ebf1f6;

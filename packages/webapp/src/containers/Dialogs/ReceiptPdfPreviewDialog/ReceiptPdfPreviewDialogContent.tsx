@@ -1,14 +1,12 @@
 // @ts-nocheck
-import React from 'react';
 import { AnchorButton } from '@blueprintjs/core';
-
+import React from 'react';
 import { DialogContent, PdfDocumentPreview, T } from '@/components';
-import { usePdfReceipt } from '@/hooks/query';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { usePdfReceipt } from '@/hooks/query';
 import { compose } from '@/utils';
 
-function ReceiptPdfPreviewDialogContent({
+function ReceiptPdfPreviewDialogContentInner({
   subscriptionForm: { receiptId },
   // #withDialogActions
   closeDialog,
@@ -47,4 +45,6 @@ function ReceiptPdfPreviewDialogContent({
   );
 }
 
-export default compose(withDialogActions)(ReceiptPdfPreviewDialogContent);
+export const ReceiptPdfPreviewDialogContent = compose(withDialogActions)(
+  ReceiptPdfPreviewDialogContentInner,
+);

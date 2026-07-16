@@ -1,6 +1,11 @@
-// @ts-nocheck
-import React, { useState, createContext } from 'react';
+import {
+  CurrenciesListResponse,
+  BranchesListResponse,
+  Customer,
+} from '@bigcapital/sdk-ts';
+import React, { createContext, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { Features } from '@/constants';
 import {
   useCustomer,
   useCurrencies,
@@ -9,13 +14,50 @@ import {
   useContact,
   useBranches,
 } from '@/hooks/query';
-import { Features } from '@/constants';
 import { useFeatureCan } from '@/hooks/state';
 
-const CustomerFormContext = createContext();
+type CustomerFormSubmitPayload = {
+  noRedirect?: boolean;
+};
 
-function CustomerFormProvider({ query, customerId, ...props }) {
-  const { state } = useLocation();
+type CustomerFormContextValue = {
+  customerId?: number;
+  customer?: Customer | undefined;
+  currencies: CurrenciesListResponse;
+  branches: BranchesListResponse;
+  contactDuplicate?: unknown | undefined;
+  submitPayload: CustomerFormSubmitPayload;
+  isNewMode: boolean;
+
+  isCustomerLoading: boolean;
+  isCurrenciesLoading: boolean;
+  isBranchesSuccess: boolean;
+  isFormLoading: boolean;
+
+  setSubmitPayload: React.Dispatch<
+    React.SetStateAction<CustomerFormSubmitPayload>
+  >;
+
+  editCustomerMutate: (args: [number, any]) => Promise<any>;
+  createCustomerMutate: (values: any) => Promise<any>;
+};
+
+type CustomerFormProviderProps = {
+  query?: Record<string, unknown>;
+  customerId?: number;
+  children?: React.ReactNode;
+};
+
+const CustomerFormContext = createContext<CustomerFormContextValue | undefined>(
+  undefined,
+);
+
+export function CustomerFormProvider({
+  query,
+  customerId,
+  children,
+}: CustomerFormProviderProps) {
+  const { state } = useLocation<{ action?: number | string }>();
   const contactId = state?.action;
 
   // Features guard.
@@ -33,7 +75,8 @@ function CustomerFormProvider({ query, customerId, ...props }) {
     { enabled: !!contactId },
   );
   // Handle fetch Currencies data table
-  const { data: currencies, isLoading: isCurrenciesLoading } = useCurrencies();
+  const { data: currencies, isLoading: isCurrenciesLoading } =
+    useCurrencies(undefined);
 
   // Fetches the branches list.
   const {
@@ -43,23 +86,29 @@ function CustomerFormProvider({ query, customerId, ...props }) {
   } = useBranches(query, { enabled: isBranchFeatureCan });
 
   // Form submit payload.
-  const [submitPayload, setSubmitPayload] = useState({});
+  const [submitPayload, setSubmitPayload] = useState<CustomerFormSubmitPayload>(
+    {},
+  );
 
-  const { mutateAsync: editCustomerMutate } = useEditCustomer();
-  const { mutateAsync: createCustomerMutate } = useCreateCustomer();
+  const editCustomerMutation = useEditCustomer(undefined) as any;
+  const createCustomerMutation = useCreateCustomer(undefined) as any;
+  const editCustomerMutate =
+    editCustomerMutation.mutateAsync as CustomerFormContextValue['editCustomerMutate'];
+  const createCustomerMutate =
+    createCustomerMutation.mutateAsync as CustomerFormContextValue['createCustomerMutate'];
 
   // determines whether the form new or duplicate mode.
-  const isNewMode = contactId || !customerId;
+  const isNewMode = Boolean(contactId) || !customerId;
 
   const isFormLoading =
     isCustomerLoading || isCurrenciesLoading || isBranchesLoading;
 
-  const provider = {
+  const provider: CustomerFormContextValue = {
     customerId,
     customer,
-    currencies,
-    branches,
-    contactDuplicate,
+    currencies: currencies ?? [],
+    branches: branches ?? [],
+    contactDuplicate: contactDuplicate || undefined,
     submitPayload,
     isNewMode,
 
@@ -73,9 +122,19 @@ function CustomerFormProvider({ query, customerId, ...props }) {
     createCustomerMutate,
   };
 
-  return <CustomerFormContext.Provider value={provider} {...props} />;
+  return (
+    <CustomerFormContext.Provider value={provider}>
+      {children}
+    </CustomerFormContext.Provider>
+  );
 }
 
-const useCustomerFormContext = () => React.useContext(CustomerFormContext);
-
-export { CustomerFormProvider, useCustomerFormContext };
+export const useCustomerFormContext = () => {
+  const ctx = React.useContext(CustomerFormContext);
+  if (!ctx) {
+    throw new Error(
+      'useCustomerFormContext must be used within a CustomerFormProvider',
+    );
+  }
+  return ctx;
+};

@@ -1,23 +1,21 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Alert } from '@blueprintjs/core';
+import React from 'react';
 import { FormattedMessage as T } from '@/components';
-
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-
 import { compose, saveInvoke } from '@/utils';
 
 /**
  * Alert description.
  */
-function ExpenseDeleteEntriesAlert({
+function ExpenseDeleteEntriesAlertInner({
   name,
   onConfirm,
 
   // #withAlertStoreConnect
   isOpen,
-  payload: {  },
+  payload: {},
 
   // #withAlertActions
   closeAlert,
@@ -30,7 +28,7 @@ function ExpenseDeleteEntriesAlert({
   // Handle confirm the alert.
   const handleConfirm = (event) => {
     closeAlert(name);
-    saveInvoke(onConfirm, event)
+    saveInvoke(onConfirm, event);
   };
 
   return (
@@ -44,13 +42,14 @@ function ExpenseDeleteEntriesAlert({
       loading={false}
     >
       <p>
-        Clearing the table lines will delete all expense amounts were applied, Is this okay?
+        Clearing the table lines will delete all expense amounts were applied,
+        Is this okay?
       </p>
     </Alert>
   );
 }
 
-export default compose(
+export const ExpenseDeleteEntriesAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ExpenseDeleteEntriesAlert);
+)(ExpenseDeleteEntriesAlertInner);

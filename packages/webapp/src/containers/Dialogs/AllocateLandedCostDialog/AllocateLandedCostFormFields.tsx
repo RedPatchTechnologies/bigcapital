@@ -1,7 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
-import { ErrorMessage, useFormikContext } from 'formik';
 import {
   Classes,
   FormGroup,
@@ -10,28 +7,36 @@ import {
   InputGroup,
   Spinner,
 } from '@blueprintjs/core';
-import classNames from 'classnames';
 import { x } from '@xstyled/emotion';
-import { FormattedMessage as T, If, FFormGroup, FSelect, FRadioGroup, FInputGroup } from '@/components';
-import { handleStringChange } from '@/utils';
-import { FieldRequiredHint } from '@/components';
-import { CLASSES } from '@/constants/classes';
-import { AllocateLandedCostType } from '@/constants/allocateLandedCostType';
-
-import AllocateLandedCostFormBody from './AllocateLandedCostFormBody';
-import {
-  allocateCostToEntries,
-  resetAllocatedCostEntries,
-} from './utils';
+import classNames from 'classnames';
+import { ErrorMessage, useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { useAllocateLandedConstDialogContext } from './AllocateLandedCostDialogProvider';
+import { AllocateLandedCostFormBody } from './AllocateLandedCostFormBody';
+import { allocateCostToEntries, resetAllocatedCostEntries } from './utils';
+import {
+  If,
+  FFormGroup,
+  FSelect,
+  FRadioGroup,
+  FInputGroup,
+} from '@/components';
+import { FieldRequiredHint } from '@/components';
+import { AllocateLandedCostType } from '@/constants/allocateLandedCostType';
+import { CLASSES } from '@/constants/classes';
+import { handleStringChange } from '@/utils';
 
 /**
  * Allocate landed cost form fields.
  */
-export default function AllocateLandedCostFormFields() {
+export function AllocateLandedCostFormFields() {
   // Allocated landed cost dialog.
-  const { costTransactionEntries, landedCostTransactions, isLandedCostTransactionsLoading } =
-    useAllocateLandedConstDialogContext();
+  const {
+    costTransactionEntries,
+    landedCostTransactions,
+    isLandedCostTransactionsLoading,
+  } = useAllocateLandedConstDialogContext();
 
   const { values, setFieldValue, form } = useFormikContext();
 
@@ -73,7 +78,7 @@ export default function AllocateLandedCostFormFields() {
       {/*------------Transaction type -----------*/}
       <FFormGroup
         name={'transaction_type'}
-        label={<T id={'transaction_type'} />}
+        label={intl.get('transaction_type')}
         labelInfo={<FieldRequiredHint />}
         inline
         fill
@@ -94,7 +99,7 @@ export default function AllocateLandedCostFormFields() {
       {/*------------ Transaction  -----------*/}
       <FFormGroup
         name={'transaction_id'}
-        label={<T id={'transaction_id'} />}
+        label={intl.get('transaction_id')}
         labelInfo={<FieldRequiredHint />}
         inline
         fill
@@ -108,7 +113,9 @@ export default function AllocateLandedCostFormFields() {
             valueAccessor={'id'}
             textAccessor={'name'}
             labelAccessor={'formatted_unallocated_cost_amount'}
-            placeholder={intl.get('landed_cost.dialog.label_select_transaction')}
+            placeholder={intl.get(
+              'landed_cost.dialog.label_select_transaction',
+            )}
             popoverProps={{ minimal: true }}
             disabled={isLandedCostTransactionsLoading}
           />
@@ -130,7 +137,7 @@ export default function AllocateLandedCostFormFields() {
       <If condition={costTransactionEntries?.length > 0}>
         <FFormGroup
           name={'transaction_entry_id'}
-          label={<T id={'transaction_line'} />}
+          label={intl.get('transaction_line')}
           inline
           fill
           fastField
@@ -155,7 +162,7 @@ export default function AllocateLandedCostFormFields() {
       {/*------------ Amount -----------*/}
       <FFormGroup
         name={'amount'}
-        label={<T id={'amount'} />}
+        label={intl.get('amount')}
         inline={true}
         fastField
       >
@@ -176,7 +183,7 @@ export default function AllocateLandedCostFormFields() {
       {/*------------ Allocation method -----------*/}
       <FFormGroup
         name={'allocation_method'}
-        label={<T id={'allocation_method'} />}
+        label={intl.get('allocation_method')}
         medium
         inline
         fastField
@@ -194,8 +201,8 @@ export default function AllocateLandedCostFormFields() {
           })}
           inline={true}
         >
-          <Radio label={<T id={'quantity'} />} value="quantity" />
-          <Radio label={<T id={'valuation'} />} value="value" />
+          <Radio label={intl.get('quantity')} value="quantity" />
+          <Radio label={intl.get('valuation')} value="value" />
         </FRadioGroup>
       </FFormGroup>
 

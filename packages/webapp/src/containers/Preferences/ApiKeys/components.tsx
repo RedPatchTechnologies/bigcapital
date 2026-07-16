@@ -1,7 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
-import { FormattedMessage as T, Icon } from '@/components';
 import {
   Intent,
   Button,
@@ -11,16 +8,16 @@ import {
   Position,
   Tag,
 } from '@blueprintjs/core';
-import { safeCallback } from '@/utils';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { FormattedMessage as T, Icon } from '@/components';
 import { FormatDateCell } from '@/components/Utils/FormatDate';
+import { safeCallback } from '@/utils';
 
 /**
  * API Keys table actions menu.
  */
-export function ActionsMenu({
-  row: { original },
-  payload: { onRevoke },
-}) {
+export function ActionsMenu({ row: { original }, payload: { onRevoke } }) {
   return (
     <Menu>
       <MenuItem
@@ -38,11 +35,7 @@ export function ActionsMenu({
  * Displays the token value in a Tag component.
  */
 function TokenAccessor(apiKey) {
-  return (
-    <Tag minimal={true}>
-      {apiKey.token || ''}
-    </Tag>
-  );
+  return <Tag minimal={true}>{apiKey.token || ''}</Tag>;
 }
 
 /**

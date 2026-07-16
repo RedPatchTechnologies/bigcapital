@@ -1,17 +1,16 @@
 // @ts-nocheck
-import React from 'react';
 import { Button, Classes, Dialog, Intent } from '@blueprintjs/core';
-import { FormattedMessage as T, AppToaster } from '@/components';
+import React from 'react';
 import intl from 'react-intl-universal';
-
-import BulkDeleteDialogContent from '@/containers/Dialogs/components/BulkDeleteDialogContent';
-import { useBulkDeleteCreditNotes } from '@/hooks/query/creditNote';
+import { FormattedMessage as T, AppToaster } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { BulkDeleteDialogContent } from '@/containers/Dialogs/components/BulkDeleteDialogContent';
 import { withCreditNotesActions } from '@/containers/Sales/CreditNotes/CreditNotesLanding/withCreditNotesActions';
+import { useBulkDeleteCreditNotes } from '@/hooks/query/credit-note';
 import { compose } from '@/utils';
 
-function CreditNoteBulkDeleteDialog({
+function CreditNoteBulkDeleteDialogInner({
   dialogName,
   isOpen,
   payload: {
@@ -96,9 +95,8 @@ function CreditNoteBulkDeleteDialog({
   );
 }
 
-export default compose(
+export const CreditNoteBulkDeleteDialog = compose(
   withDialogRedux(),
   withDialogActions,
   withCreditNotesActions,
-)(CreditNoteBulkDeleteDialog);
-
+)(CreditNoteBulkDeleteDialogInner);

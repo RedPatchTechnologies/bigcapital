@@ -36,7 +36,9 @@ import {
   OrganizationBuiltResponseExample,
 } from './Organization.swagger';
 import { GetCurrentOrganizationResponseDto } from './dtos/GetCurrentOrganizationResponse.dto';
+import { OrganizationBuildJobResponseDto } from './dtos/OrganizationBuildJobResponse.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
+import { OrgBaseCurrencyMutateAbilitiesResponseDto } from './dtos/OrgBaseCurrencyMutateAbilitiesResponse.dto';
 
 @ApiTags('Organization')
 @Controller('organization')
@@ -44,6 +46,8 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 @IgnoreTenantSeededRoute()
 @IgnoreTenantModelsInitialize()
 @ApiExtraModels(GetCurrentOrganizationResponseDto)
+@ApiExtraModels(OrganizationBuildJobResponseDto)
+@ApiExtraModels(OrgBaseCurrencyMutateAbilitiesResponseDto)
 @ApiCommonHeaders()
 export class OrganizationController {
   constructor(
@@ -88,6 +92,13 @@ export class OrganizationController {
   })
   @HttpCode(200)
   @ApiOperation({ summary: 'Gets the organization build job details' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the organization build job details',
+    schema: {
+      $ref: getSchemaPath(OrganizationBuildJobResponseDto),
+    },
+  })
   async buildJob(@Param('buildJobId') buildJobId: string) {
     return this.getBuildOrganizationJobService.getJobDetails(buildJobId);
   }
@@ -111,6 +122,14 @@ export class OrganizationController {
   }
 
   @Get('base-currency-mutate')
+  @ApiOperation({
+    summary: 'Retrieves the base currency mutation lock abilities.',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'The base currency mutation abilities.',
+    schema: { $ref: getSchemaPath(OrgBaseCurrencyMutateAbilitiesResponseDto) },
+  })
   async baseCurrencyMutate() {
     const abilities =
       await this.orgBaseCurrencyLockingService.baseCurrencyMutateLocks();

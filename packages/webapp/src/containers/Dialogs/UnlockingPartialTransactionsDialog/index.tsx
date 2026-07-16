@@ -5,7 +5,9 @@ import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
 const UnlockingPartialTransactionsDialogContent = React.lazy(() =>
-  import('./UnlockingPartialTransactionsDialogContent'),
+  import('./UnlockingPartialTransactionsDialogContent').then((m) => ({
+    default: m.UnlockingPartialTransactionsDialogContent,
+  })),
 );
 
 /**
@@ -35,4 +37,6 @@ function UnLockingPartialTransactionsDilaog({
   );
 }
 
-export default compose(withDialogRedux())(UnLockingPartialTransactionsDilaog);
+export const index = compose(withDialogRedux())(
+  UnLockingPartialTransactionsDilaog,
+);

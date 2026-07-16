@@ -23,7 +23,7 @@ export const PreferencesMenu = [
   },
   {
     text: 'Payment Methods',
-    href: '/preferences/payment-methods'
+    href: '/preferences/payment-methods',
   },
   {
     text: <T id={'preferences.estimates'} />,

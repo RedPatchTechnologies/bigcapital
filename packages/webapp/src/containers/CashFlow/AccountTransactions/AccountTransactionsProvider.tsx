@@ -1,19 +1,66 @@
-// @ts-nocheck
-import React, { useRef, useState } from 'react';
+import { keepPreviousData } from '@tanstack/react-query';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import type {
+  Account,
+  BankingAccountSummaryResponse,
+  BankingAccountsListResponse,
+} from '@bigcapital/sdk-ts';
 import { DashboardInsider } from '@/components';
-import { useCashflowAccounts, useAccount } from '@/hooks/query';
 import { useAppQueryString } from '@/hooks';
-import { useGetBankAccountSummaryMeta } from '@/hooks/query/bank-rules';
+import { useCashflowAccounts, useAccount } from '@/hooks/query';
+import { useGetBankAccountSummaryMeta } from '@/hooks/query/banking';
 
-const AccountTransactionsContext = React.createContext();
+/**
+ * `BankingAccountSummaryResponse` SDK type only declares name + uncategorized +
+ * recognized counts. Runtime sends more fields; surface them as optional so
+ * consumers can read them without per-file casts.
+ */
+export type BankAccountSummaryMeta = BankingAccountSummaryResponse & {
+  totalExcludedTransactions?: number;
+  totalPendingTransactions?: number;
+};
+
+export interface AccountTransactionsContextValue {
+  accountId: number;
+  cashflowAccounts: BankingAccountsListResponse;
+  currentAccount?: Account;
+  bankAccountMetaSummary?: BankAccountSummaryMeta;
+
+  isCashFlowAccountsFetching: boolean;
+  isCashFlowAccountsLoading: boolean;
+  isCurrentAccountFetching: boolean;
+  isCurrentAccountLoading: boolean;
+
+  isBankAccountMetaSummaryLoading: boolean;
+  isBankAccountMetaSummaryFetching: boolean;
+
+  filterTab: string;
+  setFilterTab: (value: string) => void;
+
+  scrollableRef: HTMLElement | null;
+  setScrollableRef: Dispatch<SetStateAction<HTMLElement | null>>;
+}
+
+interface AccountTransactionsProviderProps {
+  query?: Record<string, unknown>;
+  children?: React.ReactNode;
+}
+
+const AccountTransactionsContext =
+  React.createContext<AccountTransactionsContextValue>(
+    {} as AccountTransactionsContextValue,
+  );
 
 /**
  * Account transctions provider.
  */
-function AccountTransactionsProvider({ query, ...props }) {
-  const { id } = useParams();
-  const accountId = parseInt(id, 10);
+function AccountTransactionsProvider({
+  query,
+  children,
+}: AccountTransactionsProviderProps) {
+  const { id } = useParams<{ id: string }>();
+  const accountId = parseInt(id ?? '', 10);
 
   const [locationQuery, setLocationQuery] = useAppQueryString();
 
@@ -26,14 +73,14 @@ function AccountTransactionsProvider({ query, ...props }) {
     data: cashflowAccounts,
     isFetching: isCashFlowAccountsFetching,
     isLoading: isCashFlowAccountsLoading,
-  } = useCashflowAccounts(query, { keepPreviousData: true });
+  } = useCashflowAccounts(query, { placeholderData: keepPreviousData });
 
   // Retrieves specific account details.
   const {
     data: currentAccount,
     isFetching: isCurrentAccountFetching,
     isLoading: isCurrentAccountLoading,
-  } = useAccount(accountId, { keepPreviousData: true });
+  } = useAccount(accountId, { placeholderData: keepPreviousData });
 
   // Retrieves the bank account meta summary.
   const {
@@ -42,18 +89,17 @@ function AccountTransactionsProvider({ query, ...props }) {
     isFetching: isBankAccountMetaSummaryFetching,
   } = useGetBankAccountSummaryMeta(accountId);
 
-  const [scrollableRef, setScrollableRef] = useState();
+  const [scrollableRef, setScrollableRef] = useState<HTMLElement | null>(null);
 
   // Provider payload.
-  const provider = {
+  const provider: AccountTransactionsContextValue = {
     accountId,
-    cashflowAccounts,
+    cashflowAccounts: cashflowAccounts ?? [],
     currentAccount,
     bankAccountMetaSummary,
 
     isCashFlowAccountsFetching,
     isCashFlowAccountsLoading,
-
     isCurrentAccountFetching,
     isCurrentAccountLoading,
 
@@ -69,7 +115,9 @@ function AccountTransactionsProvider({ query, ...props }) {
 
   return (
     <DashboardInsider name={'account-transactions'}>
-      <AccountTransactionsContext.Provider value={provider} {...props} />
+      <AccountTransactionsContext.Provider value={provider}>
+        {children}
+      </AccountTransactionsContext.Provider>
     </DashboardInsider>
   );
 }

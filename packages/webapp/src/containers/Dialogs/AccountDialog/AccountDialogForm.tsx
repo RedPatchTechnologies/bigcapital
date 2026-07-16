@@ -1,26 +1,23 @@
 // @ts-nocheck
-import React, { useCallback } from 'react';
-import intl from 'react-intl-universal';
 import { Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
-import { AppToaster } from '@/components';
-
-import AccountDialogFormContent from './AccountDialogFormContent';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import React, { useCallback } from 'react';
+import intl from 'react-intl-universal';
+import { AccountDialogFormContent } from './AccountDialogFormContent';
+import { useAccountDialogContext } from './AccountDialogProvider';
 import {
   EditAccountFormSchema,
   CreateAccountFormSchema,
 } from './AccountForm.schema';
-import { compose, transformToForm } from '@/utils';
 import {
   transformApiErrors,
   transformAccountToForm,
   transformFormToReq,
 } from './utils';
-
+import { AppToaster } from '@/components';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { compose, transformToForm } from '@/utils';
 import '@/style/pages/Accounts/AccountFormDialog.scss';
-import { useAccountDialogContext } from './AccountDialogProvider';
 
 // Default initial form values.
 const defaultInitialValues = {
@@ -83,9 +80,7 @@ function AccountFormDialogContent({
     // Handle request error.
     const handleError = (error) => {
       const {
-        response: {
-          data: { errors },
-        },
+        data: { errors },
       } = error;
 
       const errorsTransformed = transformApiErrors(errors);
@@ -135,4 +130,6 @@ function AccountFormDialogContent({
   );
 }
 
-export default compose(withDialogActions)(AccountFormDialogContent);
+export const AccountDialogForm = compose(withDialogActions)(
+  AccountFormDialogContent,
+);

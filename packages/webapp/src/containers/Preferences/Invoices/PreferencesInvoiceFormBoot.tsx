@@ -1,11 +1,11 @@
 // @ts-nocheck
-import React from 'react';
 import classNames from 'classnames';
+import React from 'react';
 import styled from 'styled-components';
+import { PreferencesPageLoader } from '../PreferencesPageLoader';
+import { Card } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { useSettings } from '@/hooks/query';
-import PreferencesPageLoader from '../PreferencesPageLoader';
-import { Card } from '@/components';
 
 const PreferencesInvoiceFormContext = React.createContext();
 
@@ -15,7 +15,7 @@ function PreferencesInvoicesBoot({ ...props }) {
 
   // Provider state.
   const provider = {
-    isSettingsLoading
+    isSettingsLoading,
   };
 
   // Detarmines whether if any query is loading.
@@ -42,7 +42,7 @@ function PreferencesInvoicesBoot({ ...props }) {
 const PreferencesInvoicesCard = styled(Card)`
   padding: 25px;
 
-  .bp4-form-group{
+  .bp4-form-group {
     max-width: 600px;
   }
 `;

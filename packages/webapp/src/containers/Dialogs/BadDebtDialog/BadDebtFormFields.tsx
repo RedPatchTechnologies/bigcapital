@@ -1,14 +1,4 @@
 // @ts-nocheck
-import React from 'react';
-import { FastField, ErrorMessage } from 'formik';
-import {
-  FMoneyInputGroup,
-  FTextArea,
-  FormattedMessage as T,
-  FFormGroup,
-} from '@/components';
-
-import { useAutofocus } from '@/hooks';
 import {
   Classes,
   FormGroup,
@@ -18,22 +8,31 @@ import {
   Intent,
 } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { CLASSES } from '@/constants/classes';
-import { ACCOUNT_TYPE } from '@/constants/accountTypes';
-import { inputIntent } from '@/utils';
+import { FastField, ErrorMessage } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useBadDebtContext } from './BadDebtFormProvider';
+import {
+  FMoneyInputGroup,
+  FTextArea,
+  FormattedMessage as T,
+  FFormGroup,
+} from '@/components';
 import {
   FAccountsSuggestField,
   InputPrependText,
   MoneyInputGroup,
   FieldRequiredHint,
 } from '@/components';
-
-import { useBadDebtContext } from './BadDebtFormProvider';
+import { ACCOUNT_TYPE } from '@/constants/accountTypes';
+import { CLASSES } from '@/constants/classes';
+import { useAutofocus } from '@/hooks';
+import { inputIntent } from '@/utils';
 
 /**
  * Bad debt form fields.
  */
-function BadDebtFormFields() {
+export function BadDebtFormFields() {
   const amountfieldRef = useAutofocus();
 
   const { accounts, invoice } = useBadDebtContext();
@@ -49,7 +48,7 @@ function BadDebtFormFields() {
       {/*------------ Written-off amount -----------*/}
       <FFormGroup
         name={'amount'}
-        label={<T id={'bad_debt.dialog.written_off_amount'} />}
+        label={intl.get('bad_debt.dialog.written_off_amount')}
         labelInfo={<FieldRequiredHint />}
         fill
       >
@@ -66,7 +65,7 @@ function BadDebtFormFields() {
       {/*------------ Expense account -----------*/}
       <FFormGroup
         name={'expense_account_id'}
-        label={<T id={'expense_account_id'} />}
+        label={intl.get('expense_account_id')}
         labelInfo={<FieldRequiredHint />}
         fill
       >
@@ -81,7 +80,7 @@ function BadDebtFormFields() {
       {/*------------ reason -----------*/}
       <FFormGroup
         name={'reason'}
-        label={<T id={'reason'} />}
+        label={intl.get('reason')}
         labelInfo={<FieldRequiredHint />}
         fill
       >
@@ -90,5 +89,3 @@ function BadDebtFormFields() {
     </div>
   );
 }
-
-export default BadDebtFormFields;

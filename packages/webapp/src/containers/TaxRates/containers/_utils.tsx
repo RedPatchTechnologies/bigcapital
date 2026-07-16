@@ -1,8 +1,8 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Tag, Classes } from '@blueprintjs/core';
-import { Align } from '@/constants';
 import clsx from 'classnames';
+import React from 'react';
+import { Align } from '@/constants';
 
 const codeAccessor = (taxRate) => {
   return (
@@ -75,4 +75,3 @@ export const useTaxRatesTableColumns = () => {
     },
   ];
 };
-

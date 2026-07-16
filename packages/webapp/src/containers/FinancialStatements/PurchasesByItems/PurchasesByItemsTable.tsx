@@ -1,24 +1,27 @@
-// @ts-nocheck
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-
-import { ReportDataTable, FinancialSheet } from '@/components';
-
-import { usePurchaseByItemsContext } from './PurchasesByItemsProvider';
-
-import { tableRowTypesToClassnames } from '@/utils';
-import { TableStyle } from '@/constants';
 import { usePurchasesByItemsTableColumns } from './dynamicColumns';
+import { usePurchaseByItemsContext } from './PurchasesByItemsProvider';
+import { ReportDataTable, FinancialSheet } from '@/components';
+import { TableStyle } from '@/constants';
+import { tableRowTypesToClassnames } from '@/utils';
+
+interface PurchasesByItemsTableProps {
+  companyName: string;
+}
 
 /**
  * Purchases by items data table.
  */
-export default function PurchasesByItemsTable({ companyName }) {
+export function PurchasesByItemsTable({
+  companyName,
+}: PurchasesByItemsTableProps) {
   // Purchases by items context.
-  const {
-    purchaseByItems: { table, query, meta },
-  } = usePurchaseByItemsContext();
+  const { purchaseByItems } = usePurchaseByItemsContext();
+
+  const table = (purchaseByItems as any)?.table;
+  const meta = (purchaseByItems as any)?.meta;
 
   // Purchases by items table columns.
   const columns = usePurchasesByItemsTableColumns();
@@ -27,7 +30,7 @@ export default function PurchasesByItemsTable({ companyName }) {
     <PurchasesByItemsSheet
       companyName={companyName}
       sheetType={intl.get('purchases_by_items')}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
+      dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
     >
       <PurchasesByItemsDataTable
         columns={columns}

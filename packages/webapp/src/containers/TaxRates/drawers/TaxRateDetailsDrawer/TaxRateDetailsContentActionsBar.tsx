@@ -1,5 +1,4 @@
 // @ts-nocheck
-import React from 'react';
 import {
   Button,
   Classes,
@@ -13,23 +12,24 @@ import {
   Position,
 } from '@blueprintjs/core';
 import * as R from 'ramda';
+import React from 'react';
+import { useTaxRateDetailsContext } from './TaxRateDetailsContentBoot';
 import { AppToaster, Can, DrawerActionsBar, Icon } from '@/components';
 import { AbilitySubject, TaxRateAction } from '@/constants/abilityOption';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { DialogsName } from '@/constants/dialogs';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { useTaxRateDetailsContext } from './TaxRateDetailsContentBoot';
-import { DialogsName } from '@/constants/dialogs';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import {
   useActivateTaxRate,
   useInactivateTaxRate,
-} from '@/hooks/query/taxRates';
+} from '@/hooks/query/tax-rates';
 
 /**
  * Tax rate details content actions bar.
  * @returns {JSX.Element}
  */
-function TaxRateDetailsContentActionsBar({
+function TaxRateDetailsContentActionsBarInner({
   // #withDrawerActions
   openDialog,
 
@@ -141,8 +141,8 @@ function TaxRateDetailsContentActionsBar({
   );
 }
 
-export default R.compose(
+export const TaxRateDetailsContentActionsBar = R.compose(
   withDrawerActions,
   withDialogActions,
   withAlertActions,
-)(TaxRateDetailsContentActionsBar);
+)(TaxRateDetailsContentActionsBarInner);

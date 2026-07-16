@@ -1,16 +1,14 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Alert } from '@blueprintjs/core';
-
+import React from 'react';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-
 import { compose, saveInvoke } from '@/utils';
 
 /**
  * Changing full-amount alert in payment made form.
  */
-function ChangingFullAmountAlert({
+function ChangingFullAmountAlertInner({
   name,
   onConfirm,
 
@@ -49,7 +47,7 @@ function ChangingFullAmountAlert({
   );
 }
 
-export default compose(
+export const ChangingFullAmountAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ChangingFullAmountAlert);
+)(ChangingFullAmountAlertInner);

@@ -1,11 +1,9 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Alert } from '@blueprintjs/core';
+import React from 'react';
 import { FormattedMessage as T } from '@/components';
-
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-
 import { compose } from '@/utils';
 
 /**
@@ -16,7 +14,7 @@ function ClearPaymentTransactionAlert({
 
   // #withAlertStoreConnect
   isOpen,
-  payload: {  },
+  payload: {},
 
   // #withAlertActions
   closeAlert,
@@ -27,9 +25,7 @@ function ClearPaymentTransactionAlert({
   };
 
   // Handle confirm delete manual journal.
-  const handleConfirm = () => {
-     
-  };
+  const handleConfirm = () => {};
 
   return (
     <Alert
@@ -49,7 +45,7 @@ function ClearPaymentTransactionAlert({
   );
 }
 
-export default compose(
+export const ClearTransactionAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
 )(ClearPaymentTransactionAlert);

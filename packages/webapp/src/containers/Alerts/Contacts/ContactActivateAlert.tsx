@@ -1,20 +1,17 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import { AppToaster, FormattedMessage as T } from '@/components';
-
-import { useActivateContact } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useActivateContact } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  *  Contact activate alert.
  */
-function ContactActivateAlert({
+function ContactActivateAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -61,7 +58,7 @@ function ContactActivateAlert({
   );
 }
 
-export default compose(
+export const ContactActivateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ContactActivateAlert);
+)(ContactActivateAlertInner);

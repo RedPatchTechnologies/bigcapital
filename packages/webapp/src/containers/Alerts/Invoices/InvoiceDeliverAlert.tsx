@@ -1,20 +1,17 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { AppToaster, FormattedMessage as T } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-
-import { useDeliverInvoice } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useDeliverInvoice } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * Sale invoice alert.
  */
-function InvoiceDeliverAlert({
+function InvoiceDeliverAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -63,7 +60,7 @@ function InvoiceDeliverAlert({
   );
 }
 
-export default compose(
+export const InvoiceDeliverAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(InvoiceDeliverAlert);
+)(InvoiceDeliverAlertInner);

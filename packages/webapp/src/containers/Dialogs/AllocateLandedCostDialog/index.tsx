@@ -5,7 +5,9 @@ import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
 const AllocateLandedCostDialogContent = lazy(() =>
-  import('./AllocateLandedCostDialogContent'),
+  import('./AllocateLandedCostDialogContent').then((m) => ({
+    default: m.AllocateLandedCostDialogContent,
+  })),
 );
 
 /**
@@ -34,4 +36,4 @@ function AllocateLandedCostDialog({
   );
 }
 
-export default compose(withDialogRedux())(AllocateLandedCostDialog);
+export const index = compose(withDialogRedux())(AllocateLandedCostDialog);

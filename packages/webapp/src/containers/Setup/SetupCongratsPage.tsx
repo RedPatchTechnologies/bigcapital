@@ -1,20 +1,18 @@
 // @ts-nocheck
-import React from 'react';
 import { Button, Intent } from '@blueprintjs/core';
-import { x } from '@xstyled/emotion';
 import { css } from '@emotion/css';
-import { useIsDarkMode } from '@/hooks/useDarkMode';
-
-import WorkflowIcon from './WorkflowIcon';
+import { x } from '@xstyled/emotion';
+import React from 'react';
+import { WorkflowIcon } from './WorkflowIcon';
 import { FormattedMessage as T } from '@/components';
-
 import { withOrganizationActions } from '@/containers/Organization/withOrganizationActions';
+import { useIsDarkMode } from '@/hooks/useDarkMode';
 import { compose } from '@/utils';
 
 /**
  * Setup congrats page.
  */
-function SetupCongratsPage({ setOrganizationSetupCompleted }) {
+function SetupCongratsPageInner({ setOrganizationSetupCompleted }) {
   const [isReloading, setIsReloading] = React.useState(false);
   const isDarkMode = useIsDarkMode();
 
@@ -24,12 +22,7 @@ function SetupCongratsPage({ setOrganizationSetupCompleted }) {
   };
 
   return (
-    <x.div
-      w={'500px'}
-      mx="auto"
-      textAlign="center"
-      pt={'80px'}
-    >
+    <x.div w={'500px'} mx="auto" textAlign="center" pt={'80px'}>
       <x.div>
         <WorkflowIcon width="280" height="330" />
       </x.div>
@@ -76,4 +69,6 @@ function SetupCongratsPage({ setOrganizationSetupCompleted }) {
   );
 }
 
-export default compose(withOrganizationActions)(SetupCongratsPage);
+export const SetupCongratsPage = compose(withOrganizationActions)(
+  SetupCongratsPageInner,
+);

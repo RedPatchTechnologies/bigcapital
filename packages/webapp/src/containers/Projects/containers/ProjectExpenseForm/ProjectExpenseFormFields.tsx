@@ -1,31 +1,31 @@
 // @ts-nocheck
-import React from 'react';
-import styled from 'styled-components';
-import intl from 'react-intl-universal';
 import { Classes, Position, ControlGroup } from '@blueprintjs/core';
-import { CLASSES } from '@/constants/classes';
 import classNames from 'classnames';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import {
+  ExpenseSelect,
+  FInputGroupComponent,
+  ProjectTaskChargeTypeSelect,
+} from '../../components';
+import { expenseChargeOption } from '../common/modalChargeOptions';
+import { ExpenseFormChargeFields } from './ProjectExpenseFormChargeFields';
+import { useProjectExpenseFormContext } from './ProjectExpenseFormProvider';
 import {
   FFormGroup,
   FInputGroup,
   FDateInput,
   FormattedMessage as T,
 } from '@/components';
-import {
-  ExpenseSelect,
-  FInputGroupComponent,
-  ProjectTaskChargeTypeSelect,
-} from '../../components';
-import ExpenseFormChargeFields from './ProjectExpenseFormChargeFields';
+import { CLASSES } from '@/constants/classes';
 import { momentFormatter } from '@/utils';
-import { useProjectExpenseFormContext } from './ProjectExpenseFormProvider';
-import { expenseChargeOption } from '../common/modalChargeOptions';
 
 /**
  * Project expense form fields.
  * @returns
  */
-export default function ProjectExpenseFormFields() {
+export function ProjectExpenseFormFields() {
   return (
     <div className={Classes.DIALOG_BODY}>
       {/*------------ Expense Name -----------*/}
@@ -97,7 +97,7 @@ export default function ProjectExpenseFormFields() {
       {/*------------ Charge -----------*/}
       <FFormGroup
         name={'expenseCharge'}
-        label={<T id={'project_expense.dialog.charge'} />}
+        label={intl.get('project_expense.dialog.charge')}
         className={classNames('form-group--select-list', Classes.FILL)}
       >
         <ProjectTaskChargeTypeSelect

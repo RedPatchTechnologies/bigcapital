@@ -1,7 +1,7 @@
 // @ts-nocheck
 import { connect } from 'react-redux';
-import { getUserDetails } from '@/store/users/users.reducer';
 import { getDialogPayload } from '@/store/dashboard/dashboard.reducer';
+import { getUserDetails } from '@/store/users/users.reducer';
 
 export const mapStateToProps = (state, props) => {
   const dialogPayload = getDialogPayload(state, 'user-form');
@@ -16,4 +16,4 @@ export const mapStateToProps = (state, props) => {
   };
 };
 
-export default connect(mapStateToProps, null);
+export const UserFormDialogConnector = connect(mapStateToProps, null);

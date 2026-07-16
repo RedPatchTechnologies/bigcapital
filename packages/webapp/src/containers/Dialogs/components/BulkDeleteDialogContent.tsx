@@ -1,8 +1,8 @@
 // @ts-nocheck
-import React from 'react';
 import { Classes, Intent, Tag } from '@blueprintjs/core';
-import { FormattedMessage as T } from '@/components';
 import { x } from '@xstyled/emotion';
+import React from 'react';
+import { FormattedMessage as T } from '@/components';
 
 interface BulkDeleteDialogContentProps {
   totalSelected: number;
@@ -12,7 +12,7 @@ interface BulkDeleteDialogContentProps {
   resourcePluralLabel: string;
 }
 
-function BulkDeleteDialogContent({
+export function BulkDeleteDialogContent({
   totalSelected,
   deletableCount,
   undeletableCount,
@@ -78,6 +78,3 @@ function BulkDeleteDialogContent({
     </div>
   );
 }
-
-export default BulkDeleteDialogContent;
-

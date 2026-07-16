@@ -1,11 +1,11 @@
 // @ts-nocheck
+import classNames from 'classnames';
 import React from 'react';
 import styled from 'styled-components';
-import classNames from 'classnames';
+import { PreferencesPageLoader } from '../PreferencesPageLoader';
+import { Card } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { useSettings } from '@/hooks/query';
-import PreferencesPageLoader from '../PreferencesPageLoader';
-import { Card } from '@/components';
 
 const PreferencesCreditNotesFormContext = React.createContext();
 

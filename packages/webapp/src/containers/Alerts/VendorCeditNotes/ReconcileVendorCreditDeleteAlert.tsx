@@ -1,24 +1,22 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import {
   AppToaster,
   FormattedMessage as T,
   FormattedHTMLMessage,
 } from '@/components';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
 import { useDeleteReconcileVendorCredit } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * Reconcile vendor credit delete alert.
  */
-function ReconcileVendorCreditDeleteAlert({
+function ReconcileVendorCreditDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -48,13 +46,7 @@ function ReconcileVendorCreditDeleteAlert({
         });
         // closeDrawer('vendor-credit-detail-drawer');
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {},
-      )
+      .catch(({ data: { errors } }) => {})
       .finally(() => {
         closeAlert(name);
       });
@@ -82,8 +74,8 @@ function ReconcileVendorCreditDeleteAlert({
   );
 }
 
-export default compose(
+export const ReconcileVendorCreditDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(ReconcileVendorCreditDeleteAlert);
+)(ReconcileVendorCreditDeleteAlertInner);

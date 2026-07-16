@@ -1,17 +1,16 @@
 // @ts-nocheck
-import React from 'react';
 import { AnchorButton } from '@blueprintjs/core';
-
+import React from 'react';
 import { DialogContent, PdfDocumentPreview, T } from '@/components';
-import { usePdfPaymentReceive } from '@/hooks/query';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { usePdfPaymentReceive } from '@/hooks/query';
 import { compose } from '@/utils';
 
 function PaymentReceivePdfPreviewDialogContent({
   subscriptionForm: { paymentReceiveId },
 }) {
-  const { isLoading, pdfUrl, filename } = usePdfPaymentReceive(paymentReceiveId);
+  const { isLoading, pdfUrl, filename } =
+    usePdfPaymentReceive(paymentReceiveId);
 
   return (
     <DialogContent>
@@ -45,6 +44,6 @@ function PaymentReceivePdfPreviewDialogContent({
   );
 }
 
-export default compose(withDialogActions)(
+export const PaymentReceivePdfPreviewContent = compose(withDialogActions)(
   PaymentReceivePdfPreviewDialogContent,
 );

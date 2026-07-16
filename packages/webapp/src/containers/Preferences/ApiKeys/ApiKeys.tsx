@@ -1,13 +1,12 @@
 // @ts-nocheck
+import classNames from 'classnames';
 import React, { useEffect } from 'react';
 import intl from 'react-intl-universal';
-import classNames from 'classnames';
 import styled from 'styled-components';
-
+import { ApiKeysDataTable } from './ApiKeysDataTable';
 import { Card } from '@/components';
 import { CLASSES } from '@/constants/classes';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-import ApiKeysDataTable from './ApiKeysDataTable';
 import { compose } from '@/utils';
 
 /**
@@ -39,4 +38,4 @@ const ApiKeysPreferencesCard = styled(Card)`
   padding: 0;
 `;
 
-export default compose(withDashboardActions)(ApiKeysPreferences);
+export const ApiKeys = compose(withDashboardActions)(ApiKeysPreferences);

@@ -1,17 +1,16 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Button, Classes } from '@blueprintjs/core';
 import { useFormikContext } from 'formik';
-import { FormattedMessage as T } from '@/components';
-
+import React from 'react';
 import { useBranchActivateContext } from './BranchActivateFormProvider';
+import { FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
 /**
  * branch activate  form floating actions.
  */
-function BranchActivateFormFloatingActions({
+function BranchActivateFormFloatingActionsInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -39,11 +38,12 @@ function BranchActivateFormFloatingActions({
           type="submit"
         >
           {<T id={'branches.activate_button'} />}
-          
         </Button>
       </div>
     </div>
   );
 }
 
-export default compose(withDialogActions)(BranchActivateFormFloatingActions);
+export const BranchActivateFormFloatingActions = compose(withDialogActions)(
+  BranchActivateFormFloatingActionsInner,
+);

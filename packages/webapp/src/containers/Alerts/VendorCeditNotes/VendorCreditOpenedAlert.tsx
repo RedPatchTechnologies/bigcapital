@@ -1,20 +1,17 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { AppToaster, FormattedMessage as T } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-
-import { useOpenVendorCredit } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useOpenVendorCredit } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  *  Vendor credit opened alert.
  */
-function VendorCreditOpenedAlert({
+function VendorCreditOpenedAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -63,7 +60,7 @@ function VendorCreditOpenedAlert({
     </Alert>
   );
 }
-export default compose(
+export const VendorCreditOpenedAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(VendorCreditOpenedAlert);
+)(VendorCreditOpenedAlertInner);

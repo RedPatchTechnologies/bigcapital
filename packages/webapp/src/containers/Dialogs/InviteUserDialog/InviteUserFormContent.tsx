@@ -1,7 +1,9 @@
 // @ts-nocheck
-import React from 'react';
 import { Intent, Button } from '@blueprintjs/core';
 import { Form, useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useInviteUserFormContext } from './InviteUserFormProvider';
 import {
   FSelect,
   FieldRequiredHint,
@@ -10,12 +12,10 @@ import {
   FInputGroup,
 } from '@/components';
 import { CLASSES } from '@/constants/classes';
-import { compose } from '@/utils';
-import { useInviteUserFormContext } from './InviteUserFormProvider';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { compose } from '@/utils';
 
-function InviteUserFormContent({
+function InviteUserFormContentInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -35,7 +35,7 @@ function InviteUserFormContent({
         {/* ----------- Email ----------- */}
         <FFormGroup
           name={'email'}
-          label={<T id={'invite_user.label.email'} />}
+          label={intl.get('invite_user.label.email')}
           labelInfo={<FieldRequiredHint />}
         >
           <FInputGroup name={'email'} />
@@ -43,7 +43,7 @@ function InviteUserFormContent({
         {/* ----------- Role name ----------- */}
         <FFormGroup
           name={'role_id'}
-          label={<T id={'invite_user.label.role_name'} />}
+          label={intl.get('invite_user.label.role_name')}
           labelInfo={<FieldRequiredHint />}
         >
           <FSelect
@@ -77,4 +77,6 @@ function InviteUserFormContent({
   );
 }
 
-export default compose(withDialogActions)(InviteUserFormContent);
+export const InviteUserFormContent = compose(withDialogActions)(
+  InviteUserFormContentInner,
+);

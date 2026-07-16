@@ -1,4 +1,5 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import {
@@ -6,20 +7,16 @@ import {
   FormattedMessage as T,
   FormattedHTMLMessage,
 } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-
-import { useDeleteBranch } from '@/hooks/query';
-import { handleDeleteErrors } from '@/containers/Preferences/Branches/utils';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { handleDeleteErrors } from '@/containers/Preferences/Branches/utils';
+import { useDeleteBranch } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * Branch delete alert.
  */
-function BranchDeleteAlert({
+function BranchDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -45,15 +42,9 @@ function BranchDeleteAlert({
           intent: Intent.SUCCESS,
         });
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });
@@ -77,7 +68,7 @@ function BranchDeleteAlert({
   );
 }
 
-export default compose(
+export const BranchDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(BranchDeleteAlert);
+)(BranchDeleteAlertInner);

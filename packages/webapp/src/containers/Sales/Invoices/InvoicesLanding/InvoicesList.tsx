@@ -1,32 +1,34 @@
-// @ts-nocheck
 import React from 'react';
 
 import '@/style/pages/SaleInvoice/List.scss';
-
-import { DashboardPageContent } from '@/components';
+import { InvoicesActionsBar } from './InvoicesActionsBar';
+import { InvoicesDataTable } from './InvoicesDataTable';
+import { InvoicesListDialogs } from './InvoicesListDialogs';
+import { InvoicesListDrawers } from './InvoicesListDrawers';
 import { InvoicesListProvider } from './InvoicesListProvider';
-
-import InvoicesDataTable from './InvoicesDataTable';
-import InvoicesActionsBar from './InvoicesActionsBar';
-
-import { withInvoices } from './withInvoices';
 import { withInvoiceActions } from './withInvoiceActions';
+import { withInvoices } from './withInvoices';
+import type { WithInvoicesProps } from './withInvoices';
+import { DashboardPageContent } from '@/components';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
 import { transformTableStateToQuery, compose } from '@/utils';
 
-/**
- * Sale invoices list.
- */
-function InvoicesList({
-  // #withInvoice
+interface WithInvoiceActionsProps {
+  resetInvoicesTableState: () => void;
+}
+
+interface InvoicesListProps
+  extends Pick<
+      WithInvoicesProps,
+      'invoicesTableState' | 'invoicesTableStateChanged'
+    >,
+    WithInvoiceActionsProps {}
+
+function InvoicesListInner({
   invoicesTableState,
   invoicesTableStateChanged,
-
-  // #withInvoicesActions
   resetInvoicesTableState,
-}) {
-  // Resets the invoices table state once the page unmount.
+}: InvoicesListProps) {
   React.useEffect(
     () => () => {
       resetInvoicesTableState();
@@ -40,6 +42,8 @@ function InvoicesList({
       tableStateChanged={invoicesTableStateChanged}
     >
       <InvoicesActionsBar />
+      <InvoicesListDrawers />
+      <InvoicesListDialogs />
 
       <DashboardPageContent>
         <InvoicesDataTable />
@@ -48,11 +52,11 @@ function InvoicesList({
   );
 }
 
-export default compose(
+export const InvoicesList = compose(
   withInvoices(({ invoicesTableState, invoicesTableStateChanged }) => ({
     invoicesTableState,
     invoicesTableStateChanged,
   })),
   withInvoiceActions,
   withAlertActions,
-)(InvoicesList);
+)(InvoicesListInner);

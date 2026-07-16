@@ -1,13 +1,16 @@
 // @ts-nocheck
-import React from 'react';
+import { createApiFetcher } from '@bigcapital/sdk-ts';
 import axios from 'axios';
+import React from 'react';
+import { getCookie, normalizeApiPath } from '../utils';
 import {
   useAuthActions,
   useAuthOrganizationId,
   useSetGlobalErrors,
   useAuthToken,
 } from './state';
-import { getCookie, normalizeApiPath } from '../utils';
+import { useApiFetcherOnError } from './useApiFetcherOnError';
+import type { ApiError } from 'openapi-typescript-fetch';
 
 export default function useApiRequest() {
   const setGlobalErrors = useSetGlobalErrors();
@@ -118,6 +121,57 @@ export default function useApiRequest() {
     }),
     [http],
   );
+}
+
+/**
+ * Returns an ApiFetcher configured with baseUrl and auth headers for use with sdk-ts fetch functions.
+ * Use this in query hooks that call fetchAccounts, fetchCreditNotes, etc.
+ *
+ * @param options - Optional configuration
+ * @param options.enableCamelCaseTransform - If true, automatically transforms response data from snake_case to camelCase
+ */
+export function useApiFetcher(options?: {
+  enableCamelCaseTransform?: boolean;
+}) {
+  const token = useAuthToken();
+  const organizationId = useAuthOrganizationId();
+  const currentLocale = getCookie('locale');
+  const onError = useApiFetcherOnError();
+
+  return React.useMemo(() => {
+    const headers: Record<string, string> = {
+      accept: 'application/json',
+    };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+    if (organizationId) {
+      headers['organization-id'] = organizationId;
+    }
+    if (currentLocale) {
+      headers['Accept-Language'] = currentLocale;
+    }
+
+    return createApiFetcher({
+      baseUrl: '',
+      init: { headers },
+      disableCamelCaseTransform: !options?.enableCamelCaseTransform,
+      // onError,
+    });
+  }, [
+    token,
+    organizationId,
+    currentLocale,
+    options?.enableCamelCaseTransform,
+    onError,
+  ]);
+}
+
+/**
+ * Returns an unauthenticated ApiFetcher for auth flows (signin, signup, reset password, etc.).
+ */
+export function useAuthApiFetcher() {
+  return React.useMemo(() => createApiFetcher({ baseUrl: '' }), []);
 }
 
 export function useAuthApiRequest() {

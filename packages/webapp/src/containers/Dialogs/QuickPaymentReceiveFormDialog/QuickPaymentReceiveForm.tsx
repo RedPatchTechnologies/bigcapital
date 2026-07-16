@@ -1,28 +1,26 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
+import { defaultTo, omit } from 'lodash';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-import { defaultTo, omit } from 'lodash';
-
-import { AppToaster } from '@/components';
-import { useQuickPaymentReceiveContext } from './QuickPaymentReceiveFormProvider';
 import { CreateQuickPaymentReceiveFormSchema } from './QuickPaymentReceive.schema';
-import QuickPaymentReceiveFormContent from './QuickPaymentReceiveFormContent';
-
-import { withSettings } from '@/containers/Settings/withSettings';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { QuickPaymentReceiveFormContent } from './QuickPaymentReceiveFormContent';
+import { useQuickPaymentReceiveContext } from './QuickPaymentReceiveFormProvider';
 import {
   defaultInitialValues,
   transformErrors,
   transformInvoiceToForm,
 } from './utils';
+import { AppToaster } from '@/components';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withSettings } from '@/containers/Settings/withSettings';
 import { compose, transactionNumber } from '@/utils';
 
 /**
  * Quick payment receive form.
  */
-function QuickPaymentReceiveForm({
+function QuickPaymentReceiveFormInner({
   // #withDialogActions
   closeDialog,
 
@@ -76,11 +74,7 @@ function QuickPaymentReceiveForm({
       closeDialog(dialogName);
     };
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors) {
         transformErrors(errors, { setFieldError });
       }
@@ -99,7 +93,7 @@ function QuickPaymentReceiveForm({
   );
 }
 
-export default compose(
+export const QuickPaymentReceiveForm = compose(
   withDialogActions,
   withSettings(({ paymentReceiveSettings }) => ({
     paymentReceiveNextNumber: paymentReceiveSettings?.nextNumber,
@@ -107,4 +101,4 @@ export default compose(
     paymentReceiveAutoIncrement: paymentReceiveSettings?.autoIncrement,
     preferredDepositAccount: paymentReceiveSettings?.preferredDepositAccount,
   })),
-)(QuickPaymentReceiveForm);
+)(QuickPaymentReceiveFormInner);

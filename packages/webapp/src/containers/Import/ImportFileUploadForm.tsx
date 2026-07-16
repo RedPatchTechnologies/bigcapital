@@ -1,13 +1,12 @@
 // @ts-nocheck
-import { AppToaster } from '@/components';
-import { useImportFileUpload } from '@/hooks/query/import';
 import { Intent } from '@blueprintjs/core';
 import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
-import { useImportFileContext } from './ImportFileProvider';
 import { ImportAlert, ImportStepperStep } from './_types';
 import { useAlertsManager } from './AlertsManager';
-import { transformToCamelCase } from '@/utils';
+import { useImportFileContext } from './ImportFileProvider';
+import { AppToaster } from '@/components';
+import { useImportFileUpload } from '@/hooks/query/import';
 
 const initialValues = {
   file: null,
@@ -55,16 +54,14 @@ export function ImportFileUploadForm({
     formData.append('params', JSON.stringify(params));
 
     uploadImportFile(formData)
-      .then(({ data }) => {
-        const _data = transformToCamelCase(data);
-
-        setImportId(_data.import.importId);
-        setSheetColumns(_data.sheetColumns);
-        setEntityColumns(_data.resourceColumns);
+      .then((response) => {
+        setImportId(response.import.importId);
+        setSheetColumns(response.sheetColumns);
+        setEntityColumns(response.resourceColumns);
         setStep(ImportStepperStep.Mapping);
         setSubmitting(false);
       })
-      .catch(({ response: { data } }) => {
+      .catch(({ data }) => {
         if (
           data.errors.find(
             (er) => er.type === 'IMPORTED_FILE_EXTENSION_INVALID',

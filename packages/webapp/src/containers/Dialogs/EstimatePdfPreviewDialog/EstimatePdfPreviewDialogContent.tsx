@@ -1,14 +1,12 @@
 // @ts-nocheck
-import React from 'react';
 import { AnchorButton } from '@blueprintjs/core';
-
+import React from 'react';
 import { DialogContent, PdfDocumentPreview, T } from '@/components';
-import { usePdfEstimate } from '@/hooks/query';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { usePdfEstimate } from '@/hooks/query';
 import { compose } from '@/utils';
 
-function EstimatePdfPreviewDialogContent({
+function EstimatePdfPreviewDialogContentInner({
   subscriptionForm: { estimateId },
   dialogName,
   // #withDialogActions
@@ -48,4 +46,6 @@ function EstimatePdfPreviewDialogContent({
   );
 }
 
-export default compose(withDialogActions)(EstimatePdfPreviewDialogContent);
+export const EstimatePdfPreviewDialogContent = compose(withDialogActions)(
+  EstimatePdfPreviewDialogContentInner,
+);

@@ -1,20 +1,17 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { AppToaster, FormattedMessage as T } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-
-import { useInactivateContact } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useInactivateContact } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * customer inactivate alert.
  */
-function CustomerInactivateAlert({
+function CustomerInactivateAlertInner({
   name,
   // #withAlertStoreConnect
   isOpen,
@@ -63,7 +60,7 @@ function CustomerInactivateAlert({
     </Alert>
   );
 }
-export default compose(
+export const CustomerInactivateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(CustomerInactivateAlert);
+)(CustomerInactivateAlertInner);

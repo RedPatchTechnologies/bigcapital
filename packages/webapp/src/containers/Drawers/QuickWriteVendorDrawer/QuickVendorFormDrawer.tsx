@@ -1,23 +1,18 @@
 // @ts-nocheck
-import React from 'react';
 import * as R from 'ramda';
+import React from 'react';
 import styled from 'styled-components';
-
 import { Card, DrawerLoading } from '@/components';
+import { useDrawerContext } from '@/components/Drawer/DrawerProvider';
+import { DRAWERS } from '@/constants/drawers';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { VendorFormFormik } from '@/containers/Vendors/VendorForm/VendorFormFormik';
 import {
   VendorFormProvider,
   useVendorFormContext,
 } from '@/containers/Vendors/VendorForm/VendorFormProvider';
-import VendorFormFormik, {
-  VendorFormHeaderPrimary,
-} from '@/containers/Vendors/VendorForm/VendorFormFormik';
-
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-
-import { useDrawerContext } from '@/components/Drawer/DrawerProvider';
 import { useAddAutofillRef } from '@/hooks/state/autofill';
-import { DRAWERS } from '@/constants/drawers';
 
 /**
  * Drawer vendor form loading wrapper.
@@ -32,7 +27,7 @@ function DrawerVendorFormLoading({ children }) {
 /**
  * Quick vendor form of the drawer.
  */
-function QuickVendorFormDrawer({
+function QuickVendorFormDrawerInner({
   displayName,
   closeDrawer,
   vendorId,
@@ -62,37 +57,17 @@ function QuickVendorFormDrawer({
   return (
     <VendorFormProvider vendorId={vendorId}>
       <DrawerVendorFormLoading>
-        <VendorFormCard>
-          <VendorFormFormik
-            initialValues={{ first_name: displayName }}
-            onSubmitSuccess={handleSubmitSuccess}
-            onCancel={handleCancelForm}
-          />
-        </VendorFormCard>
+        <VendorFormFormik
+          initialValues={{ first_name: displayName }}
+          onSubmitSuccess={handleSubmitSuccess}
+          onCancel={handleCancelForm}
+        />
       </DrawerVendorFormLoading>
     </VendorFormProvider>
   );
 }
 
-export default R.compose(
+export const QuickVendorFormDrawer = R.compose(
   withDrawerActions,
   withDashboardActions,
-)(QuickVendorFormDrawer);
-
-const VendorFormCard = styled(Card)`
-  margin: 15px;
-  padding: 25px;
-  margin-bottom: calc(15px + 65px);
-
-  ${VendorFormHeaderPrimary} {
-    padding-top: 0;
-  }
-  .page-form {
-    padding: 0;
-
-    &__floating-actions {
-      margin-left: -41px;
-      margin-right: -41px;
-    }
-  }
-`;
+)(QuickVendorFormDrawerInner);

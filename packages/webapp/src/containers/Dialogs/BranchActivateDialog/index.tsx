@@ -2,11 +2,12 @@
 import React from 'react';
 import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
-
 import { compose } from '@/utils';
 
-const BranchActivateDialogContent = React.lazy(
-  () => import('./BranchActivateDialogContent'),
+const BranchActivateDialogContent = React.lazy(() =>
+  import('./BranchActivateDialogContent').then((m) => ({
+    default: m.BranchActivateDialogContent,
+  })),
 );
 
 /**
@@ -29,4 +30,4 @@ function BranchActivateDialog({ dialogName, payload: {}, isOpen }) {
   );
 }
 
-export default compose(withDialogRedux())(BranchActivateDialog);
+export const index = compose(withDialogRedux())(BranchActivateDialog);

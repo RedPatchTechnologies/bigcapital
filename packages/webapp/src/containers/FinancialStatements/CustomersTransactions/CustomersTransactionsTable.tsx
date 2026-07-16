@@ -1,28 +1,28 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-
-import { DataTable, FinancialSheet } from '@/components';
-
 import { useCustomersTransactionsColumns } from './components';
 import { useCustomersTransactionsContext } from './CustomersTransactionsProvider';
-
-import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
+import { DataTable, FinancialSheet } from '@/components';
 import { TableStyle } from '@/constants';
+import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
+
+interface CustomersTransactionsTableProps {
+  companyName: string;
+}
 
 /**
  * Customers transactions table.
  */
-export default function CustomersTransactionsTable({
+export function CustomersTransactionsTable({
   // #ownProps
   companyName,
-}) {
+}: CustomersTransactionsTableProps) {
   // Customers transactions context.
-  const {
-    customersTransactions: { tableRows, meta },
-    query,
-  } = useCustomersTransactionsContext();
+  const { customersTransactions, query } = useCustomersTransactionsContext();
+
+  const tableRows = (customersTransactions as any)?.tableRows;
+  const meta = (customersTransactions as any)?.meta;
 
   // Customers transactions table columns.
   const columns = useCustomersTransactionsColumns();
@@ -36,7 +36,7 @@ export default function CustomersTransactionsTable({
     <FinancialSheet
       companyName={companyName}
       sheetType={intl.get('customers_transactions')}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
+      dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
       fullWidth={true}
     >
       <CustomersTransactionsDataTable

@@ -1,10 +1,10 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
 import { Button, Intent, Menu, MenuItem } from '@blueprintjs/core';
 import { Popover2 } from '@blueprintjs/popover2';
 import { useFormikContext } from 'formik';
-
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useExpensesIsForeign } from './utils';
 import {
   Icon,
   Hint,
@@ -19,9 +19,8 @@ import {
   CheckBoxFieldCell,
 } from '@/components/DataTableCells';
 import { CellType, Features, Align } from '@/constants';
-
-import { useCurrentOrganization, useFeatureCan } from '@/hooks/state';
-import { useExpensesIsForeign } from './utils';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { useFeatureCan } from '@/hooks/state';
 
 /**
  * Expense category header cell.
@@ -99,8 +98,8 @@ export function useExpenseFormTableColumns({ landedCost }) {
     () => [
       {
         Header: ExpenseCategoryHeaderCell,
-        id: 'expense_account_id',
-        accessor: 'expense_account_id',
+        id: 'expenseAccountId',
+        accessor: 'expenseAccountId',
         Cell: AccountsListFieldCell,
         className: 'expense_account_id',
         disableSortBy: true,
@@ -127,8 +126,8 @@ export function useExpenseFormTableColumns({ landedCost }) {
         ? [
             {
               Header: intl.get('project'),
-              id: 'project_id',
-              accessor: 'project_id',
+              id: 'projectId',
+              accessor: 'projectId',
               Cell: ProjectsListFieldCell,
               className: 'project_id',
               disableSortBy: true,
@@ -141,7 +140,7 @@ export function useExpenseFormTableColumns({ landedCost }) {
         ? [
             {
               Header: LandedCostHeaderCell,
-              accessor: 'landed_cost',
+              accessor: 'landedCost',
               Cell: CheckBoxFieldCell,
               disableSortBy: true,
               disableResizing: true,
@@ -168,7 +167,7 @@ export function useExpenseFormTableColumns({ landedCost }) {
  * @returns {JSX.Element}
  */
 export function ExpensesExchangeRateInputField({ ...props }) {
-  const currentOrganization = useCurrentOrganization();
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
   const { values } = useFormikContext();
 
   const isForeignJouranl = useExpensesIsForeign();
@@ -179,8 +178,8 @@ export function ExpensesExchangeRateInputField({ ...props }) {
   }
   return (
     <ExchangeRateInputGroup
-      fromCurrency={values.currency_code}
-      toCurrency={currentOrganization.base_currency}
+      fromCurrency={values.currencyCode}
+      toCurrency={baseCurrency}
       {...props}
     />
   );

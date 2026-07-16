@@ -1,22 +1,20 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
+import { handleDeleteErrors } from './_utils';
 import { AppToaster, FormattedMessage as T } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { DRAWERS } from '@/constants/drawers';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
 import { useDeleteExpense } from '@/hooks/query';
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
-import { handleDeleteErrors } from './_utils';
 
 /**
  * Expense delete alert.
  */
-function ExpenseDeleteAlert({
+function ExpenseDeleteAlertInner({
   // #withAlertActions
   closeAlert,
 
@@ -46,15 +44,9 @@ function ExpenseDeleteAlert({
         });
         closeDrawer(DRAWERS.EXPENSE_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert('expense-delete');
       });
@@ -78,8 +70,8 @@ function ExpenseDeleteAlert({
   );
 }
 
-export default compose(
+export const ExpenseDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(ExpenseDeleteAlert);
+)(ExpenseDeleteAlertInner);

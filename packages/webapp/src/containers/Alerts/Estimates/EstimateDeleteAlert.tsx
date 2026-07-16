@@ -1,26 +1,23 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React, { useCallback } from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import {
   AppToaster,
   FormattedMessage as T,
   FormattedHTMLMessage,
 } from '@/components';
-
-import { useDeleteEstimate } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { useDeleteEstimate } from '@/hooks/query';
+import { compose } from '@/utils';
 
 /**
  * Estimate delete alert.
  */
-function EstimateDeleteAlert({
+function EstimateDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -50,24 +47,18 @@ function EstimateDeleteAlert({
         });
         closeDrawer(DRAWERS.ESTIMATE_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (
-            errors.find((e) => e.type === 'SALE_ESTIMATE_CONVERTED_TO_INVOICE')
-          ) {
-            AppToaster.show({
-              intent: Intent.DANGER,
-              message: intl.get(
-                'estimate.delete.error.estimate_converted_to_invoice',
-              ),
-            });
-          }
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        if (
+          errors.find((e) => e.type === 'SALE_ESTIMATE_CONVERTED_TO_INVOICE')
+        ) {
+          AppToaster.show({
+            intent: Intent.DANGER,
+            message: intl.get(
+              'estimate.delete.error.estimate_converted_to_invoice',
+            ),
+          });
+        }
+      })
       .finally(() => {
         closeAlert(name);
       });
@@ -93,8 +84,8 @@ function EstimateDeleteAlert({
   );
 }
 
-export default compose(
+export const EstimateDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(EstimateDeleteAlert);
+)(EstimateDeleteAlertInner);

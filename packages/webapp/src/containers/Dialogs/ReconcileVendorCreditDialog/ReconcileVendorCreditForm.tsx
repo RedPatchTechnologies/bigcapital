@@ -1,15 +1,15 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
 
 import '@/style/pages/ReconcileVendorCredit/ReconcileVendorCreditForm.scss';
 
-import { AppToaster } from '@/components';
 import { CreateReconcileVendorCreditFormSchema } from './ReconcileVendorCreditForm.schema';
+import { ReconcileVendorCreditFormContent } from './ReconcileVendorCreditFormContent';
 import { useReconcileVendorCreditContext } from './ReconcileVendorCreditFormProvider';
-import ReconcileVendorCreditFormContent from './ReconcileVendorCreditFormContent';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose, transformToForm } from '@/utils';
 
@@ -26,7 +26,7 @@ const defaultInitialValues = {
 /**
  * Reconcile vendor credit form.
  */
-function ReconcileVendorCreditForm({
+function ReconcileVendorCreditFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -70,11 +70,7 @@ function ReconcileVendorCreditForm({
     };
 
     // Handle the request error.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       // if (errors) {
       //   transformErrors(errors, { setErrors });
       // }
@@ -95,4 +91,6 @@ function ReconcileVendorCreditForm({
     />
   );
 }
-export default compose(withDialogActions)(ReconcileVendorCreditForm);
+export const ReconcileVendorCreditForm = compose(withDialogActions)(
+  ReconcileVendorCreditFormInner,
+);

@@ -2,11 +2,12 @@
 import React from 'react';
 import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
-
 import { compose } from '@/utils';
 
-const BranchFormDialogContent = React.lazy(
-  () => import('./BranchFormDialogContent'),
+const BranchFormDialogContent = React.lazy(() =>
+  import('./BranchFormDialogContent').then((m) => ({
+    default: m.BranchFormDialogContent,
+  })),
 );
 
 /**
@@ -38,4 +39,4 @@ function BranchFormDialog({
     </Dialog>
   );
 }
-export default compose(withDialogRedux())(BranchFormDialog);
+export const index = compose(withDialogRedux())(BranchFormDialog);

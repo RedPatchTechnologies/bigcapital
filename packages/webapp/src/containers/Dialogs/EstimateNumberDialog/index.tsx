@@ -4,8 +4,10 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { saveInvoke, compose } from '@/utils';
 
-const EstimateNumberDialogContent = lazy(
-  () => import('./EstimateNumberDialogContent'),
+const EstimateNumberDialogContent = lazy(() =>
+  import('./EstimateNumberDialogContent').then((m) => ({
+    default: m.EstimateNumberDialogContent,
+  })),
 );
 
 /**
@@ -40,4 +42,4 @@ function EstimateNumberDialog({
   );
 }
 
-export default compose(withDialogRedux())(EstimateNumberDialog);
+export const index = compose(withDialogRedux())(EstimateNumberDialog);

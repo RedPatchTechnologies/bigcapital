@@ -2,7 +2,15 @@ import { Response } from 'express';
 import { Controller, Get, Headers, Query, Res } from '@nestjs/common';
 import { PurchasesByItemsApplication } from './PurchasesByItemsApplication';
 import { AcceptType } from '@/constants/accept-type';
-import { ApiExtraModels, ApiOperation, ApiResponse, ApiTags, getSchemaPath } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+  ApiQuery,
+  getSchemaPath,
+} from '@nestjs/swagger';
+import { NumberFormatQueryDto } from '@/modules/BankingTransactions/dtos/NumberFormatQuery.dto';
 import { PurchasesByItemsQueryDto } from './PurchasesByItemsQuery.dto';
 import {
   PurchasesByItemsResponseDto,
@@ -13,7 +21,11 @@ import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 @Controller('/reports/purchases-by-items')
 @ApiTags('Reports')
 @ApiCommonHeaders()
-@ApiExtraModels(PurchasesByItemsResponseDto, PurchasesByItemsTableResponseDto)
+@ApiExtraModels(
+  PurchasesByItemsResponseDto,
+  PurchasesByItemsTableResponseDto,
+  NumberFormatQueryDto,
+)
 export class PurchasesByItemReportController {
   constructor(
     private readonly purchasesByItemsApp: PurchasesByItemsApplication,
@@ -33,6 +45,13 @@ export class PurchasesByItemReportController {
     },
   })
   @ApiOperation({ summary: 'Get purchases by items report' })
+  @ApiQuery({
+    name: 'numberFormat',
+    required: false,
+    description:
+      'Number formatting options (serialized as bracket notation, e.g. numberFormat[precision]=2)',
+    schema: { $ref: getSchemaPath(NumberFormatQueryDto) },
+  })
   async purchasesByItems(
     @Query() filter: PurchasesByItemsQueryDto,
     @Res({ passthrough: true }) res: Response,

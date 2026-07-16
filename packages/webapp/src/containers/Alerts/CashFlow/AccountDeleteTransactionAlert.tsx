@@ -1,26 +1,23 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import {
   AppToaster,
   FormattedMessage as T,
   FormattedHTMLMessage,
 } from '@/components';
-
-import { useDeleteCashflowTransaction } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
-import { compose } from '@/utils';
 import { DRAWERS } from '@/constants/drawers';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
+import { useDeleteCashflowTransaction } from '@/hooks/query';
+import { compose } from '@/utils';
 
 /**
  * Account delete transaction alert.
  */
-function AccountDeleteTransactionAlert({
+function AccountDeleteTransactionAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -51,35 +48,29 @@ function AccountDeleteTransactionAlert({
         });
         closeDrawer(DRAWERS.CASHFLOW_TRNASACTION_DETAILS);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (
-            errors.find(
-              (e) =>
-                e.type ===
-                'CANNOT_DELETE_TRANSACTION_CONVERTED_FROM_UNCATEGORIZED',
-            )
-          ) {
-            AppToaster.show({
-              message:
-                'Cannot delete transaction converted from uncategorized transaction but you uncategorize it.',
-              intent: Intent.DANGER,
-            });
-          } else if (
-            errors.find((e) => e.type === 'CANNOT_DELETE_TRANSACTION_MATCHED')
-          ) {
-            AppToaster.show({
-              message:
-                'Cannot delete a transaction matched to the bank transaction',
-              intent: Intent.DANGER,
-            });
-          }
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        if (
+          errors.find(
+            (e) =>
+              e.type ===
+              'CANNOT_DELETE_TRANSACTION_CONVERTED_FROM_UNCATEGORIZED',
+          )
+        ) {
+          AppToaster.show({
+            message:
+              'Cannot delete transaction converted from uncategorized transaction but you uncategorize it.',
+            intent: Intent.DANGER,
+          });
+        } else if (
+          errors.find((e) => e.type === 'CANNOT_DELETE_TRANSACTION_MATCHED')
+        ) {
+          AppToaster.show({
+            message:
+              'Cannot delete a transaction matched to the bank transaction',
+            intent: Intent.DANGER,
+          });
+        }
+      })
       .finally(() => {
         closeAlert(name);
       });
@@ -107,8 +98,8 @@ function AccountDeleteTransactionAlert({
   );
 }
 
-export default compose(
+export const AccountDeleteTransactionAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(AccountDeleteTransactionAlert);
+)(AccountDeleteTransactionAlertInner);

@@ -1,22 +1,18 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
 import React from 'react';
 import intl from 'react-intl-universal';
-
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
-
-import { AppToaster } from '@/components';
+import { BranchActivateFormContent } from './BranchActivateFormContent';
 import { useBranchActivateContext } from './BranchActivateFormProvider';
-import BranchActivateFormContent from './BranchActivateFormContent';
-
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { compose } from '@/utils';
 
 /**
  * Branch activate form.
  */
-function BranchActivateForm({
+function BranchActivateFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -41,11 +37,7 @@ function BranchActivateForm({
     };
 
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors) {
       }
       setSubmitting(false);
@@ -62,4 +54,6 @@ function BranchActivateForm({
   );
 }
 
-export default compose(withDialogActions)(BranchActivateForm);
+export const BranchActivateForm = compose(withDialogActions)(
+  BranchActivateFormInner,
+);

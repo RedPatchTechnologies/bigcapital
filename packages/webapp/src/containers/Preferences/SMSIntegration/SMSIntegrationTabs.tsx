@@ -1,25 +1,22 @@
 // @ts-nocheck
+import { Tabs, Tab } from '@blueprintjs/core';
+import classNames from 'classnames';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import classNames from 'classnames';
-import { Tabs, Tab } from '@blueprintjs/core';
-
-import { CLASSES } from '@/constants/classes';
-import SMSMessagesDataTable from './SMSMessagesDataTable';
+import { SMSMessagesDataTable } from './SMSMessagesDataTable';
 import { Card } from '@/components';
+import { CLASSES } from '@/constants/classes';
+import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
+import { compose } from '@/utils';
 
 import '@/style/pages/Preferences/SMSIntegration.scss';
-
-import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-
-import { compose } from '@/utils';
 
 /**
  * SMS Integration Tabs.
  * @returns {React.JSX}
  */
-function SMSIntegrationTabs({
+function SMSIntegrationTabsInner({
   // #withDashboardActions
   changePreferencesPageTitle,
 }) {
@@ -46,7 +43,9 @@ function SMSIntegrationTabs({
   );
 }
 
-export default compose(withDashboardActions)(SMSIntegrationTabs);
+export const SMSIntegrationTabs = compose(withDashboardActions)(
+  SMSIntegrationTabsInner,
+);
 
 const SMSIntegrationCard = styled(Card)`
   padding: 0;

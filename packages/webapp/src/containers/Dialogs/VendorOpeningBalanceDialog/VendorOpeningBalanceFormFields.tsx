@@ -1,38 +1,33 @@
 // @ts-nocheck
-import React from 'react';
 import { Classes, Position, FormGroup, ControlGroup } from '@blueprintjs/core';
 import { DateInput } from '@blueprintjs/datetime';
-import { isEqual } from 'lodash';
-import { FastField, useFormikContext } from 'formik';
-import { momentFormatter, tansformDateValue, handleDateChange } from '@/utils';
-import { Features } from '@/constants';
 import classNames from 'classnames';
-
+import { FastField, useFormikContext } from 'formik';
+import { isEqual } from 'lodash';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { useSetPrimaryBranchToForm } from './utils';
+import { useVendorOpeningBalanceContext } from './VendorOpeningBalanceFormProvider';
 import {
   If,
   Icon,
-  FormattedMessage as T,
   ExchangeRateMutedField,
   BranchSelect,
   FeatureCan,
   InputPrependText,
 } from '@/components';
 import { FMoneyInputGroup, FFormGroup, FDateInput } from '@/components/Forms';
-
-import { useVendorOpeningBalanceContext } from './VendorOpeningBalanceFormProvider';
-import { useSetPrimaryBranchToForm } from './utils';
-
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
-import { compose } from '@/utils';
+import { Features } from '@/constants';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { momentFormatter, tansformDateValue, handleDateChange } from '@/utils';
 
 /**
  * Vendor Opening balance form fields.
  * @returns
  */
-function VendorOpeningBalanceFormFields({
-  // #withCurrentOrganization
-  organization: { base_currency },
-}) {
+function VendorOpeningBalanceFormFieldsInner() {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+
   // Formik context.
   const { values } = useFormikContext();
 
@@ -46,7 +41,7 @@ function VendorOpeningBalanceFormFields({
       {/*------------ Opening balance -----------*/}
       <FFormGroup
         name={'opening_balance'}
-        label={<T id={'vendor_opening_balance.label.opening_balance'} />}
+        label={intl.get('vendor_opening_balance.label.opening_balance')}
       >
         <ControlGroup>
           <InputPrependText text={vendor.currency_code} />
@@ -61,7 +56,7 @@ function VendorOpeningBalanceFormFields({
       {/*------------ Opening balance at -----------*/}
       <FFormGroup
         name={'opening_balance_at'}
-        label={<T id={'vendor_opening_balance.label.opening_balance_at'} />}
+        label={intl.get('vendor_opening_balance.label.opening_balance_at')}
         fill
         fastField
       >
@@ -78,11 +73,11 @@ function VendorOpeningBalanceFormFields({
         />
       </FFormGroup>
 
-      <If condition={!isEqual(base_currency, vendor.currency_code)}>
+      <If condition={!isEqual(baseCurrency, vendor.currency_code)}>
         {/*------------ Opening balance exchange rate -----------*/}
         <ExchangeRateMutedField
           name={'opening_balance_exchange_rate'}
-          fromCurrency={base_currency}
+          fromCurrency={baseCurrency}
           toCurrency={vendor.currency_code}
           formGroupProps={{ label: '', inline: false }}
           date={values.opening_balance_at}
@@ -93,7 +88,7 @@ function VendorOpeningBalanceFormFields({
       {/*------------ Opening balance branch id -----------*/}
       <FeatureCan feature={Features.Branches}>
         <FFormGroup
-          label={<T id={'branch'} />}
+          label={intl.get('branch')}
           name={'opening_balance_branch_id'}
           fill
           fastField
@@ -109,6 +104,5 @@ function VendorOpeningBalanceFormFields({
   );
 }
 
-export default compose(withCurrentOrganization())(
-  VendorOpeningBalanceFormFields,
-);
+export const VendorOpeningBalanceFormFields =
+  VendorOpeningBalanceFormFieldsInner;

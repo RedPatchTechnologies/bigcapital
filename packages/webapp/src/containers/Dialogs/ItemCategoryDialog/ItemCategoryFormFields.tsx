@@ -1,44 +1,38 @@
-// @ts-nocheck
-import React from 'react';
 import { Classes } from '@blueprintjs/core';
+import React from 'react';
+import intl from 'react-intl-universal';
 import {
-  FormattedMessage as T,
   FieldRequiredHint,
   FFormGroup,
   FInputGroup,
   FTextArea,
 } from '@/components';
-
 import { useAutofocus } from '@/hooks';
 
-/**
- * Item category form fields.
- */
-export default function ItemCategoryFormFields() {
-  const categoryNameFieldRef = useAutofocus();
+export function ItemCategoryFormFields(): React.ReactElement {
+  const categoryNameFieldRef = useAutofocus<HTMLInputElement>();
 
   return (
     <div className={Classes.DIALOG_BODY}>
-      {/* ----------- Category name ----------- */}
       <FFormGroup
         name={'name'}
-        label={<T id={'category_name'} />}
+        label={intl.get('category_name')}
         labelInfo={<FieldRequiredHint />}
         inline
         fastField
       >
         <FInputGroup
           name={'name'}
-          medium={true}
-          inputRef={(ref) => (categoryNameFieldRef.current = ref)}
+          inputRef={(ref: HTMLInputElement | null) => {
+            categoryNameFieldRef.current = ref;
+          }}
           fastField
         />
       </FFormGroup>
 
-      {/* ----------- Description ----------- */}
       <FFormGroup
         name={'description'}
-        label={<T id={'description'} />}
+        label={intl.get('description')}
         inline
         fastField
       >

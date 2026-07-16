@@ -1,28 +1,30 @@
-// @ts-nocheck
 import React from 'react';
-
-import { TABLES } from '@/constants/tables';
+import { useCashFlowAccountsContext } from './CashFlowAccountsProvider';
+import { useCashFlowAccountsTableColumns } from './components';
 import {
   DataTable,
   TableFastCell,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-
+import { TABLES } from '@/constants/tables';
 import { withSettings } from '@/containers/Settings/withSettings';
-
 import { useMemorizedColumnsWidths } from '@/hooks';
-import { useCashFlowAccountsContext } from './CashFlowAccountsProvider';
-import { useCashFlowAccountsTableColumns } from './components';
 import { compose } from '@/utils';
+
+interface WithSettingsProps {
+  cashflowTableSize?: string | null;
+}
+
+interface CashFlowAccountsDataTableProps extends WithSettingsProps {}
 
 /**
  * Cash flow accounts data table.
  */
-function CashFlowAccountsDataTable({
+function CashFlowAccountsDataTableInner({
   // #withSettings
   cashflowTableSize,
-}) {
+}: CashFlowAccountsDataTableProps) {
   // Retrieve list context.
   const {
     cashflowAccounts,
@@ -41,7 +43,7 @@ function CashFlowAccountsDataTable({
     <DataTable
       noInitialFetch={true}
       columns={columns}
-      data={cashflowAccounts}
+      data={cashflowAccounts ?? []}
       selectionColumn={false}
       sticky={true}
       loading={isCashFlowAccountsLoading}
@@ -60,8 +62,8 @@ function CashFlowAccountsDataTable({
   );
 }
 
-export default compose(
+export const CashFlowAccountsDataTable = compose(
   withSettings(({ cashflowSettings }) => ({
     cashflowTableSize: cashflowSettings?.tableSize,
   })),
-)(CashFlowAccountsDataTable);
+)(CashFlowAccountsDataTableInner);

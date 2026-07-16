@@ -1,26 +1,19 @@
 // @ts-nocheck
-import React from 'react';
+import { Classes, Button, Intent } from '@blueprintjs/core';
+import { FormGroup, InputGroup } from '@blueprintjs/core';
 import { Form, useFormikContext } from 'formik';
-import {
-  Classes,
-  Button,
-  Intent,
-} from '@blueprintjs/core';
 import { FastField, ErrorMessage } from 'formik';
-import {
-  FormGroup,
-  InputGroup,
-} from '@blueprintjs/core';
+import React from 'react';
 import intl from 'react-intl-universal';
-import { inputIntent } from '@/utils';
 import { FFormGroup, FInputGroup, FormattedMessage as T } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { inputIntent } from '@/utils';
 import { compose } from '@/utils';
 
 /**
  * API Keys Generate form content.
  */
-function ApiKeysGenerateFormContent({
+function ApiKeysGenerateFormContentInner({
   dialogName,
   // #withDialogActions
   closeDialog,
@@ -35,11 +28,11 @@ function ApiKeysGenerateFormContent({
     <Form>
       <div className={Classes.DIALOG_BODY}>
         {/* ----------- Name ----------- */}
-        <FFormGroup
-          name={'name'}
-          label={<T id={'api_key.name'} />}
-        >
-          <FInputGroup name={'name'} placeholder={intl.get('api_key.name_placeholder')} />
+        <FFormGroup name={'name'} label={intl.get('api_key.name')}>
+          <FInputGroup
+            name={'name'}
+            placeholder={intl.get('api_key.name_placeholder')}
+          />
         </FFormGroup>
       </div>
 
@@ -64,4 +57,6 @@ function ApiKeysGenerateFormContent({
   );
 }
 
-export default compose(withDialogActions)(ApiKeysGenerateFormContent);
+export const ApiKeysGenerateFormContent = compose(withDialogActions)(
+  ApiKeysGenerateFormContentInner,
+);

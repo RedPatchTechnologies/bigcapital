@@ -1,18 +1,16 @@
 // @ts-nocheck
-import React from 'react';
-import intl from 'react-intl-universal';
-import moment from 'moment';
 import { Intent } from '@blueprintjs/core';
 import { Formik } from 'formik';
+import moment from 'moment';
+import React from 'react';
+import intl from 'react-intl-universal';
 
 import '@/style/pages/TransactionsLocking/TransactionsLockingDialog.scss';
 
-import { AppToaster } from '@/components';
 import { CreateUnLockingPartialTransactionsFormSchema } from './UnlockingPartialTransactionsForm.schema';
-
+import { PartialUnlockingTransactionsFormContent as UnlockingPartialTransactionsFormContent } from './UnlockingPartialTransactionsFormContent';
 import { useUnlockingPartialTransactionsContext } from './UnlockingPartialTransactionsFormProvider';
-import UnlockingPartialTransactionsFormContent from './UnlockingPartialTransactionsFormContent';
-
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
@@ -26,7 +24,7 @@ const defaultInitialValues = {
 /**
  * Partial Unlocking transactions form.
  */
-function UnlockingPartialTransactionsForm({
+function UnlockingPartialTransactionsFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -54,11 +52,7 @@ function UnlockingPartialTransactionsForm({
       closeDialog(dialogName);
     };
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       setSubmitting(false);
     };
 
@@ -77,4 +71,6 @@ function UnlockingPartialTransactionsForm({
   );
 }
 
-export default compose(withDialogActions)(UnlockingPartialTransactionsForm);
+export const UnlockingPartialTransactionsForm = compose(withDialogActions)(
+  UnlockingPartialTransactionsFormInner,
+);

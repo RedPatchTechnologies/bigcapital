@@ -3,21 +3,19 @@ import React, { useEffect } from 'react';
 
 import '@/style/pages/Vendors/List.scss';
 
-import { DashboardPageContent } from '@/components';
-
+import { VendorActionsBar } from './VendorActionsBar';
+import { VendorsListDialogs } from './VendorsListDialogs';
 import { VendorsListProvider } from './VendorsListProvider';
-import VendorActionsBar from './VendorActionsBar';
-import VendorsTable from './VendorsTable';
-
+import { VendorsTable } from './VendorsTable';
 import { withVendors } from './withVendors';
 import { withVendorsActions } from './withVendorsActions';
-
+import { DashboardPageContent } from '@/components';
 import { compose } from '@/utils';
 
 /**
  * Vendors list page.
  */
-function VendorsList({
+function VendorsListInner({
   // #withVendors
   vendorsTableState,
   vendorsTableStateChanged,
@@ -41,6 +39,7 @@ function VendorsList({
       tableStateChanged={vendorsTableStateChanged}
     >
       <VendorActionsBar />
+      <VendorsListDialogs />
 
       <DashboardPageContent>
         <VendorsTable />
@@ -49,10 +48,10 @@ function VendorsList({
   );
 }
 
-export default compose(
+export const VendorsList = compose(
   withVendors(({ vendorsTableState, vendorsTableStateChanged }) => ({
     vendorsTableState,
     vendorsTableStateChanged,
   })),
   withVendorsActions,
-)(VendorsList);
+)(VendorsListInner);

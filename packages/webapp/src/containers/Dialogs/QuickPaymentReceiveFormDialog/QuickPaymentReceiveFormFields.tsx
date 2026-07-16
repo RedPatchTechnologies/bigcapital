@@ -1,18 +1,17 @@
 // @ts-nocheck
-import React from 'react';
-import styled from 'styled-components';
-import intl from 'react-intl-universal';
-import { FastField, ErrorMessage, useFormikContext } from 'formik';
-import { useAutofocus } from '@/hooks';
-import { isEqual } from 'lodash';
 import { Classes, Position, ControlGroup } from '@blueprintjs/core';
 import classNames from 'classnames';
-import { CLASSES, Features, ACCOUNT_TYPE } from '@/constants';
+import { FastField, ErrorMessage, useFormikContext } from 'formik';
+import { isEqual } from 'lodash';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
+import { useQuickPaymentReceiveContext } from './QuickPaymentReceiveFormProvider';
+import { useSetPrimaryBranchToForm } from './utils';
 import {
   Row,
   Col,
   FieldRequiredHint,
-  FormattedMessage as T,
   FAccountsSuggestField,
   InputPrependText,
   MoneyInputGroup,
@@ -27,22 +26,18 @@ import {
   FDateInput,
   FMoneyInputGroup,
 } from '@/components';
-import { momentFormatter, compose } from '@/utils';
-import { useSetPrimaryBranchToForm } from './utils';
-import { useQuickPaymentReceiveContext } from './QuickPaymentReceiveFormProvider';
-import { withCurrentOrganization } from '@/containers/Organization/withCurrentOrganization';
+import { CLASSES, Features, ACCOUNT_TYPE } from '@/constants';
 import { withSettings } from '@/containers/Settings/withSettings';
+import { useAutofocus } from '@/hooks';
+import { useCurrentOrganizationBaseCurrency } from '@/hooks/query';
+import { momentFormatter, compose } from '@/utils';
 
 /**
  * Quick payment receive form fields.
  */
-function QuickPaymentReceiveFormFields({
-  paymentReceiveAutoIncrement,
-
-  // #withCurrentOrganization
-  organization: { base_currency },
-}) {
-  const { accounts, branches, baseCurrency } = useQuickPaymentReceiveContext();
+function QuickPaymentReceiveFormFieldsInner({ paymentReceiveAutoIncrement }) {
+  const baseCurrency = useCurrentOrganizationBaseCurrency();
+  const { accounts, branches } = useQuickPaymentReceiveContext();
 
   // Intl context.
   const { values } = useFormikContext();
@@ -57,7 +52,7 @@ function QuickPaymentReceiveFormFields({
       <FeatureCan feature={Features.Branches}>
         <Row>
           <Col xs={5}>
-            <FFormGroup name={'branch_id'} label={<T id={'branch'} />}>
+            <FFormGroup name={'branch_id'} label={intl.get('branch')}>
               <BranchSelect
                 name={'branch_id'}
                 branches={branches}
@@ -74,7 +69,7 @@ function QuickPaymentReceiveFormFields({
           {/* ------------- Customer name ------------- */}
           <FFormGroup
             name={'customer_id'}
-            label={<T id={'customer_name'} />}
+            label={intl.get('customer_name')}
             labelInfo={<FieldRequiredHint />}
           >
             <FInputGroup name={'customer_id'} minimal={true} disabled={true} />
@@ -85,7 +80,7 @@ function QuickPaymentReceiveFormFields({
           {/* ------------ Payment receive no. ------------ */}
           <FFormGroup
             name={'payment_receive_no'}
-            label={<T id={'payment_no'} />}
+            label={intl.get('payment_no')}
           >
             <FInputGroup
               name={'payment_receive_no'}
@@ -97,7 +92,7 @@ function QuickPaymentReceiveFormFields({
       </Row>
       {/*------------ Amount Received -----------*/}
 
-      <FFormGroup name={'amount'} label={<T id={'amount_received'} />}>
+      <FFormGroup name={'amount'} label={intl.get('amount_received')}>
         <ControlGroup>
           <InputPrependText text={values.currency_code} />
           <FMoneyInputGroup
@@ -108,11 +103,11 @@ function QuickPaymentReceiveFormFields({
         </ControlGroup>
       </FFormGroup>
 
-      <If condition={!isEqual(base_currency, values.currency_code)}>
+      <If condition={!isEqual(baseCurrency, values.currency_code)}>
         {/*------------ exchange rate -----------*/}
         <ExchangeRateMutedField
           name={'exchange_rate'}
-          fromCurrency={base_currency}
+          fromCurrency={baseCurrency}
           toCurrency={values.currency_code}
           formGroupProps={{ label: '', inline: false }}
           date={values.payment_date}
@@ -123,7 +118,7 @@ function QuickPaymentReceiveFormFields({
       <Row>
         <Col xs={5}>
           {/* ------------- Payment date ------------- */}
-          <FFormGroup name={'payment_date'} label={<T id={'payment_date'} />}>
+          <FFormGroup name={'payment_date'} label={intl.get('payment_date')}>
             <FDateInput
               {...momentFormatter('YYYY/MM/DD')}
               name={'payment_date'}
@@ -139,7 +134,7 @@ function QuickPaymentReceiveFormFields({
           {/* ------------ Deposit account ------------ */}
           <FFormGroup
             name={'deposit_account_id'}
-            label={<T id={'deposit_to'} />}
+            label={intl.get('deposit_to')}
           >
             <FAccountsSuggestField
               name={'deposit_account_id'}
@@ -158,14 +153,14 @@ function QuickPaymentReceiveFormFields({
       </Row>
 
       {/* ------------ Reference No. ------------ */}
-      <FFormGroup label={<T id={'reference'} />} name={'reference_no'}>
+      <FFormGroup label={intl.get('reference')} name={'reference_no'}>
         <FInputGroup name={'reference_no'} minimal={true} />
       </FFormGroup>
 
       {/* --------- Statement --------- */}
       <FFormGroup
         name={'statement'}
-        label={<T id={'statement'} />}
+        label={intl.get('statement')}
         className={'form-group--statement'}
       >
         <FTextArea name={'statement'} growVertically={true} />
@@ -174,12 +169,11 @@ function QuickPaymentReceiveFormFields({
   );
 }
 
-export default compose(
+export const QuickPaymentReceiveFormFields = compose(
   withSettings(({ paymentReceiveSettings }) => ({
     paymentReceiveAutoIncrement: paymentReceiveSettings?.autoIncrement,
   })),
-  withCurrentOrganization(),
-)(QuickPaymentReceiveFormFields);
+)(QuickPaymentReceiveFormFieldsInner);
 
 export const BranchRowDivider = styled.div`
   height: 1px;

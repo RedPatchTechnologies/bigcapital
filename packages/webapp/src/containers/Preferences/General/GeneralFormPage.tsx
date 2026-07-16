@@ -1,17 +1,16 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
 import React, { useEffect } from 'react';
 import intl from 'react-intl-universal';
-import { Formik } from 'formik';
-import { Intent } from '@blueprintjs/core';
 
 import '@/style/pages/Preferences/GeneralForm.scss';
 
-import { AppToaster } from '@/components';
-import GeneralForm from './GeneralForm';
 import { PreferencesGeneralSchema } from './General.schema';
+import { PreferencesGeneralForm as GeneralForm } from './GeneralForm';
 import { useGeneralFormContext } from './GeneralFormProvider';
+import { AppToaster } from '@/components';
 import { withDashboardActions } from '@/containers/Dashboard/withDashboardActions';
-
 import { compose, transformToForm } from '@/utils';
 
 const defaultValues = {
@@ -30,7 +29,7 @@ const defaultValues = {
 /**
  * Preferences - General form Page.
  */
-function GeneralFormPage({
+function GeneralFormPageInner({
   // #withDashboardActions
   changePreferencesPageTitle,
 }) {
@@ -79,4 +78,5 @@ function GeneralFormPage({
   );
 }
 
-export default compose(withDashboardActions)(GeneralFormPage);
+export const GeneralFormPage =
+  compose(withDashboardActions)(GeneralFormPageInner);

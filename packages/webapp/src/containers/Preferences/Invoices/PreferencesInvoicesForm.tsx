@@ -1,9 +1,9 @@
 // @ts-nocheck
-import styled from 'styled-components';
-import { Form } from 'formik';
 import { Button, Intent } from '@blueprintjs/core';
+import { Form } from 'formik';
+import intl from 'react-intl-universal';
 import { useHistory } from 'react-router-dom';
-
+import styled from 'styled-components';
 import { FormattedMessage as T, FFormGroup, FTextArea } from '@/components';
 
 /**
@@ -22,7 +22,7 @@ export function PreferencesInvoicesForm({ isSubmitting }) {
       {/* ---------- Customer Notes ----------  */}
       <FFormGroup
         name={'customerNotes'}
-        label={<T id={'pref.invoices.customerNotes.field'} />}
+        label={intl.get('pref.invoices.customerNotes.field')}
         fastField={true}
       >
         <FTextArea
@@ -36,7 +36,7 @@ export function PreferencesInvoicesForm({ isSubmitting }) {
       {/* ---------- Terms & Conditions ----------  */}
       <FFormGroup
         name={'termsConditions'}
-        label={<T id={'pref.invoices.termsConditions.field'} />}
+        label={intl.get('pref.invoices.termsConditions.field')}
         fastField={true}
       >
         <FTextArea

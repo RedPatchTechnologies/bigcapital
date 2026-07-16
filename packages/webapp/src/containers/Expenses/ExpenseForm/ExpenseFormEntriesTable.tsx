@@ -1,9 +1,8 @@
 // @ts-nocheck
 import React, { useCallback } from 'react';
-
-import { DataTableEditable } from '@/components';
-import { useExpenseFormContext } from './ExpenseFormPageProvider';
 import { useExpenseFormTableColumns } from './components';
+import { useExpenseFormContext } from './ExpenseFormPageProvider';
+import { DataTableEditable } from '@/components';
 import {
   saveInvoke,
   compose,
@@ -16,7 +15,7 @@ import {
 /**
  * Expenses form entries.
  */
-export default function ExpenseFormEntriesTable({
+export function ExpenseFormEntriesTable({
   // #ownPorps
   entries,
   defaultEntry,
@@ -37,7 +36,7 @@ export default function ExpenseFormEntriesTable({
     (rowIndex, columnId, value) => {
       const newRows = compose(
         // Update auto-adding new line.
-        updateAutoAddNewLine(defaultEntry, ['expense_account_id']),
+        updateAutoAddNewLine(defaultEntry, ['expenseAccountId']),
         // Update the row value of the given row index and column id.
         updateTableCell(rowIndex, columnId, value),
       )(entries);
@@ -74,7 +73,7 @@ export default function ExpenseFormEntriesTable({
         errors: error,
         updateData: handleUpdateData,
         removeRow: handleRemoveRow,
-        autoFocus: ['expense_account_id', 0],
+        autoFocus: ['expenseAccountId', 0],
         currencyCode,
       }}
     />

@@ -1,31 +1,31 @@
-// @ts-nocheck
 import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-
-import { TableStyle } from '@/constants';
+import { useJournalSheetColumns } from './dynamicColumns';
+import { useJournalSheetContext } from './JournalProvider';
 import {
   ReportDataTable,
   FinancialSheet,
   TableFastCell,
   TableVirtualizedListRows,
 } from '@/components';
-
-import { useJournalSheetContext } from './JournalProvider';
-
+import { TableStyle } from '@/constants';
 import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
-import { useJournalSheetColumns } from './dynamicColumns';
+
+interface JournalTableProps {
+  companyName: string;
+}
 
 /**
  * Journal sheet table.
  * @returns {JSX.Element}
  */
-export function JournalTable({ companyName }) {
+export function JournalTable({ companyName }: JournalTableProps) {
   // Journal sheet context.
-  const {
-    journalSheet: { table, query, meta },
-    isLoading,
-  } = useJournalSheetContext();
+  const { journalSheet } = useJournalSheetContext();
+
+  const table = (journalSheet as any)?.table;
+  const meta = (journalSheet as any)?.meta;
 
   // Retrieves the journal table columns.
   const columns = useJournalSheetColumns();
@@ -37,14 +37,12 @@ export function JournalTable({ companyName }) {
     <FinancialSheet
       companyName={companyName}
       sheetType={intl.get('journal_sheet')}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
-      loading={isLoading}
+      dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
       fullWidth={true}
-      name="journal"
     >
       <JournalDataTable
         columns={columns}
-        data={table.rows}
+        data={table?.rows}
         rowClassNames={tableRowTypesToClassnames}
         noResults={intl.get(
           'this_report_does_not_contain_any_data_between_date_period',
@@ -88,7 +86,7 @@ const JournalDataTable = styled(ReportDataTable)`
           border-bottom: 1px solid var(--color-table-total-border-color);
         }
       }
-      .tr.row_type--TOTAL{
+      .tr.row_type--TOTAL {
         font-weight: 600;
         color: var(--color-table-total-text-color);
       }

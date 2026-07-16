@@ -6,7 +6,9 @@ import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
 const CurrencyFormDialogContent = lazy(() =>
-  import('./CurrencyFormDialogContent'),
+  import('./CurrencyFormDialogContent').then((m) => ({
+    default: m.CurrencyFormDialogContent,
+  })),
 );
 
 /**
@@ -44,4 +46,4 @@ function CurrencyFormDialog({
   );
 }
 
-export default compose(withDialogRedux())(CurrencyFormDialog);
+export const index = compose(withDialogRedux())(CurrencyFormDialog);

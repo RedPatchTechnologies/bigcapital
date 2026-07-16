@@ -1,13 +1,10 @@
 // @ts-nocheck
 import React from 'react';
-import styled from 'styled-components';
 import { useParams, useHistory } from 'react-router-dom';
-
-import '@/style/pages/Vendors/PageForm.scss';
-
-import { DashboardCard, DashboardInsider } from '@/components';
+import styled from 'styled-components';
+import { VendorFormFormik } from './VendorFormFormik';
 import { VendorFormProvider, useVendorFormContext } from './VendorFormProvider';
-import VendorFormFormik from './VendorFormFormik';
+import { Box, DashboardCard, DashboardInsider } from '@/components';
 
 /**
  * Vendor form page loading wrapper.
@@ -17,16 +14,14 @@ function VendorFormPageLoading({ children }) {
   const { isFormLoading } = useVendorFormContext();
 
   return (
-    <VendorDashboardInsider loading={isFormLoading}>
-      {children}
-    </VendorDashboardInsider>
+    <DashboardInsider loading={isFormLoading}>{children}</DashboardInsider>
   );
 }
 
 /**
  * Vendor form page.
  */
-export default function VendorFormPage() {
+export function VendorFormPage() {
   const history = useHistory();
   const { id } = useParams();
 
@@ -44,26 +39,13 @@ export default function VendorFormPage() {
   return (
     <VendorFormProvider vendorId={id}>
       <VendorFormPageLoading>
-        <DashboardCard page>
-          <VendorFormPageFormik
+        <Box mx={'auto'} maxWidth={800}>
+          <VendorFormFormik
             onSubmitSuccess={handleSubmitSuccess}
             onCancel={handleFormCancel}
           />
-        </DashboardCard>
+        </Box>
       </VendorFormPageLoading>
     </VendorFormProvider>
   );
 }
-
-const VendorFormPageFormik = styled(VendorFormFormik)`
-  .page-form {
-    &__floating-actions {
-      margin-left: -40px;
-      margin-right: -40px;
-    }
-  }
-`;
-
-const VendorDashboardInsider = styled(DashboardInsider)`
-  padding-bottom: 64px;
-`;

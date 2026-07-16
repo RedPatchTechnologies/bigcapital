@@ -1,7 +1,6 @@
 import { Module } from '@nestjs/common';
-import { TenancyContext } from '../Tenancy/TenancyContext.service';
+import { TenancyModule } from '../Tenancy/Tenancy.module';
 import { TenancyDatabaseModule } from '../Tenancy/TenancyDB/TenancyDB.module';
-import { TransformerInjectable } from '../Transformer/TransformerInjectable.service';
 import { BranchesController } from './Branches.controller';
 import { CreateBranchService } from './commands/CreateBranch.service';
 import { DeleteBranchService } from './commands/DeleteBranch.service';
@@ -40,7 +39,7 @@ import { PaymentMadeActivateBranchesSubscriber } from './subscribers/Activate/Pa
 import { FeaturesModule } from '../Features/Features.module';
 
 @Module({
-  imports: [TenancyDatabaseModule, FeaturesModule],
+  imports: [TenancyModule, TenancyDatabaseModule, FeaturesModule],
   controllers: [BranchesController],
   providers: [
     CreateBranchService,
@@ -52,8 +51,6 @@ import { FeaturesModule } from '../Features/Features.module';
     ActivateBranches,
     BranchesApplication,
     BranchesSettingsService,
-    TenancyContext,
-    TransformerInjectable,
     BranchCommandValidator,
     BranchTransactionDTOTransformer,
     ManualJournalBranchesDTOTransformer,
@@ -78,7 +75,7 @@ import { FeaturesModule } from '../Features/Features.module';
     BillPaymentsActivateBranches,
     BillBranchesActivateSubscriber,
     VendorCreditBranchesActivateSubscriber,
-    PaymentMadeActivateBranchesSubscriber
+    PaymentMadeActivateBranchesSubscriber,
   ],
   exports: [
     BranchesSettingsService,
@@ -86,4 +83,4 @@ import { FeaturesModule } from '../Features/Features.module';
     ManualJournalBranchesDTOTransformer,
   ],
 })
-export class BranchesModule { }
+export class BranchesModule {}

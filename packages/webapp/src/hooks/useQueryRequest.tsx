@@ -1,10 +1,10 @@
 // @ts-nocheck
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { castArray, defaultTo } from 'lodash';
+import { useRef } from 'react';
+import { normalizeApiPath } from '../utils';
 import { useAuthOrganizationId } from './state';
 import useApiRequest from './useRequest';
-import { normalizeApiPath } from '../utils';
-import { useRef } from 'react';
 
 /**
  * Query for tenant requests.
@@ -12,23 +12,28 @@ import { useRef } from 'react';
 export function useQueryTenant(query, callback, props) {
   const organizationId = useAuthOrganizationId();
 
-  return useQuery([...castArray(query), organizationId], callback, props);
+  return useQuery({
+    queryKey: [...castArray(query), organizationId],
+    queryFn: callback,
+    ...props,
+  });
 }
 
 export function useRequestQuery(query, axios, props) {
   const apiRequest = useApiRequest();
+  const { defaultData: defaultDataProp, ...restProps } = props || {};
 
-  const states = useQuery(
-    query,
-    () =>
+  const states = useQuery({
+    queryKey: query,
+    queryFn: () =>
       apiRequest.http({
         ...axios,
         url: `/api/${normalizeApiPath(axios.url)}`,
       }),
-    props,
-  );
-  // Momerize the default data.
-  const defaultData = useRef(props.defaultData || undefined);
+    placeholderData: defaultDataProp,
+    ...restProps,
+  });
+  const defaultData = useRef(defaultDataProp ?? undefined);
 
   return {
     ...states,

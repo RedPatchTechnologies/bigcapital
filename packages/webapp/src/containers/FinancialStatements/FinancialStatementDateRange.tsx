@@ -1,31 +1,24 @@
-// @ts-nocheck
-import React, { useMemo } from 'react';
-import intl from 'react-intl-universal';
-import moment from 'moment';
-import { FastField, ErrorMessage } from 'formik';
 import { HTMLSelect, FormGroup, Position } from '@blueprintjs/core';
-
+import { FastField } from 'formik';
+import moment from 'moment';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { dateRangeOptions } from './constants';
 import { Row, Col, Hint, FDateInput, FFormGroup } from '@/components';
 import { momentFormatter, parseDateRangeQuery } from '@/utils';
-import { dateRangeOptions } from './constants';
 
 const FINANCIAL_REPORT_MAX_DATE = moment().add(5, 'years').toDate();
 
-/**
- * Financial statement - Date range select.
- */
-export default function FinancialStatementDateRange() {
+export function FinancialStatementDateRange() {
   return (
     <>
       <Row>
         <Col xs={4}>
           <FastField name={'date_range'}>
-            {({ form: { setFieldValue }, field: { value } }) => (
+            {({ form: { setFieldValue }, field: { value } }: any) => (
               <FormGroup
                 label={intl.get('report_date_range')}
                 labelInfo={<Hint />}
-                minimal={true}
-                fill={true}
               >
                 <HTMLSelect
                   fill={true}
@@ -63,7 +56,6 @@ export default function FinancialStatementDateRange() {
             name={'fromDate'}
             label={intl.get('from_date')}
             labelInfo={<Hint />}
-            fill
             fastField
           >
             <FDateInput
@@ -72,7 +64,6 @@ export default function FinancialStatementDateRange() {
               popoverProps={{ minimal: true, position: Position.BOTTOM_LEFT }}
               maxDate={FINANCIAL_REPORT_MAX_DATE}
               canClearSelection={false}
-              minimal
               fill
             />
           </FFormGroup>
@@ -83,7 +74,6 @@ export default function FinancialStatementDateRange() {
             name={'toDate'}
             label={intl.get('to_date')}
             labelInfo={<Hint />}
-            fill
             fastField
           >
             <FDateInput
@@ -92,7 +82,6 @@ export default function FinancialStatementDateRange() {
               popoverProps={{ minimal: true, position: Position.BOTTOM }}
               canClearSelection={false}
               fill
-              minimal
               maxDate={FINANCIAL_REPORT_MAX_DATE}
             />
           </FFormGroup>

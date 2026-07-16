@@ -1,25 +1,20 @@
 // @ts-nocheck
+import { Classes, ControlGroup } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-import { Classes, ControlGroup } from '@blueprintjs/core';
-import {
-  FieldRequiredHint,
-  FormattedMessage as T,
-  FFormGroup,
-  FInputGroup,
-} from '@/components';
+import { FieldRequiredHint, FFormGroup, FInputGroup } from '@/components';
 
 /**
  * Branch form dialog fields.
  */
-function BranchFormFields() {
+export function BranchFormFields() {
   return (
     <div className={Classes.DIALOG_BODY}>
       {/*------------ Branch Name -----------*/}
       <FFormGroup
         name={'name'}
-        label={<T id={'branch.dialog.label.branch_name'} />}
+        label={intl.get('branch.dialog.label.branch_name')}
         labelInfo={<FieldRequiredHint />}
         inline={true}
         className={'form-group--branch_name'}
@@ -29,7 +24,7 @@ function BranchFormFields() {
       {/*------------ Branch Code -----------*/}
       <FFormGroup
         name={'code'}
-        label={<T id={'branch.dialog.label.branch_code'} />}
+        label={intl.get('branch.dialog.label.branch_code')}
         inline={true}
         className={'form-group--branch_name'}
       >
@@ -100,9 +95,6 @@ function BranchFormFields() {
     </div>
   );
 }
-
-export default BranchFormFields;
-
 const BranchAddressWrap = styled.div`
   margin-left: 160px;
 `;

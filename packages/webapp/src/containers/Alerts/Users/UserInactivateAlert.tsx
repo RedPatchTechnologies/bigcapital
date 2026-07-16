@@ -1,19 +1,17 @@
 // @ts-nocheck
+import { Alert, Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { AppToaster, FormattedMessage as T } from '@/components';
-import { Alert, Intent } from '@blueprintjs/core';
-import { useInactivateUser } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useInactivateUser } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * User inactivate alert.
  */
-function UserInactivateAlert({
+function UserInactivateAlertInner({
   // #ownProps
   name,
 
@@ -35,26 +33,20 @@ function UserInactivateAlert({
         });
         closeAlert(name);
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (
-            errors.find(
-              (e) => e.type === 'CANNOT.TOGGLE.ACTIVATE.AUTHORIZED.USER',
-            )
-          ) {
-            AppToaster.show({
-              message:
-                'You could not activate/inactivate the same authorized user.',
-              intent: Intent.DANGER,
-            });
-          }
-          closeAlert(name);
-        },
-      );
+      .catch(({ data: { errors } }) => {
+        if (
+          errors.find(
+            (e) => e.type === 'CANNOT.TOGGLE.ACTIVATE.AUTHORIZED.USER',
+          )
+        ) {
+          AppToaster.show({
+            message:
+              'You could not activate/inactivate the same authorized user.',
+            intent: Intent.DANGER,
+          });
+        }
+        closeAlert(name);
+      });
   };
 
   const handleCancel = () => {
@@ -77,7 +69,7 @@ function UserInactivateAlert({
   );
 }
 
-export default compose(
+export const UserInactivateAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(UserInactivateAlert);
+)(UserInactivateAlertInner);

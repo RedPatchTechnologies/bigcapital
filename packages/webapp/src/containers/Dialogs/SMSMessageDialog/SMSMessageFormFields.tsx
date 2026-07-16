@@ -1,19 +1,17 @@
 // @ts-nocheck
-import React from 'react';
-import styled from 'styled-components';
-import { useFormikContext, FastField, ErrorMessage } from 'formik';
 import { Intent, Button, FormGroup, TextArea } from '@blueprintjs/core';
-
-import { FormattedMessage as T } from '@/components';
-
+import { useFormikContext, FastField, ErrorMessage } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import styled from 'styled-components';
 import { useSMSMessageDialogContext } from './SMSMessageDialogProvider';
-
+import { FormattedMessage as T } from '@/components';
 import { inputIntent } from '@/utils';
 
 /**
  *
  */
-export default function SMSMessageFormFields() {
+export function SMSMessageFormFields() {
   // SMS message dialog context.
   const { smsNotification } = useSMSMessageDialogContext();
 
@@ -31,7 +29,7 @@ export default function SMSMessageFormFields() {
       <FastField name={'message_text'}>
         {({ field, meta: { error, touched } }) => (
           <FormGroup
-            label={<T id={'notify_via_sms.dialog.message_text'} />}
+            label={intl.get('notify_via_sms.dialog.message_text')}
             className={'form-group--message_text'}
             intent={inputIntent({ error, touched })}
             helperText={

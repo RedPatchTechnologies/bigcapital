@@ -3,10 +3,10 @@ import React from 'react';
 
 import '@/style/pages/RefundVendorCredit/RefundVendorCredit.scss';
 
+import { RefundVendorCreditForm } from './RefundVendorCreditForm';
 import { RefundVendorCreditFormProvider } from './RefundVendorCreditFormProvider';
-import RefundVendorCreditForm from './RefundVendorCreditForm';
 
-export default function RefundVendorCreditDialogContent({
+export function RefundVendorCreditDialogContent({
   // #ownProps
   dialogName,
   vendorCreditId,

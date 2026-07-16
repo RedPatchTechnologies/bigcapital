@@ -1,13 +1,14 @@
 // @ts-nocheck
 import React from 'react';
-
 import { FormattedMessage as T } from '@/components';
 import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
 const CustomerOpeningBalanceDialogContent = React.lazy(() =>
-  import('./CustomerOpeningBalanceDialogContent'),
+  import('./CustomerOpeningBalanceDialogContent').then((m) => ({
+    default: m.CustomerOpeningBalanceDialogContent,
+  })),
 );
 
 /**
@@ -38,4 +39,4 @@ function CustomerOpeningBalanceDialog({
   );
 }
 
-export default compose(withDialogRedux())(CustomerOpeningBalanceDialog);
+export const index = compose(withDialogRedux())(CustomerOpeningBalanceDialog);

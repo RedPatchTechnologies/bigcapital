@@ -1,11 +1,11 @@
 // @ts-nocheck
+import { FormGroup, Radio, Button, Intent } from '@blueprintjs/core';
+import { Form, useFormikContext } from 'formik';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Form, useFormikContext } from 'formik';
-import styled from 'styled-components';
-import { FormGroup, Radio, Button, Intent } from '@blueprintjs/core';
 import { useHistory } from 'react-router-dom';
-
+import styled from 'styled-components';
+import { useAccountantFormContext } from './AccountantFormProvider';
 import {
   FormattedMessage as T,
   AccountsSelect,
@@ -16,12 +16,11 @@ import {
   FRadioGroup,
 } from '@/components';
 import { ACCOUNT_PARENT_TYPE, ACCOUNT_TYPE } from '@/constants/accountTypes';
-import { useAccountantFormContext } from './AccountantFormProvider';
 
 /**
  * Accountant form.
  */
-export default function AccountantForm() {
+export function AccountantForm() {
   const history = useHistory();
   const { accounts } = useAccountantFormContext();
   const { isSubmitting } = useFormikContext();

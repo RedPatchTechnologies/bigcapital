@@ -1,21 +1,18 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
 import React, { useCallback } from 'react';
-
-import { compose } from '@/utils';
-import { DataTable, TableSkeletonRows, AppToaster } from '@/components';
-import { useResendInvitation } from '@/hooks/query';
-
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
 import { ActionsMenu, useUsersListColumns } from './components';
 import { useUsersListContext } from './UsersProvider';
-import { Intent } from '@blueprintjs/core';
+import { DataTable, TableSkeletonRows, AppToaster } from '@/components';
+import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { useResendInvitation } from '@/hooks/query';
+import { compose } from '@/utils';
 
 /**
  * Users datatable.
  */
-function UsersDataTable({
+function UsersDataTableInner({
   // #withDialogActions
   openDialog,
 
@@ -66,27 +63,21 @@ function UsersDataTable({
           intent: Intent.SUCCESS,
         });
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          if (errors.find((e) => e.type === 'USER_RECENTLY_INVITED')) {
-            AppToaster.show({
-              message:
-                'This person was recently invited. No need to invite them again just yet.',
-              intent: Intent.WARNING,
-            });
-          }
-        },
-      );
+      .catch(({ data: { errors } }) => {
+        if (errors.find((e) => e.type === 'USER_RECENTLY_INVITED')) {
+          AppToaster.show({
+            message:
+              'This person was recently invited. No need to invite them again just yet.',
+            intent: Intent.WARNING,
+          });
+        }
+      });
   });
 
   return (
     <DataTable
       columns={columns}
-      data={users}
+      data={users ?? []}
       loading={isUsersLoading}
       headerLoading={isUsersLoading}
       progressBarLoading={isUsersFetching}
@@ -104,4 +95,7 @@ function UsersDataTable({
   );
 }
 
-export default compose(withDialogActions, withAlertActions)(UsersDataTable);
+export const UsersDataTable = compose(
+  withDialogActions,
+  withAlertActions,
+)(UsersDataTableInner);

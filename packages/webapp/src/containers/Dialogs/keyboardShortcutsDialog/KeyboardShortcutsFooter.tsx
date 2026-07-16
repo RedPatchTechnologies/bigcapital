@@ -1,12 +1,11 @@
 // @ts-nocheck
-import React from 'react';
 import { Button, Intent } from '@blueprintjs/core';
+import React from 'react';
 import { FormattedMessage as T } from '@/components';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
 
-function KeyboardShortcutsFooter({
+function KeyboardShortcutsFooterInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -23,4 +22,6 @@ function KeyboardShortcutsFooter({
   );
 }
 
-export default compose(withDialogActions)(KeyboardShortcutsFooter);
+export const KeyboardShortcutsFooter = compose(withDialogActions)(
+  KeyboardShortcutsFooterInner,
+);

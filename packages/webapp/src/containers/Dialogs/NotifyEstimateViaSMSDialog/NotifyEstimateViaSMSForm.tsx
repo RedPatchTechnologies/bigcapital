@@ -1,15 +1,12 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-
-import { Intent } from '@blueprintjs/core';
-import { AppToaster } from '@/components';
-
-import NotifyViaSMSForm from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
 import { useEstimateViaSMSContext } from './NotifyEstimateViaSMSFormProvider';
-import { transformErrors } from '@/containers/NotifyViaSMS/utils';
-
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { NotifyViaSMSForm } from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
+import { transformErrors } from '@/containers/NotifyViaSMS/utils';
 import { compose } from '@/utils';
 
 const notificationType = {
@@ -17,7 +14,7 @@ const notificationType = {
   label: intl.get('sms_notification.estimate_details.type'),
 };
 
-function NotifyEstimateViaSMSForm({
+function NotifyEstimateViaSMSFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -44,11 +41,7 @@ function NotifyEstimateViaSMSForm({
       setSubmitting(false);
     };
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors) {
         transformErrors(errors, { setErrors, setCalloutCode });
       }
@@ -79,4 +72,6 @@ function NotifyEstimateViaSMSForm({
   );
 }
 
-export default compose(withDialogActions)(NotifyEstimateViaSMSForm);
+export const NotifyEstimateViaSMSForm = compose(withDialogActions)(
+  NotifyEstimateViaSMSFormInner,
+);

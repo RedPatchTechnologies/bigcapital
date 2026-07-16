@@ -12,10 +12,10 @@ import { GetSaleInvoiceState } from './queries/GetSaleInvoiceState.service';
 import { GetSaleInvoiceMailState } from './queries/GetSaleInvoiceMailState.service';
 import {
   ISaleInvoiceWriteoffDTO,
-  ISalesInvoicesFilter,
   SaleInvoiceMailState,
   SendInvoiceMailDTO,
 } from './SaleInvoice.types';
+import { GetSaleInvoicesQueryDto } from './dtos/GetSaleInvoicesQuery.dto';
 import { GetSaleInvoicesService } from './queries/GetSaleInvoices';
 import { SendSaleInvoiceMail } from './commands/SendSaleInvoiceMail';
 import {
@@ -45,7 +45,7 @@ export class SaleInvoiceApplication {
     private generateShareLinkService: GenerateShareLink,
     private bulkDeleteSaleInvoicesService: BulkDeleteSaleInvoicesService,
     private validateBulkDeleteSaleInvoicesService: ValidateBulkDeleteSaleInvoicesService,
-  ) { }
+  ) {}
 
   /**
    * Creates a new sale invoice with associated GL entries.
@@ -112,7 +112,7 @@ export class SaleInvoiceApplication {
    * @param {ISalesInvoicesFilter} filterDTO
    * @returns {Promise<{ salesInvoices: SaleInvoice[]; pagination: IPaginationMeta; filterMeta: IFilterMeta; }>}
    */
-  public getSaleInvoices(filterDTO: Partial<ISalesInvoicesFilter>) {
+  public getSaleInvoices(filterDTO: GetSaleInvoicesQueryDto) {
     return this.getSaleInvoicesService.getSaleInvoices(filterDTO);
   }
 

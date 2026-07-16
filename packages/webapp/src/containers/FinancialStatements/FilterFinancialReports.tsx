@@ -1,8 +1,20 @@
-// @ts-nocheck
 import { isEmpty } from 'lodash';
 import { useAbilityContext } from '@/hooks';
 
-function useFilterFinancialReports(financialSection) {
+interface FinancialReport {
+  ability: string;
+  subject: string;
+  [key: string]: unknown;
+}
+
+interface FinancialSection {
+  sectionTitle: string;
+  reports: FinancialReport[];
+}
+
+export function useFilterFinancialReports(
+  financialSection: FinancialSection[],
+) {
   const ability = useAbilityContext();
 
   const section = financialSection
@@ -20,5 +32,3 @@ function useFilterFinancialReports(financialSection) {
 
   return section;
 }
-
-export default useFilterFinancialReports;

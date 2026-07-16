@@ -1,45 +1,45 @@
-// @ts-nocheck
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import intl from 'react-intl-universal';
 import styled from 'styled-components';
-
-import { TableStyle } from '@/constants';
-import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
+import { useGeneralLedgerTableColumns } from './dynamicColumns';
+import { useGeneralLedgerContext } from './GeneralLedgerProvider';
 import {
   FinancialSheet,
   ReportDataTable,
   TableFastCell,
   TableVirtualizedListRows,
 } from '@/components';
+import { TableStyle } from '@/constants';
+import { defaultExpanderReducer, tableRowTypesToClassnames } from '@/utils';
 
-import { useGeneralLedgerContext } from './GeneralLedgerProvider';
-import { useGeneralLedgerTableColumns } from './dynamicColumns';
+interface GeneralLedgerTableProps {
+  companyName: string;
+}
 
 /**
  * General ledger table.
  */
-export default function GeneralLedgerTable({ companyName }) {
+export function GeneralLedgerTable({ companyName }: GeneralLedgerTableProps) {
   // General ledger context.
-  const {
-    generalLedger: { query, table, meta },
-    isLoading,
-  } = useGeneralLedgerContext();
+  const { generalLedger } = useGeneralLedgerContext();
+
+  const table = (generalLedger as any)?.table;
+  const meta = (generalLedger as any)?.meta;
 
   // General ledger table columns.
   const columns = useGeneralLedgerTableColumns();
 
   // Default expanded rows of general ledger table.
   const expandedRows = useMemo(
-    () => defaultExpanderReducer(table.rows, 1),
-    [table.rows],
+    () => defaultExpanderReducer(table?.rows ?? [], 1),
+    [table?.rows],
   );
 
   return (
     <FinancialSheet
       companyName={companyName}
       sheetType={intl.get('general_ledger_sheet')}
-      dateText={meta?.formatted_date_range ?? meta?.formatted_as_date}
-      loading={isLoading}
+      dateText={meta?.formattedDateRange ?? meta?.formattedAsDate}
       fullWidth={true}
     >
       <GeneralLedgerDataTable
@@ -47,7 +47,7 @@ export default function GeneralLedgerTable({ companyName }) {
           'this_report_does_not_contain_any_data_between_date_period',
         )}
         columns={columns}
-        data={table.rows}
+        data={table?.rows ?? []}
         rowClassNames={tableRowTypesToClassnames}
         expanded={expandedRows}
         virtualizedRows={true}

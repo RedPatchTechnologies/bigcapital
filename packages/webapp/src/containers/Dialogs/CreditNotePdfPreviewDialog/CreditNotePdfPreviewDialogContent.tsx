@@ -1,14 +1,12 @@
 // @ts-nocheck
-import React from 'react';
 import { AnchorButton } from '@blueprintjs/core';
-
+import React from 'react';
 import { DialogContent, PdfDocumentPreview, T } from '@/components';
-import { usePdfCreditNote } from '@/hooks/query';
-
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { usePdfCreditNote } from '@/hooks/query';
 import { compose } from '@/utils';
 
-function CreditNotePdfPreviewDialogContent({
+function CreditNotePdfPreviewDialogContentInner({
   subscriptionForm: { creditNoteId },
 }) {
   const { isLoading, pdfUrl, filename } = usePdfCreditNote(creditNoteId);
@@ -45,4 +43,6 @@ function CreditNotePdfPreviewDialogContent({
   );
 }
 
-export default compose(withDialogActions)(CreditNotePdfPreviewDialogContent);
+export const CreditNotePdfPreviewDialogContent = compose(withDialogActions)(
+  CreditNotePdfPreviewDialogContentInner,
+);

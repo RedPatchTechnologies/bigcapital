@@ -9,10 +9,10 @@ import { GetSaleReceipt } from './queries/GetSaleReceipt.service';
 import { EditSaleReceipt } from './commands/EditSaleReceipt.service';
 import {
   ISaleReceiptState,
-  ISalesReceiptsFilter,
   SaleReceiptMailOpts,
   SaleReceiptMailOptsDTO,
 } from './types/SaleReceipts.types';
+import { GetSaleReceiptsQueryDto } from './dtos/GetSaleReceiptsQuery.dto';
 import { GetSaleReceiptsService } from './queries/GetSaleReceipts.service';
 import { SaleReceipt } from './models/SaleReceipt';
 import { IFilterMeta, IPaginationMeta } from '@/interfaces/Model';
@@ -40,7 +40,7 @@ export class SaleReceiptApplication {
     private getSaleReceiptMailStateService: GetSaleReceiptMailStateService,
     private bulkDeleteSaleReceiptsService: BulkDeleteSaleReceiptsService,
     private validateBulkDeleteSaleReceiptsService: ValidateBulkDeleteSaleReceiptsService,
-  ) { }
+  ) {}
 
   /**
    * Creates a new sale receipt with associated entries.
@@ -115,10 +115,10 @@ export class SaleReceiptApplication {
 
   /**
    * Retrieve sales receipts paginated and filterable list.
-   * @param {ISalesReceiptsFilter} filterDTO
+   * @param {GetSaleReceiptsQueryDto} filterDTO
    * @returns
    */
-  public async getSaleReceipts(filterDTO: ISalesReceiptsFilter): Promise<{
+  public async getSaleReceipts(filterDTO: GetSaleReceiptsQueryDto): Promise<{
     data: SaleReceipt[];
     pagination: IPaginationMeta;
     filterMeta: IFilterMeta;
@@ -182,9 +182,7 @@ export class SaleReceiptApplication {
    * Retrieves the mail state of the given sale receipt.
    * @param {number} saleReceiptId
    */
-  public getSaleReceiptMail(
-    saleReceiptId: number,
-  ): Promise<ISaleReceiptState> {
+  public getSaleReceiptMail(saleReceiptId: number): Promise<ISaleReceiptState> {
     return this.getSaleReceiptMailStateService.getMailState(saleReceiptId);
   }
 }

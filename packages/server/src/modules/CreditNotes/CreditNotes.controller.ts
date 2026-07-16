@@ -21,9 +21,10 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CreditNoteApplication } from './CreditNoteApplication.service';
-import { ICreditNotesQueryDTO } from './types/CreditNotes.types';
 import { CreateCreditNoteDto, EditCreditNoteDto } from './dtos/CreditNote.dto';
+import { GetCreditNotesQueryDto } from './dtos/GetCreditNotesQuery.dto';
 import { CreditNoteResponseDto } from './dtos/CreditNoteResponse.dto';
+import { CreditNoteStateResponseDto } from './dtos/CreditNoteStateResponse.dto';
 import { PaginatedResponseDto } from '@/common/dtos/PaginatedResults.dto';
 import { ApiCommonHeaders } from '@/common/decorators/ApiCommonHeaders';
 import {
@@ -48,7 +49,7 @@ export class CreditNotesController {
   /**
    * @param {CreditNoteApplication} creditNoteApplication - The credit note application service.
    */
-  constructor(private creditNoteApplication: CreditNoteApplication) { }
+  constructor(private creditNoteApplication: CreditNoteApplication) {}
 
   @Post()
   @RequirePermission(CreditNoteAction.Create, AbilitySubject.CreditNote)
@@ -62,7 +63,11 @@ export class CreditNotesController {
   @Get('state')
   @RequirePermission(CreditNoteAction.View, AbilitySubject.CreditNote)
   @ApiOperation({ summary: 'Get credit note state' })
-  @ApiResponse({ status: 200, description: 'Returns the credit note state' })
+  @ApiResponse({
+    status: 200,
+    description: 'Returns the credit note state',
+    type: CreditNoteStateResponseDto,
+  })
   getCreditNoteState() {
     return this.creditNoteApplication.getCreditNoteState();
   }
@@ -121,7 +126,7 @@ export class CreditNotesController {
       ],
     },
   })
-  getCreditNotes(@Query() creditNotesQuery: ICreditNotesQueryDTO) {
+  getCreditNotes(@Query() creditNotesQuery: GetCreditNotesQueryDto) {
     return this.creditNoteApplication.getCreditNotes(creditNotesQuery);
   }
 

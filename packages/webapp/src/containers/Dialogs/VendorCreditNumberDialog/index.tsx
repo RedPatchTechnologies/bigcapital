@@ -5,7 +5,9 @@ import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose, saveInvoke } from '@/utils';
 
 const VendorCreditNumberDialogContent = React.lazy(() =>
-  import('./VendorCreditNumberDialogContent'),
+  import('./VendorCreditNumberDialogContent').then((m) => ({
+    default: m.VendorCreditNumberDialogContent,
+  })),
 );
 
 /**
@@ -38,4 +40,4 @@ function VendorCreditNumberDialog({
     </Dialog>
   );
 }
-export default compose(withDialogRedux())(VendorCreditNumberDialog);
+export const index = compose(withDialogRedux())(VendorCreditNumberDialog);

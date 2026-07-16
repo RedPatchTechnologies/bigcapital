@@ -1,35 +1,30 @@
 // @ts-nocheck
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-
-import CustomersEmptyStatus from './CustomersEmptyStatus';
-
-import { TABLES } from '@/constants/tables';
+import { ActionsMenu, useCustomersTableColumns } from './components';
+import { CustomersEmptyStatus } from './CustomersEmptyStatus';
+import { useCustomersListContext } from './CustomersListProvider';
+import { withCustomers } from './withCustomers';
+import { withCustomersActions } from './withCustomersActions';
 import {
   DataTable,
   DashboardContentTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
-import { ActionsMenu, useCustomersTableColumns } from './components';
-
-import { withCustomers } from './withCustomers';
-import { withCustomersActions } from './withCustomersActions';
+import { DRAWERS } from '@/constants/drawers';
+import { TABLES } from '@/constants/tables';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { withSettings } from '@/containers/Settings/withSettings';
-
-import { useCustomersListContext } from './CustomersListProvider';
 import { useMemorizedColumnsWidths } from '@/hooks';
-
 import { compose } from '@/utils';
-import { DRAWERS } from '@/constants/drawers';
 
 /**
  * Customers table.
  */
-function CustomersTable({
+function CustomersTableInner({
   // #withCustomersActions
   setCustomersTableState,
   setCustomersSelectedRows,
@@ -135,7 +130,7 @@ function CustomersTable({
       <DataTable
         noInitialFetch={true}
         columns={columns}
-        data={customers}
+        data={customers ?? []}
         loading={isCustomersLoading}
         headerLoading={isCustomersLoading}
         progressBarLoading={isCustomersFetching}
@@ -145,10 +140,10 @@ function CustomersTable({
         sticky={true}
         spinnerProps={{ size: 30 }}
         pagination={true}
-        initialPageSize={customersTableState.pageSize}
+        initialPageSize={customersTableState?.pageSize ?? 10}
         manualSortBy={true}
         manualPagination={true}
-        pagesCount={pagination.pagesCount}
+        rowsCount={pagination?.total ?? 0}
         onSelectedRowsChange={handleSelectedRowsChange}
         autoResetSelectedRows={false}
         autoResetSortBy={false}
@@ -173,7 +168,7 @@ function CustomersTable({
   );
 }
 
-export default compose(
+export const CustomersTable = compose(
   withAlertActions,
   withDialogActions,
   withCustomersActions,
@@ -182,4 +177,4 @@ export default compose(
   withSettings(({ customersSettings }) => ({
     customersTableSize: customersSettings?.tableSize,
   })),
-)(CustomersTable);
+)(CustomersTableInner);

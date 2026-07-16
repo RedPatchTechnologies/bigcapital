@@ -4,8 +4,10 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const QuickPaymentMadeFormDialogContent = lazy(
-  () => import('./QuickPaymentMadeFormDialogContent'),
+const QuickPaymentMadeFormDialogContent = lazy(() =>
+  import('./QuickPaymentMadeFormDialogContent').then((m) => ({
+    default: m.QuickPaymentMadeFormDialogContent,
+  })),
 );
 
 /**
@@ -35,4 +37,4 @@ function QuickPaymentMadeFormDialog({
   );
 }
 
-export default compose(withDialogRedux())(QuickPaymentMadeFormDialog);
+export const index = compose(withDialogRedux())(QuickPaymentMadeFormDialog);

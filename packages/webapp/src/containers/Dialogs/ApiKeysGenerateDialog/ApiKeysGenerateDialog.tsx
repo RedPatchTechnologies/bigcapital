@@ -4,20 +4,20 @@ import { Dialog, DialogSuspense, FormattedMessage as T } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
-const ApiKeysGenerateDialogContent = React.lazy(
-  () => import('./ApiKeysGenerateDialogContent'),
+const ApiKeysGenerateDialogContent = React.lazy(() =>
+  import('./ApiKeysGenerateDialogContent').then((m) => ({
+    default: m.ApiKeysGenerateDialogContent,
+  })),
 );
 
 /**
  * API Keys Generate dialog.
  */
-function ApiKeysGenerateDialog({ dialogName, payload, isOpen }) {
+function ApiKeysGenerateDialogInner({ dialogName, payload, isOpen }) {
   return (
     <Dialog
       name={dialogName}
-      title={
-        <T id={'api_key.dialog.generate_title'} />
-      }
+      title={<T id={'api_key.dialog.generate_title'} />}
       isOpen={isOpen}
       canEscapeJeyClose={true}
       autoFocus={true}
@@ -25,11 +25,11 @@ function ApiKeysGenerateDialog({ dialogName, payload, isOpen }) {
       style={{ width: '500px' }}
     >
       <DialogSuspense>
-        <ApiKeysGenerateDialogContent
-          dialogName={dialogName}
-        />
+        <ApiKeysGenerateDialogContent dialogName={dialogName} />
       </DialogSuspense>
     </Dialog>
   );
 }
-export default compose(withDialogRedux())(ApiKeysGenerateDialog);
+export const ApiKeysGenerateDialog = compose(withDialogRedux())(
+  ApiKeysGenerateDialogInner,
+);

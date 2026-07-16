@@ -1,24 +1,22 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import {
   AppToaster,
   FormattedMessage as T,
   FormattedHTMLMessage,
 } from '@/components';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-
 import { useDeleteReconcileCredit } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * Reconcile credit note delete alert.
  */
-function ReconcileCreditNoteDeleteAlert({
+function ReconcileCreditNoteDeleteAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -47,15 +45,9 @@ function ReconcileCreditNoteDeleteAlert({
           intent: Intent.SUCCESS,
         });
       })
-      .catch(
-        ({
-          response: {
-            data: { errors },
-          },
-        }) => {
-          // handleDeleteErrors(errors);
-        },
-      )
+      .catch(({ data: { errors } }) => {
+        // handleDeleteErrors(errors);
+      })
       .finally(() => {
         closeAlert(name);
       });
@@ -83,8 +75,8 @@ function ReconcileCreditNoteDeleteAlert({
   );
 }
 
-export default compose(
+export const ReconcileCreditNoteDeleteAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
   withDrawerActions,
-)(ReconcileCreditNoteDeleteAlert);
+)(ReconcileCreditNoteDeleteAlertInner);

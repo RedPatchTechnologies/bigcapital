@@ -1,10 +1,9 @@
-// @ts-nocheck
-import { useMemo } from 'react';
 import { castArray } from 'lodash';
 import moment from 'moment';
+import { useMemo } from 'react';
 import * as Yup from 'yup';
-import { useAppQueryString } from '@/hooks';
 import { getDefaultARAgingSummaryQuery } from '../ARAgingSummary/common';
+import { useAppQueryString } from '@/hooks';
 import { transformToForm } from '@/utils';
 
 /**
@@ -28,10 +27,9 @@ export const getCustomersBalanceQuerySchema = () => {
   });
 };
 
-/**
- * Parses the customer balance summary query.
- */
-const parseCustomersBalanceSummaryQuery = (locationQuery) => {
+const parseCustomersBalanceSummaryQuery = (
+  locationQuery: Record<string, unknown>,
+) => {
   const defaultQuery = getDefaultARAgingSummaryQuery();
 
   const transformed = {

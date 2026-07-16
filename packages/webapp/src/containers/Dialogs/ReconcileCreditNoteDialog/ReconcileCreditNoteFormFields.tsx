@@ -1,9 +1,11 @@
 // @ts-nocheck
+import { Classes } from '@blueprintjs/core';
+import { FastField, useFormikContext } from 'formik';
+import { subtract } from 'lodash';
 import React from 'react';
 import styled from 'styled-components';
-import { FastField, useFormikContext } from 'formik';
-import { Classes } from '@blueprintjs/core';
-
+import { ReconcileCreditNoteEntriesTable } from './ReconcileCreditNoteEntriesTable';
+import { useReconcileCreditNoteContext } from './ReconcileCreditNoteFormProvider';
 import {
   T,
   TotalLines,
@@ -11,16 +13,13 @@ import {
   TotalLineBorderStyle,
   TotalLineTextStyle,
 } from '@/components';
-import { subtract } from 'lodash';
 import { getEntriesTotal } from '@/containers/Entries/utils';
-import ReconcileCreditNoteEntriesTable from './ReconcileCreditNoteEntriesTable';
-import { useReconcileCreditNoteContext } from './ReconcileCreditNoteFormProvider';
 import { formattedAmount } from '@/utils';
 
 /**
  * Reconcile credit note form fields.
  */
-export default function ReconcileCreditNoteFormFields() {
+export function ReconcileCreditNoteFormFields() {
   const {
     creditNote: { formatted_credits_remaining },
   } = useReconcileCreditNoteContext();

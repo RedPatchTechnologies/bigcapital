@@ -1,18 +1,15 @@
 // @ts-nocheck
-import React from 'react';
-import moment from 'moment';
-import intl from 'react-intl-universal';
-import { Formik } from 'formik';
 import { Intent } from '@blueprintjs/core';
+import { Formik } from 'formik';
 import { defaultTo } from 'lodash';
-
-import { AppToaster } from '@/components';
+import moment from 'moment';
+import React from 'react';
+import intl from 'react-intl-universal';
 import { CreateCustomerOpeningBalanceFormSchema } from './CustomerOpeningBalanceForm.schema';
+import { CustomerOpeningBalanceFormContent } from './CustomerOpeningBalanceFormContent';
 import { useCustomerOpeningBalanceContext } from './CustomerOpeningBalanceFormProvider';
-
-import CustomerOpeningBalanceFormContent from './CustomerOpeningBalanceFormContent';
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-
 import { compose } from '@/utils';
 
 const defaultInitialValues = {
@@ -26,7 +23,7 @@ const defaultInitialValues = {
  * Customer Opening balance form.
  * @returns
  */
-function CustomerOpeningBalanceForm({
+function CustomerOpeningBalanceFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -44,7 +41,9 @@ function CustomerOpeningBalanceForm({
   const handleFormSubmit = (values, { setSubmitting, setErrors }) => {
     const formValues = {
       ...values,
-      opening_balance_at: moment(values.opening_balance_at).format('YYYY-MM-DD'),
+      opening_balance_at: moment(values.opening_balance_at).format(
+        'YYYY-MM-DD',
+      ),
     };
 
     // Handle request response success.
@@ -57,11 +56,7 @@ function CustomerOpeningBalanceForm({
     };
 
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors) {
       }
       setSubmitting(false);
@@ -82,4 +77,6 @@ function CustomerOpeningBalanceForm({
   );
 }
 
-export default compose(withDialogActions)(CustomerOpeningBalanceForm);
+export const CustomerOpeningBalanceForm = compose(withDialogActions)(
+  CustomerOpeningBalanceFormInner,
+);

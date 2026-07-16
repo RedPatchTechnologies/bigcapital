@@ -1,5 +1,3 @@
-// @ts-nocheck
-import React from 'react';
 import {
   Button,
   NavbarGroup,
@@ -8,8 +6,17 @@ import {
   Intent,
   Alignment,
 } from '@blueprintjs/core';
+import { isEmpty } from 'lodash';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
-
+import { useExpensesListContext } from './ExpensesListProvider';
+import { useBulkDeleteExpensesDialog } from './hooks/use-bulk-delete-expenses-dialog';
+import { withExpenses } from './withExpenses';
+import { withExpensesActions } from './withExpensesActions';
+import type { WithExpensesProps } from './withExpenses';
+import type { WithExpensesActionsProps } from './withExpensesActions';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithSettingsActionsProps } from '@/containers/Settings/withSettingsActions';
 import {
   If,
   Can,
@@ -21,23 +28,24 @@ import {
   AdvancedFilterPopover,
   FormattedMessage as T,
 } from '@/components';
-
 import { ExpenseAction, AbilitySubject } from '@/constants/abilityOption';
 import { DialogsName } from '@/constants/dialogs';
-
-import { useRefreshExpenses } from '@/hooks/query/expenses';
-import { useExpensesListContext } from './ExpensesListProvider';
-import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
-
-import { withExpenses } from './withExpenses';
-import { withExpensesActions } from './withExpensesActions';
-import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { withSettings } from '@/containers/Settings/withSettings';
-
+import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
+import { useRefreshExpenses } from '@/hooks/query/expenses';
+import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
+import type { IFilterRole } from '@/components/AdvancedFilter/interfaces';
 import { compose } from '@/utils';
-import { isEmpty } from 'lodash';
-import { useBulkDeleteExpensesDialog } from './hooks/use-bulk-delete-expenses-dialog';
+
+interface ExpensesActionsBarInnerProps
+  extends Pick<WithExpensesActionsProps, 'setExpensesTableState'>,
+    Pick<WithSettingsActionsProps, 'addSetting'>,
+    Pick<WithDialogActionsProps, 'openDialog'>,
+    Pick<WithExpensesProps, 'expensesSelectedRows'> {
+  expensesFilterConditions: IFilterRole[];
+  expensesTableSize: unknown;
+}
 
 /**
  * Expenses actions bar.
@@ -58,7 +66,7 @@ function ExpensesActionsBar({
 
   // #withDialogActions
   openDialog,
-}) {
+}: ExpensesActionsBarInnerProps) {
   // History context.
   const history = useHistory();
 
@@ -75,10 +83,8 @@ function ExpensesActionsBar({
   const onClickNewExpense = () => {
     history.push('/expenses/new');
   };
-  const {
-    openBulkDeleteDialog,
-    isValidatingBulkDeleteExpenses,
-  } = useBulkDeleteExpensesDialog();
+  const { openBulkDeleteDialog, isValidatingBulkDeleteExpenses } =
+    useBulkDeleteExpensesDialog();
 
   // Handle delete button click.
   const handleBulkDelete = () => {
@@ -86,7 +92,7 @@ function ExpensesActionsBar({
   };
 
   // Handles the tab chaning.
-  const handleTabChange = (view) => {
+  const handleTabChange = (view: { slug?: string | null } | null) => {
     setExpensesTableState({
       viewSlug: view ? view.slug : null,
     });
@@ -100,7 +106,7 @@ function ExpensesActionsBar({
     history.push('/expenses/import');
   };
   // Handle table row size change.
-  const handleTableRowSizeChange = (size) => {
+  const handleTableRowSizeChange = (size: unknown) => {
     addSetting('expenses', 'tableSize', size);
   };
   // Handle the export button click.
@@ -136,6 +142,7 @@ function ExpensesActionsBar({
           resourceName={'expenses'}
           views={expensesViews}
           allMenuItem={true}
+          allMenuItemText={null}
           onChange={handleTabChange}
         />
         <NavbarDivider />
@@ -148,11 +155,12 @@ function ExpensesActionsBar({
           />
         </Can>
         <AdvancedFilterPopover
+          popoverProps={{ minimal: true }}
           advancedFilterProps={{
             conditions: expensesFilterConditions,
             defaultFieldKey: 'reference_no',
             fields: fields,
-            onFilterChange: (filterConditions) => {
+            onFilterChange: (filterConditions: IFilterRole[]) => {
               setExpensesTableState({ filterRoles: filterConditions });
             },
           }}
@@ -193,6 +201,7 @@ function ExpensesActionsBar({
         <NavbarDivider />
         <DashboardRowsHeightButton
           initialValue={expensesTableSize}
+          value={expensesTableSize}
           onChange={handleTableRowSizeChange}
         />
         <NavbarDivider />
@@ -208,7 +217,7 @@ function ExpensesActionsBar({
   );
 }
 
-export default compose(
+export const ExpenseActionsBar = compose(
   withDialogActions,
   withExpensesActions,
   withSettingsActions,

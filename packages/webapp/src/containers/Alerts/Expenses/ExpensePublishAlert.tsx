@@ -1,19 +1,17 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-import { Intent, Alert } from '@blueprintjs/core';
 import { AppToaster, FormattedMessage as T } from '@/components';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { usePublishExpense } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * Expense publish alert.
  */
-function ExpensePublishAlert({
+function ExpensePublishAlertInner({
   closeAlert,
 
   // #withAlertStoreConnect
@@ -59,7 +57,7 @@ function ExpensePublishAlert({
   );
 }
 
-export default compose(
+export const ExpensePublishAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(ExpensePublishAlert);
+)(ExpensePublishAlertInner);

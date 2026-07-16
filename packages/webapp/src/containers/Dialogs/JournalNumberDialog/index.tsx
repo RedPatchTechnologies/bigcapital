@@ -5,16 +5,20 @@ import { Dialog, DialogSuspense } from '@/components';
 import withDialogRedux from '@/components/DialogReduxConnect';
 import { saveInvoke, compose } from '@/utils';
 
-const JournalNumberDialogContent = lazy(() => import('./JournalNumberDialogContent'));
+const JournalNumberDialogContent = lazy(() =>
+  import('./JournalNumberDialogContent').then((m) => ({
+    default: m.JournalNumberDialogContent,
+  })),
+);
 
 function JournalNumberDialog({
   dialogName,
   payload: { initialFormValues },
   isOpen,
-  onConfirm
+  onConfirm,
 }) {
   const handleConfirm = (values) => {
-    saveInvoke(onConfirm, values)
+    saveInvoke(onConfirm, values);
   };
 
   return (
@@ -36,6 +40,4 @@ function JournalNumberDialog({
   );
 }
 
-export default compose(
-  withDialogRedux(),
-)(JournalNumberDialog);
+export const index = compose(withDialogRedux())(JournalNumberDialog);

@@ -1,5 +1,3 @@
-// @ts-nocheck
-import React from 'react';
 import {
   Button,
   Classes,
@@ -13,7 +11,16 @@ import {
   PopoverInteractionKind,
   Position,
 } from '@blueprintjs/core';
+import { isEmpty } from 'lodash';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
+import { useBulkDeleteInvoicesDialog } from '../hooks/use-bulk-delete-accounts-dialog';
+import { useInvoicesListContext } from './InvoicesListProvider';
+import { withInvoiceActions } from './withInvoiceActions';
+import { withInvoices } from './withInvoices';
+import type { WithInvoicesProps } from './withInvoices';
+import type { WithDialogActionsProps } from '@/containers/Dialog/withDialogActions';
+import type { WithDrawerActionsProps } from '@/containers/Drawer/withDrawerActions';
 import {
   Icon,
   FormattedMessage as T,
@@ -22,107 +29,92 @@ import {
   DashboardRowsHeightButton,
   DashboardActionsBar,
 } from '@/components';
-
 import { Can, If, DashboardActionViewsList } from '@/components';
 import { SaleInvoiceAction, AbilitySubject } from '@/constants/abilityOption';
-
-import { useRefreshInvoices } from '@/hooks/query/invoices';
-import { useInvoicesListContext } from './InvoicesListProvider';
-import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
-import { useBulkDeleteInvoicesDialog } from '../hooks/use-bulk-delete-accounts-dialog';
-
-import { withInvoices } from './withInvoices';
-import { withInvoiceActions } from './withInvoiceActions';
+import { DialogsName } from '@/constants/dialogs';
+import { DRAWERS } from '@/constants/drawers';
+import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
 import { withSettings } from '@/containers/Settings/withSettings';
 import { withSettingsActions } from '@/containers/Settings/withSettingsActions';
+import { useDownloadExportPdf } from '@/hooks/query/FinancialReports/use-export-pdf';
+import { useRefreshInvoices } from '@/hooks/query/invoices';
 import { compose } from '@/utils';
-import { withDialogActions } from '@/containers/Dialog/withDialogActions';
-import { DialogsName } from '@/constants/dialogs';
-import { withDrawerActions } from '@/containers/Drawer/withDrawerActions';
-import { DRAWERS } from '@/constants/drawers';
-import { isEmpty } from 'lodash';
 
-/**
- * Invoices table actions bar.
- */
+interface WithInvoiceActionsProps {
+  setInvoicesTableState: (state: Record<string, any>) => void;
+}
+
+interface WithSettingsActionsProps {
+  addSetting: (group: string, key: string, value: any) => void;
+}
+
+interface WithSettingsProps {
+  invoicesTableSize?: string | null;
+}
+
+interface InvoiceActionsBarProps
+  extends Pick<WithInvoicesProps, 'invoicesSelectedRows'>,
+    WithInvoiceActionsProps,
+    WithSettingsActionsProps,
+    WithDialogActionsProps,
+    WithDrawerActionsProps,
+    WithSettingsProps {
+  invoicesFilterRoles: any[];
+}
+
 function InvoiceActionsBar({
-  // #withInvoiceActions
   setInvoicesTableState,
-
-  // #withInvoices
   invoicesFilterRoles,
   invoicesSelectedRows = [],
-
-  // #withSettings
   invoicesTableSize,
-
-  // #withSettingsActions
   addSetting,
-
-  // #withDialogsActions
   openDialog,
-
-  // #withDrawerActions
   openDrawer,
-
-}) {
+}: InvoiceActionsBarProps) {
   const history = useHistory();
-  const {
-    openBulkDeleteDialog,
-    isValidatingBulkDeleteInvoices,
-  } = useBulkDeleteInvoicesDialog();
+  const { openBulkDeleteDialog, isValidatingBulkDeleteInvoices } =
+    useBulkDeleteInvoicesDialog();
 
-  // Sale invoices list context.
   const { invoicesViews, invoicesFields } = useInvoicesListContext();
 
-  // Exports pdf document.
   const { downloadAsync: downloadExportPdf } = useDownloadExportPdf();
 
-  // Handle new invoice button click.
   const handleClickNewInvoice = () => {
     history.push('/invoices/new');
   };
 
-  // Invoices refresh action.
   const { refresh } = useRefreshInvoices();
 
-  // Handle views tab change.
-  const handleTabChange = (view) => {
+  const handleTabChange = (view: { slug?: string } | null) => {
     setInvoicesTableState({ viewSlug: view ? view.slug : null });
   };
 
-  // Handle click a refresh sale invoices
   const handleRefreshBtnClick = () => {
     refresh();
   };
 
-  // Handle table row size change.
-  const handleTableRowSizeChange = (size) => {
+  const handleTableRowSizeChange = (size: any) => {
     addSetting('salesInvoices', 'tableSize', size);
   };
 
-  // Handle the import button click.
   const handleImportBtnClick = () => {
     history.push('/invoices/import');
   };
 
-  // Handle the export button click.
   const handleExportBtnClick = () => {
     openDialog(DialogsName.Export, { resource: 'sale_invoice' });
   };
-  // Handles the print button click.
   const handlePrintBtnClick = () => {
     downloadExportPdf({ resource: 'SaleInvoice' });
   };
 
-  // Handles the invoice customize button click.
   const handleCustomizeBtnClick = () => {
     openDrawer(DRAWERS.BRANDING_TEMPLATES, { resource: 'SaleInvoice' });
   };
 
-  // Handle bulk invoices delete.
   const handleBulkDelete = () => {
-    openBulkDeleteDialog(invoicesSelectedRows);
+    openBulkDeleteDialog(invoicesSelectedRows as number[]);
   };
 
   if (!isEmpty(invoicesSelectedRows)) {
@@ -165,7 +157,7 @@ function InvoiceActionsBar({
             conditions: invoicesFilterRoles,
             defaultFieldKey: 'invoice_no',
             fields: invoicesFields,
-            onFilterChange: (filterConditions) => {
+            onFilterChange: (filterConditions: any) => {
               setInvoicesTableState({ filterRoles: filterConditions });
             },
           }}
@@ -176,7 +168,7 @@ function InvoiceActionsBar({
         <NavbarDivider />
         <Button
           className={Classes.MINIMAL}
-          icon={<Icon icon={'print-16'} iconSize={'16'} />}
+          icon={<Icon icon={'print-16'} iconSize={16} />}
           text={<T id={'print'} />}
           onClick={handlePrintBtnClick}
         />
@@ -188,7 +180,7 @@ function InvoiceActionsBar({
         />
         <Button
           className={Classes.MINIMAL}
-          icon={<Icon icon={'file-export-16'} iconSize={'16'} />}
+          icon={<Icon icon={'file-export-16'} iconSize={16} />}
           text={<T id={'export'} />}
           onClick={handleExportBtnClick}
         />
@@ -229,7 +221,7 @@ function InvoiceActionsBar({
   );
 }
 
-export default compose(
+export const InvoicesActionsBar = compose(
   withInvoiceActions,
   withSettingsActions,
   withInvoices(({ invoicesTableState, invoicesSelectedRows }) => ({

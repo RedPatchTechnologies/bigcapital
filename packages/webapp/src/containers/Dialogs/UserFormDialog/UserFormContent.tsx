@@ -1,25 +1,26 @@
 // @ts-nocheck
-import React from 'react';
-import {
-  Intent,
-  Classes,
-  Button,
-} from '@blueprintjs/core';
-import { Form, useFormikContext } from 'formik';
+import { Intent, Classes, Button } from '@blueprintjs/core';
 import classNames from 'classnames';
-
-import { FFormGroup, FInputGroup, FSelect, FormattedMessage as T } from '@/components';
-import { CLASSES } from '@/constants/classes';
-import { FieldRequiredHint } from '@/components';
+import { Form, useFormikContext } from 'formik';
+import React from 'react';
+import intl from 'react-intl-universal';
+import { UserFormCalloutAlerts } from './components';
 import { useUserFormContext } from './UserFormProvider';
+import {
+  FFormGroup,
+  FInputGroup,
+  FSelect,
+  FormattedMessage as T,
+} from '@/components';
+import { FieldRequiredHint } from '@/components';
+import { CLASSES } from '@/constants/classes';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
 import { compose } from '@/utils';
-import { UserFormCalloutAlerts } from './components';
 
 /**
  * User form content.
  */
-function UserFormContent({
+function UserFormContentInner({
   calloutCode,
 
   // #withDialogActions
@@ -40,7 +41,7 @@ function UserFormContent({
         {/* ----------- Email ----------- */}
         <FFormGroup
           name={'email'}
-          label={<T id={'email'} />}
+          label={intl.get('email')}
           labelInfo={<FieldRequiredHint />}
         >
           <FInputGroup name={'email'} />
@@ -49,7 +50,7 @@ function UserFormContent({
         {/* ----------- First name ----------- */}
         <FFormGroup
           name={'first_name'}
-          label={<T id={'first_name'} />}
+          label={intl.get('first_name')}
           labelInfo={<FieldRequiredHint />}
         >
           <FInputGroup name={'first_name'} />
@@ -58,7 +59,7 @@ function UserFormContent({
         {/* ----------- Last name ----------- */}
         <FFormGroup
           name={'last_name'}
-          label={<T id={'last_name'} />}
+          label={intl.get('last_name')}
           labelInfo={<FieldRequiredHint />}
         >
           <FInputGroup name={'last_name'} />
@@ -67,7 +68,7 @@ function UserFormContent({
         {/* ----------- Role name ----------- */}
         <FFormGroup
           name={'role_id'}
-          label={<T id={'roles.label.role_name'} />}
+          label={intl.get('roles.label.role_name')}
           labelInfo={<FieldRequiredHint />}
           className={classNames(CLASSES.FILL, 'form-group--role_name')}
         >
@@ -102,4 +103,4 @@ function UserFormContent({
     </Form>
   );
 }
-export default compose(withDialogActions)(UserFormContent);
+export const UserFormContent = compose(withDialogActions)(UserFormContentInner);

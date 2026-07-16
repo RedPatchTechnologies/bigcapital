@@ -1,15 +1,12 @@
 // @ts-nocheck
+import { Intent } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
-
-import { Intent } from '@blueprintjs/core';
-import { AppToaster } from '@/components';
-
-import NotifyViaSMSForm from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
 import { useNotifyPaymentReceiveViaSMSContext } from './NotifyPaymentReceiveViaFormProvider';
-import { transformErrors } from '@/containers/NotifyViaSMS/utils';
-
+import { AppToaster } from '@/components';
 import { withDialogActions } from '@/containers/Dialog/withDialogActions';
+import { NotifyViaSMSForm } from '@/containers/NotifyViaSMS/NotifyViaSMSForm';
+import { transformErrors } from '@/containers/NotifyViaSMS/utils';
 import { compose } from '@/utils';
 
 const notificationType = {
@@ -20,7 +17,7 @@ const notificationType = {
 /**
  * Notify Payment Recive Via SMS Form.
  */
-function NotifyPaymentReceiveViaSMSForm({
+function NotifyPaymentReceiveViaSMSFormInner({
   // #withDialogActions
   closeDialog,
 }) {
@@ -47,11 +44,7 @@ function NotifyPaymentReceiveViaSMSForm({
     };
 
     // Handle request response errors.
-    const onError = ({
-      response: {
-        data: { errors },
-      },
-    }) => {
+    const onError = ({ data: { errors } }) => {
       if (errors) {
         transformErrors(errors, { setErrors, setCalloutCode });
       }
@@ -85,4 +78,6 @@ function NotifyPaymentReceiveViaSMSForm({
     />
   );
 }
-export default compose(withDialogActions)(NotifyPaymentReceiveViaSMSForm);
+export const NotifyPaymentReceiveViaSMSForm = compose(withDialogActions)(
+  NotifyPaymentReceiveViaSMSFormInner,
+);

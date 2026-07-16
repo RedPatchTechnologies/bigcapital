@@ -1,19 +1,17 @@
 // @ts-nocheck
+import { Intent, Alert } from '@blueprintjs/core';
 import React from 'react';
 import intl from 'react-intl-universal';
 import { AppToaster, FormattedMessage as T } from '@/components';
-import { Intent, Alert } from '@blueprintjs/core';
-import { useCancelBadDebt } from '@/hooks/query';
-
-import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
 import { withAlertActions } from '@/containers/Alert/withAlertActions';
-
+import { withAlertStoreConnect } from '@/containers/Alert/withAlertStoreConnect';
+import { useCancelBadDebt } from '@/hooks/query';
 import { compose } from '@/utils';
 
 /**
  * Cancel bad debt alert.
  */
-function CancelBadDebtAlert({
+function CancelBadDebtAlertInner({
   name,
 
   // #withAlertStoreConnect
@@ -62,7 +60,7 @@ function CancelBadDebtAlert({
   );
 }
 
-export default compose(
+export const CancelBadDebtAlert = compose(
   withAlertStoreConnect(),
   withAlertActions,
-)(CancelBadDebtAlert);
+)(CancelBadDebtAlertInner);

@@ -3,7 +3,9 @@ import intl from 'react-intl-universal';
 import { AppToaster } from '@/components';
 
 export const handleDeleteErrors = (errors: any) => {
-  if (errors.find((e: any) => e.type === 'EXPENSE_HAS_ASSOCIATED_LANDED_COST')) {
+  if (
+    errors.find((e: any) => e.type === 'EXPENSE_HAS_ASSOCIATED_LANDED_COST')
+  ) {
     AppToaster.show({
       intent: Intent.DANGER,
       message: intl.get(

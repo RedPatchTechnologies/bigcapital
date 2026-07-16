@@ -5,7 +5,9 @@ import withDialogRedux from '@/components/DialogReduxConnect';
 import { compose } from '@/utils';
 
 const ReconcileVendorCreditDialogContent = React.lazy(() =>
-  import('./ReconcileVendorCreditDialogContent'),
+  import('./ReconcileVendorCreditDialogContent').then((m) => ({
+    default: m.ReconcileVendorCreditDialogContent,
+  })),
 );
 
 /**
@@ -34,4 +36,4 @@ function ReconcileVendorCreditDialog({
   );
 }
 
-export default compose(withDialogRedux())(ReconcileVendorCreditDialog);
+export const index = compose(withDialogRedux())(ReconcileVendorCreditDialog);

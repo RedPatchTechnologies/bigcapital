@@ -3,13 +3,13 @@ import React from 'react';
 
 import '@/style/pages/Branches/BranchFormDialog.scss';
 
+import { BranchForm } from './BranchForm';
 import { BranchFormProvider } from './BranchFormProvider';
-import BranchForm from './BranchForm';
 
 /**
  * Branch form dialog content.
  */
-export default function BranchFormDialogContent({
+export function BranchFormDialogContent({
   // #ownProps
   dialogName,
   branchId,

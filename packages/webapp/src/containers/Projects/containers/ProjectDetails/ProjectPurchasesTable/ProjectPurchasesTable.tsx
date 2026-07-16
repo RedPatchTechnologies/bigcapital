@@ -1,17 +1,16 @@
 // @ts-nocheck
 import React from 'react';
 import styled from 'styled-components';
+import { ActionMenu } from './components';
+import { useProjectPurchasesColumns } from './hooks';
 import {
   DataTable,
   TableSkeletonRows,
   TableSkeletonHeader,
 } from '@/components';
 import { TABLES } from '@/constants/tables';
-import { useMemorizedColumnsWidths } from '@/hooks';
-import { ActionMenu } from './components';
-import { useProjectPurchasesColumns } from './hooks';
 import { withSettings } from '@/containers/Settings/withSettings';
-
+import { useMemorizedColumnsWidths } from '@/hooks';
 import { compose } from '@/utils';
 
 /**
