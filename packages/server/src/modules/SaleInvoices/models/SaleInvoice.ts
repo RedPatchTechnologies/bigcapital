@@ -1,7 +1,7 @@
 import * as moment from 'moment';
 import * as R from 'ramda';
 import { Model, raw } from 'objection';
-import { castArray } from 'lodash';
+import { castArray, sumBy } from 'lodash';
 import { MomentInput, unitOfTime } from 'moment';
 import { defaultTo } from 'ramda';
 import { TaxRateTransaction } from '@/modules/TaxRates/models/TaxRateTransaction.model';
@@ -215,10 +215,19 @@ export class SaleInvoice extends TenantBaseModel {
   get total() {
     const adjustmentAmount = defaultTo(this.adjustment, 0);
 
+    // Prefer entry-based tax (accurate when entries have taxRate stored). Fall back to
+    // the stored taxAmountWithheld when entries are present but have no taxRate data
+    // (older invoices or cases where the per-entry rate was not persisted).
+    const entryTaxAmount =
+      this.entries?.length > 0
+        ? sumBy(this.entries, (entry: ItemEntry) => entry.taxAmount || 0)
+        : 0;
+    const taxAmount = entryTaxAmount || this.taxAmountWithheld || 0;
+
     return R.compose(
       R.add(adjustmentAmount),
       R.subtract(R.__, this.discountAmount),
-      R.when(R.always(this.isInclusiveTax), R.add(this.taxAmountWithheld)),
+      R.when(R.always(!this.isInclusiveTax), R.add(taxAmount)),
     )(this.subtotal);
   }
 
