@@ -188,10 +188,11 @@ export class Bill extends TenantBaseModel {
     // Prefer entry-based tax (accurate when entries have taxRate stored). Fall back to
     // the stored taxAmountWithheld when entries are present but have no taxRate data
     // (older bills or cases where the per-entry rate was not persisted).
-    const entryTaxAmount = (this.entries?.length > 0)
-      ? sumBy(this.entries, (entry: ItemEntry) => entry.taxAmount || 0)
-      : 0;
-    const taxAmount = entryTaxAmount || (this.taxAmountWithheld || 0);
+    const entryTaxAmount =
+      this.entries?.length > 0
+        ? sumBy(this.entries, (entry: ItemEntry) => entry.taxAmount || 0)
+        : 0;
+    const taxAmount = entryTaxAmount || this.taxAmountWithheld || 0;
 
     return R.compose(
       R.add(adjustmentAmount),
